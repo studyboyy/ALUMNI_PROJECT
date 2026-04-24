@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class AlumniProfile extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'name',
+        'slug',
+        'email',
+        'phone',
+        'program',
+        'campus_name',
+        'batch_year',
+        'graduation_year',
+        'employer',
+        'job_title',
+        'city',
+        'province',
+        'industry',
+        'employment_status',
+        'bio',
+        'achievements',
+        'linkedin_url',
+        'photo_url',
+        'testimonial_quote',
+        'is_featured',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'achievements' => 'array',
+            'is_featured' => 'boolean',
+        ];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeFilter(Builder $query, array $filters): Builder
+    {
+        return $query
+            ->when($filters['search'] ?? null, function (Builder $query, string $search) {
+                $query->where(function (Builder $query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                        ->orWhere('campus_name', 'like', "%{$search}%")
+                        ->orWhere('employer', 'like', "%{$search}%")
+                        ->orWhere('job_title', 'like', "%{$search}%")
+                        ->orWhere('city', 'like', "%{$search}%");
+                });
+            })
+            ->when($filters['program'] ?? null, fn(Builder $query, string $program) => $query->where('program', $program))
+            ->when($filters['batch_year'] ?? null, fn(Builder $query, string $batchYear) => $query->where('batch_year', $batchYear))
+            ->when($filters['employer'] ?? null, fn(Builder $query, string $employer) => $query->where('employer', 'like', "%{$employer}%"));
+    }
+}
