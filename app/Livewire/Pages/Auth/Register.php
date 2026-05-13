@@ -6,7 +6,6 @@ use App\Models\AlumniProfile;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -14,36 +13,111 @@ use Livewire\Component;
 #[Layout('layouts.auth')]
 class Register extends Component
 {
-    public string $name = '';
-
     public string $email = '';
 
     public string $password = '';
 
     public string $passwordConfirmation = '';
 
-    public string $program = '';
+    public string $nimQuery = '';
 
-    public string $campusName = '';
+    /** @var array<int, array{id:int,nim:?string,name:string,program:string,batch_year:int,campus_name:?string,is_registered:bool}> */
+    public array $nimResults = [];
 
-    public string $batchYear = '';
+    public ?int $alumniProfileId = null;
 
-    public string $graduationYear = '';
+    public function updatedNimQuery(): void
+    {
+        $this->resetErrorBag('alumniProfileId');
+        $query = trim($this->nimQuery);
 
-    public string $phone = '';
+        if ($this->alumniProfileId) {
+            $selectedNim = AlumniProfile::query()
+                ->whereKey($this->alumniProfileId)
+                ->value('nim');
+
+            if (is_string($selectedNim) && $selectedNim === $query) {
+                $this->nimResults = [];
+                return;
+            }
+        }
+
+        $this->alumniProfileId = null;
+
+        if ($query === '') {
+            $this->nimResults = [];
+            return;
+        }
+
+        $results = AlumniProfile::query()
+            ->select(['id', 'nim', 'name', 'program', 'batch_year', 'campus_name', 'user_id'])
+            ->whereNotNull('nim', 'and')
+            ->where('nim', 'like', "%{$query}%")
+            ->orderByRaw('case when user_id is null then 0 else 1 end')
+            ->orderBy('nim', 'asc')
+            ->limit(8)
+            ->get();
+
+        $this->nimResults = $results
+            ->map(fn(AlumniProfile $profile) => [
+                'id' => $profile->id,
+                'nim' => $profile->nim,
+                'name' => $profile->name,
+                'program' => $profile->program,
+                'batch_year' => (int) $profile->batch_year,
+                'campus_name' => $profile->campus_name,
+                'is_registered' => $profile->user_id !== null,
+            ])
+            ->all();
+
+        $exact = $results->firstWhere('nim', $query);
+        if ($exact) {
+            $this->selectAlumni((int) $exact->id);
+        }
+    }
+
+    public function selectAlumni(int $id): void
+    {
+        $profile = AlumniProfile::query()
+            ->select(['id', 'nim', 'name', 'program', 'batch_year', 'campus_name', 'user_id'])
+            ->whereKey($id)
+            ->first();
+
+        if (! $profile) {
+            return;
+        }
+
+        if ($profile->user_id !== null) {
+            $this->addError('alumniProfileId', 'NIM sudah terdaftar di website. Silakan login.');
+
+            return;
+        }
+
+        $this->alumniProfileId = $profile->id;
+        $this->nimQuery = $profile->nim ?? '';
+        $this->nimResults = [];
+    }
+
+    public function getSelectedAlumniProperty(): ?AlumniProfile
+    {
+        if (! $this->alumniProfileId) {
+            return null;
+        }
+
+        return AlumniProfile::query()->find($this->alumniProfileId);
+    }
 
     protected function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'min:3'],
+            'alumniProfileId' => [
+                'required',
+                'integer',
+                Rule::exists('alumni_profiles', 'id')->whereNull('user_id'),
+            ],
             'email' => ['required', 'email', Rule::unique('users', 'email')],
             'password' => ['required', 'string', 'min:8'],
             'passwordConfirmation' => ['required', 'same:password'],
-            'program' => ['required', 'string', 'max:120'],
-            'campusName' => ['required', 'string', 'max:180'],
-            'batchYear' => ['required', 'integer', 'min:1990', 'max:2100'],
-            'graduationYear' => ['nullable', 'integer', 'min:1990', 'max:2100'],
-            'phone' => ['nullable', 'string', 'max:40'],
         ];
     }
 
@@ -51,24 +125,21 @@ class Register extends Component
     {
         $validated = $this->validate();
 
+        $alumniProfile = AlumniProfile::query()
+            ->whereKey($validated['alumniProfileId'])
+            ->whereNull('user_id')
+            ->firstOrFail();
+
         $user = User::query()->create([
-            'name' => $validated['name'],
+            'name' => $alumniProfile->name,
             'email' => $validated['email'],
             'password' => $validated['password'],
             'role' => 'alumni',
         ]);
 
-        AlumniProfile::query()->create([
+        $alumniProfile->update([
             'user_id' => $user->id,
-            'name' => $validated['name'],
-            'slug' => Str::slug($validated['name']) . '-' . Str::lower(Str::random(5)),
             'email' => $validated['email'],
-            'phone' => $validated['phone'] !== '' ? $validated['phone'] : null,
-            'program' => $validated['program'],
-            'campus_name' => $validated['campusName'],
-            'batch_year' => (int) $validated['batchYear'],
-            'graduation_year' => $validated['graduationYear'] !== '' ? (int) $validated['graduationYear'] : null,
-            'employment_status' => 'Bekerja',
         ]);
 
         Auth::login($user);

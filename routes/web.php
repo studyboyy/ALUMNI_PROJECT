@@ -4,16 +4,20 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\CampusSearchController;
 use App\Livewire\Pages\Alumni\Dashboard as AlumniDashboard;
 use App\Livewire\Pages\Alumni\Index as AlumniIndex;
+use App\Livewire\Pages\Alumni\ForumChat as AlumniForumChat;
 use App\Livewire\Pages\Alumni\Show as AlumniShow;
 use App\Livewire\Pages\Alumni\SubmitJob as AlumniSubmitJob;
 use App\Livewire\Pages\Alumni\UpdateProfile as AlumniUpdateProfile;
 use App\Livewire\Pages\Auth\Login;
 use App\Livewire\Pages\Auth\Register;
 use App\Livewire\Pages\Admin\AlumniManager;
+use App\Livewire\Pages\Admin\Dashboard;
+use App\Livewire\Pages\Admin\ForumChat as AdminForumChat;
 use App\Livewire\Pages\Admin\HomepageManager;
 use App\Livewire\Pages\Admin\JobApproval;
 use App\Livewire\Pages\Admin\MediaManager;
 use App\Livewire\Pages\Admin\NewsManager;
+use App\Livewire\Pages\Admin\ProfileManager;
 use App\Livewire\Pages\Admin\ThemeManager;
 use App\Livewire\Pages\Career\Index as CareerIndex;
 use App\Livewire\Pages\Career\Show as CareerShow;
@@ -54,13 +58,17 @@ Route::post('/logout', function (Request $request) {
 
 Route::middleware('auth')->group(function () {
     Route::get('/alumni/dashboard', AlumniDashboard::class)->name('alumni.dashboard');
+    Route::get('/alumni/forum', AlumniForumChat::class)->name('alumni.forum');
     Route::get('/alumni/submit-lowongan', AlumniSubmitJob::class)->name('alumni.submit-job');
     Route::get('/alumni/update-profil', AlumniUpdateProfile::class)->name('alumni.update-profile');
 });
 
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', Dashboard::class)->name('dashboard');
     Route::get('/homepage', HomepageManager::class)->name('homepage');
+    Route::get('/profil-kontak', ProfileManager::class)->name('profile');
     Route::get('/alumni', AlumniManager::class)->name('alumni');
+    Route::get('/forum', AdminForumChat::class)->name('forum');
     Route::get('/lowongan', JobApproval::class)->name('jobs');
     Route::get('/berita', NewsManager::class)->name('news');
     Route::get('/media', MediaManager::class)->name('media');

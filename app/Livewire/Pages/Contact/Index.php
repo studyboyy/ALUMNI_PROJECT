@@ -4,6 +4,7 @@ namespace App\Livewire\Pages\Contact;
 
 use App\Models\ContactMessage;
 use App\Models\FaqItem;
+use App\Models\SiteSetting;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -41,13 +42,23 @@ class Index extends Component
 
     public function render(): View
     {
-        return view('livewire.pages.contact.index', [
-            'faqs' => FaqItem::query()->orderBy('sort_order')->get(),
-            'contactChannels' => [
+        $contactChannels = SiteSetting::getValue('contact_channels', []);
+
+        if (empty($contactChannels)) {
+            $contactChannels = [
                 ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
                 ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
                 ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
-            ],
+            ];
+        }
+
+        return view('livewire.pages.contact.index', [
+            'faqs' => FaqItem::query()->orderBy('sort_order')->get(),
+            'contactChannels' => $contactChannels,
+            'mapEmbedUrl' => SiteSetting::getValue(
+                'contact_map_embed_url',
+                'https://www.google.com/maps?q=universitas%20teknologi%20indonesia&output=embed'
+            ),
         ]);
     }
 }

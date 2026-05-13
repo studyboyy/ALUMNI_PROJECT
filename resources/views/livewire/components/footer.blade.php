@@ -23,11 +23,19 @@
                 Kolaborasi</a>
         </div>
 
+        @php
+            $footerContacts = \App\Models\SiteSetting::getValue('contact_channels', [
+                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
+                ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
+                ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
+            ]);
+        @endphp
+
         <div class="space-y-3">
             <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Kontak</p>
-            <p>humas@alumni-fti.test</p>
-            <p>+62 811-2222-3333</p>
-            <p>Gedung FTI Lt. 2, Kampus Utama</p>
+            @foreach (array_slice($footerContacts, 0, 3) as $contact)
+                <p>{{ $contact['value'] ?? '' }}</p>
+            @endforeach
         </div>
     </div>
 </footer>

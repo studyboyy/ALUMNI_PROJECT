@@ -25,14 +25,14 @@
                 x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
-                class="rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm shadow-xl shadow-violet-100/60">
-                <p class="font-semibold" :class="toast.type === 'error' ? 'text-rose-600' : 'text-violet-700'"
+                class="toast-shell">
+                <p class="font-semibold" :class="toast.type === 'error' ? 'toast-text-error' : 'toast-text'"
                     x-text="toast.message"></p>
             </div>
         </template>
     </div>
 
-    <div class="theme-shell min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
+    <div class="theme-shell min-h-screen">
         <div class="theme-particles theme-particles--far" aria-hidden="true">
             <span class="theme-particle"></span>
             <span class="theme-particle"></span>
@@ -53,12 +53,25 @@
             <span class="theme-particle"></span>
         </div>
 
-        <aside
-            class="sticky top-0 h-screen overflow-y-auto border-r border-slate-200/80 bg-white/80 px-5 py-6 backdrop-blur-xl">
+        <aside class="admin-sidebar lg:fixed lg:inset-y-0 lg:left-0 lg:w-[280px]">
+            @php
+                $siteLogo = \App\Models\SiteSetting::getValue('site_logo_url', '');
+                $siteLogoVersion = \App\Models\SiteSetting::getValue('site_logo_updated_at', '');
+                $logoSrc = '';
+                if ($siteLogo) {
+                    $separator = str_contains($siteLogo, '?') ? '&' : '?';
+                    $logoSrc = $siteLogoVersion ? $siteLogo . $separator . 'v=' . $siteLogoVersion : $siteLogo;
+                }
+            @endphp
+
             <a href="{{ route('home') }}" wire:navigate class="mb-8 flex items-center gap-3">
-                <div
-                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-400 to-fuchsia-400 font-bold text-white">
-                    FTI</div>
+                <div class="brand-badge {{ $siteLogo ? 'brand-badge--logo' : '' }}">
+                    @if ($siteLogo)
+                        <img src="{{ $logoSrc }}" alt="Logo FTI" class="h-8 w-8 rounded-full object-contain" />
+                    @else
+                        FTI
+                    @endif
+                </div>
                 <div>
                     <p class="font-display text-xl text-slate-900">Admin Panel</p>
                     <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Alumni FTI</p>
@@ -66,10 +79,16 @@
             </a>
 
             <nav class="space-y-2 text-sm">
+                <a href="{{ route('admin.dashboard') }}" wire:navigate
+                    class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'admin-nav-link-active' : '' }}">Dashboard</a>
                 <a href="{{ route('admin.homepage') }}" wire:navigate class="admin-nav-link"
                     wire:current="admin-nav-link-active">Kelola Homepage</a>
+                <a href="{{ route('admin.profile') }}" wire:navigate class="admin-nav-link"
+                    wire:current="admin-nav-link-active">Kelola Profil & Kontak</a>
                 <a href="{{ route('admin.alumni') }}" wire:navigate class="admin-nav-link"
                     wire:current="admin-nav-link-active">Kelola Alumni</a>
+                <a href="{{ route('admin.forum') }}" wire:navigate class="admin-nav-link"
+                    wire:current="admin-nav-link-active">Forum Chat</a>
                 <a href="{{ route('admin.jobs') }}" wire:navigate class="admin-nav-link"
                     wire:current="admin-nav-link-active">Approval Lowongan</a>
                 <a href="{{ route('admin.news') }}" wire:navigate class="admin-nav-link"
@@ -82,8 +101,8 @@
             </nav>
         </aside>
 
-        <main class="min-w-0">
-            <div class="border-b border-slate-200/75 bg-white/65 px-5 py-4 backdrop-blur-xl sm:px-8">
+        <main class="min-w-0 lg:ml-[280px]">
+            <div class="admin-topbar">
                 <div class="flex items-center justify-between gap-4">
                     <div>
                         <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Dashboard</p>
@@ -91,13 +110,12 @@
                     </div>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit"
-                            class="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-violet-300 hover:text-violet-700">Logout</button>
+                        <button type="submit" class="ghost-btn">Logout</button>
                     </form>
                 </div>
             </div>
 
-            <section class="px-4 py-6 sm:px-8">
+            <section class="px-4 py-7 sm:px-8 lg:px-10">
                 {{ $slot }}
             </section>
         </main>

@@ -3,8 +3,14 @@
 <div class="space-y-12 py-10 lg:py-14">
     <section class="section-shell grid gap-8 lg:grid-cols-[0.75fr_1.25fr]">
         <div class="glass-panel p-5">
-            <img src="{{ $alumniProfile->photo_url }}" alt="{{ $alumniProfile->name }}"
-                class="h-[28rem] w-full rounded-[2rem] object-cover">
+            @if ($alumniProfile->photo_url)
+                <img src="{{ $alumniProfile->photo_url }}" alt="{{ $alumniProfile->name }}"
+                    class="h-[28rem] w-full rounded-[2rem] object-cover">
+            @else
+                <div class="avatar-fallback h-[28rem] w-full rounded-[2rem] text-5xl">
+                    {{ $alumniProfile->initials }}
+                </div>
+            @endif
         </div>
         <div class="space-y-6">
             <div>

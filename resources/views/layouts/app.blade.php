@@ -25,8 +25,8 @@
                 x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-2"
-                class="rounded-2xl border border-violet-200 bg-white px-4 py-3 text-sm shadow-xl shadow-violet-100/60">
-                <p class="font-semibold" :class="toast.type === 'error' ? 'text-rose-600' : 'text-violet-700'"
+                class="toast-shell">
+                <p class="font-semibold" :class="toast.type === 'error' ? 'toast-text-error' : 'toast-text'"
                     x-text="toast.message"></p>
             </div>
         </template>

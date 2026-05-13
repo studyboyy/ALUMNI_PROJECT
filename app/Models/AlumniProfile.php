@@ -12,6 +12,7 @@ class AlumniProfile extends Model
 
     protected $fillable = [
         'user_id',
+        'nim',
         'name',
         'slug',
         'email',
@@ -45,6 +46,24 @@ class AlumniProfile extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function getInitialsAttribute(): string
+    {
+        $name = trim((string) $this->name);
+
+        if ($name === '') {
+            return 'AL';
+        }
+
+        $parts = preg_split('/\s+/', $name) ?: [];
+        $initials = collect($parts)
+            ->filter()
+            ->take(2)
+            ->map(fn(string $part) => mb_strtoupper(mb_substr($part, 0, 1)))
+            ->implode('');
+
+        return $initials !== '' ? $initials : 'AL';
     }
 
     public function user()

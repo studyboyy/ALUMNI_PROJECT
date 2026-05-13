@@ -59,7 +59,14 @@
                                     <img src="{{ $job->submitter->alumniProfile->photo_url }}"
                                         alt="{{ $job->submitter->name }}" class="h-12 w-12 rounded-lg object-cover">
                                 @else
-                                    <div class="h-12 w-12 rounded-lg bg-slate-200"></div>
+                                    @php
+                                        $submitterInitials =
+                                            $job->submitter?->alumniProfile?->initials ??
+                                            ($job->submitter?->initials() ?? 'AL');
+                                    @endphp
+                                    <div class="avatar-fallback h-12 w-12 rounded-lg text-base">
+                                        {{ $submitterInitials }}
+                                    </div>
                                 @endif
                                 <div class="flex-1 min-w-0">
                                     <p class="font-semibold text-slate-900">{{ $job->submitter->name }}</p>
@@ -90,8 +97,14 @@
             <div class="mt-4 space-y-4">
                 @foreach ($featuredMentors as $mentor)
                     <article class="card-subtle flex gap-4">
-                        <img src="{{ $mentor->photo_url }}" alt="{{ $mentor->name }}"
-                            class="h-18 w-18 rounded-[1.2rem] object-cover">
+                        @if ($mentor->photo_url)
+                            <img src="{{ $mentor->photo_url }}" alt="{{ $mentor->name }}"
+                                class="h-18 w-18 rounded-[1.2rem] object-cover">
+                        @else
+                            <div class="avatar-fallback h-18 w-18 rounded-[1.2rem] text-lg">
+                                {{ $mentor->initials }}
+                            </div>
+                        @endif
                         <div>
                             <p class="font-display text-2xl text-slate-900">{{ $mentor->name }}</p>
                             <p class="text-sm text-violet-700">{{ $mentor->job_title }} · {{ $mentor->employer }}</p>

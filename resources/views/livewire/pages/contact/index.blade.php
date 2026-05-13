@@ -18,9 +18,8 @@
             </div>
 
             <div class="overflow-hidden rounded-4xl border border-slate-200">
-                <iframe title="Lokasi FTI"
-                    src="https://www.google.com/maps?q=universitas%20teknologi%20indonesia&output=embed"
-                    class="h-80 w-full"></iframe>
+                <iframe title="Lokasi FTI" src="{{ $mapEmbedUrl }}" class="h-80 w-full" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
 

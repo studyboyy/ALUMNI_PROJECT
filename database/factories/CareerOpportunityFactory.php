@@ -10,6 +10,8 @@ class CareerOpportunityFactory extends Factory
 {
     public function definition(): array
     {
+        $alumniId = User::where('role', 'alumni')->inRandomOrder()->value('id');
+        $adminId = User::where('role', 'admin')->inRandomOrder()->value('id');
         $companies = ['GoTo Group', 'Tokopedia', 'Shopee', 'Traveloka', 'Mekari', 'Dicoding', 'Gojek'];
         $positions = ['Backend Engineer', 'Frontend Engineer', 'Data Analyst', 'Product Manager', 'UI/UX Designer'];
         $jobBoardUrls = [
@@ -30,11 +32,11 @@ class CareerOpportunityFactory extends Factory
             'apply_url' => fake()->randomElement($jobBoardUrls),
             'closes_at' => fake()->dateTimeBetween('+1 days', '+3 months')->format('Y-m-d'),
             'is_featured' => fake()->boolean(40),
-            'submitted_by' => User::where('role', 'alumni')->first()?->id,
-            'approved_by' => User::where('role', 'admin')->first()?->id,
-            'approval_status' => 'approved',
-            'approval_notes' => 'Disetujui',
-            'approved_at' => now(),
+            'submitted_by' => $alumniId,
+            'approved_by' => $adminId,
+            'approval_status' => $adminId ? 'approved' : 'pending',
+            'approval_notes' => $adminId ? 'Disetujui seeder.' : null,
+            'approved_at' => $adminId ? now() : null,
         ];
     }
 }

@@ -15,6 +15,7 @@ use App\Models\User;
 use App\Models\WorkProgram;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -28,35 +29,26 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin Alumni FTI',
             'email' => 'admin@alumni-fti.test',
             'role' => 'admin',
+            'password' => Hash::make('Admin123!'),
         ]);
 
-        $alumniUser = User::factory()->create([
-            'name' => 'Perwakilan Alumni',
-            'email' => 'alumni@alumni-fti.test',
+        $registeredUsers = User::factory()->count(5)->create([
             'role' => 'alumni',
+            'password' => Hash::make('Alumni123!'),
         ]);
 
-        $alumni = [
-            ['name' => 'Raka Pratama', 'program' => 'Teknik Informatika', 'batch_year' => 2017, 'graduation_year' => 2021, 'employer' => 'Tokopedia', 'job_title' => 'Software Engineer', 'city' => 'Jakarta', 'province' => 'DKI Jakarta', 'industry' => 'E-commerce', 'employment_status' => 'Bekerja', 'bio' => 'Aktif di komunitas backend dan mentoring mahasiswa tingkat akhir.', 'achievements' => ['Pemateri Laravel Camp 2025', 'Lead proyek integrasi API pembayaran'], 'testimonial_quote' => 'Komunitas alumni FTI membuka banyak pintu kolaborasi dan karier.', 'is_featured' => true],
-            ['name' => 'Nadia Azzahra', 'program' => 'Sistem Informasi', 'batch_year' => 2016, 'graduation_year' => 2020, 'employer' => 'Bank Syariah Indonesia', 'job_title' => 'Business Analyst', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'industry' => 'Financial Services', 'employment_status' => 'Bekerja', 'bio' => 'Berfokus pada transformasi proses bisnis dan digital onboarding.', 'achievements' => ['Best Analyst Project 2024'], 'testimonial_quote' => 'Jaringan alumni membuat transisi kampus ke industri jauh lebih cepat.', 'is_featured' => true],
-            ['name' => 'Ilham Saputra', 'program' => 'Teknik Informatika', 'batch_year' => 2018, 'graduation_year' => 2022, 'employer' => 'Traveloka', 'job_title' => 'Data Engineer', 'city' => 'Yogyakarta', 'province' => 'DI Yogyakarta', 'industry' => 'Travel Tech', 'employment_status' => 'Bekerja', 'bio' => 'Mengembangkan pipeline data dan dashboard performa produk.', 'achievements' => ['Speaker Data Day Jogja'], 'testimonial_quote' => 'Alumni jadi tempat bertanya paling relevan soal dunia kerja.', 'is_featured' => true],
-            ['name' => 'Putri Maharani', 'program' => 'Teknik Industri', 'batch_year' => 2015, 'graduation_year' => 2019, 'employer' => 'Unilever Indonesia', 'job_title' => 'Supply Chain Planner', 'city' => 'Surabaya', 'province' => 'Jawa Timur', 'industry' => 'Consumer Goods', 'employment_status' => 'Bekerja', 'bio' => 'Mendorong efisiensi operasi dan optimasi distribusi.', 'achievements' => ['Top Young Planner 2023'], 'testimonial_quote' => 'Reuni alumni bukan sekadar nostalgia, tapi ruang kolaborasi nyata.', 'is_featured' => false],
-            ['name' => 'Farhan Akbar', 'program' => 'Sistem Informasi', 'batch_year' => 2019, 'graduation_year' => 2023, 'employer' => 'Shopee', 'job_title' => 'UI Engineer', 'city' => 'Jakarta', 'province' => 'DKI Jakarta', 'industry' => 'E-commerce', 'employment_status' => 'Bekerja', 'bio' => 'Fokus pada performa antarmuka dan pengalaman pengguna.', 'achievements' => ['Juara 1 Hackathon UX 2024'], 'testimonial_quote' => 'Kolaborasi lintas angkatan sangat terasa manfaatnya.', 'is_featured' => false],
-            ['name' => 'Dewi Safitri', 'program' => 'Teknik Informatika', 'batch_year' => 2014, 'graduation_year' => 2018, 'employer' => 'Dicoding', 'job_title' => 'Curriculum Manager', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'industry' => 'Education Technology', 'employment_status' => 'Bekerja', 'bio' => 'Mendesain kurikulum teknologi yang relevan dengan industri.', 'achievements' => ['Penyusun modul cloud learning nasional'], 'testimonial_quote' => 'FTI memberi pondasi, alumni memperluas dampaknya.', 'is_featured' => false],
-            ['name' => 'Bagas Wicaksono', 'program' => 'Teknik Industri', 'batch_year' => 2017, 'graduation_year' => 2021, 'employer' => 'Kementerian BUMN', 'job_title' => 'Project Officer', 'city' => 'Jakarta', 'province' => 'DKI Jakarta', 'industry' => 'Government', 'employment_status' => 'Bekerja', 'bio' => 'Menangani inisiatif transformasi digital lintas lembaga.', 'achievements' => ['Koordinator program digitalisasi UMKM'], 'testimonial_quote' => 'Alumni FTI punya jejaring yang adaptif dan suportif.', 'is_featured' => false],
-            ['name' => 'Alya Nurfadila', 'program' => 'Sistem Informasi', 'batch_year' => 2020, 'graduation_year' => 2024, 'employer' => 'Telkom Indonesia', 'job_title' => 'Product Management Trainee', 'city' => 'Bandung', 'province' => 'Jawa Barat', 'industry' => 'Telecommunications', 'employment_status' => 'Bekerja', 'bio' => 'Sedang mendalami product discovery dan agile delivery.', 'achievements' => ['Finalis Product Innovation Challenge'], 'testimonial_quote' => 'Senior alumni banyak membantu saya memahami ritme kerja industri.', 'is_featured' => true],
-        ];
-
-        collect($alumni)->each(function (array $alumnus) {
-            AlumniProfile::create([
-                ...$alumnus,
-                'slug' => Str::slug($alumnus['name']),
-                'linkedin_url' => 'https://www.linkedin.com',
-                'photo_url' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
-                'email' => Str::slug($alumnus['name'], '.') . '@example.com',
-                'phone' => '08' . fake()->numerify('##########'),
+        $registeredUsers->each(function (User $user) {
+            AlumniProfile::factory()->create([
+                'user_id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'slug' => Str::slug($user->name),
             ]);
         });
+
+        AlumniProfile::factory()->count(5)->create([
+            'user_id' => null,
+        ]);
 
         collect([
             ['name' => 'Dr. Hendra Wijaya', 'role' => 'Ketua Ikatan Alumni', 'division' => 'Pengurus Harian', 'period' => '2025-2029', 'focus_area' => 'Penguatan jejaring dan kemitraan industri', 'sort_order' => 1],
@@ -88,31 +80,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Workshop Portofolio Digital', 'slug' => 'workshop-portofolio-digital', 'category' => 'Workshop', 'summary' => 'Pelatihan singkat untuk alumni muda yang ingin meningkatkan kualitas CV dan portofolio digital.', 'location' => 'Ruang Kolaborasi FTI', 'starts_at' => now()->addDays(18), 'registration_url' => 'https://forms.alumni-fti.ac.id/workshop-portfolio', 'is_featured' => false],
         ])->each(fn(array $event) => EventAgenda::create($event));
 
-        collect([
-            ['title' => 'Backend Engineer', 'slug' => 'backend-engineer', 'company' => 'GoTo Group', 'location' => 'Jakarta', 'employment_type' => 'Full-time', 'summary' => 'Mencari alumni dengan pengalaman Laravel, distributed systems, dan observability.', 'apply_url' => 'https://linkedin.com/jobs/view/3876543210', 'closes_at' => now()->addDays(14)->toDateString(), 'is_featured' => true],
-            ['title' => 'Business Intelligence Analyst', 'slug' => 'business-intelligence-analyst', 'company' => 'Telkom Indonesia', 'location' => 'Bandung', 'employment_type' => 'Full-time', 'summary' => 'Posisi untuk alumni dengan kemampuan analisis data, dashboarding, dan stakeholder management.', 'apply_url' => 'https://www.kalibrr.id/jobs/business-intelligence-analyst-telkom', 'closes_at' => now()->addDays(20)->toDateString(), 'is_featured' => true],
-            ['title' => 'UI/UX Intern', 'slug' => 'uiux-intern', 'company' => 'Mekari', 'location' => 'Remote', 'employment_type' => 'Internship', 'summary' => 'Magang untuk alumni baru yang ingin mengembangkan kemampuan desain produk digital.', 'apply_url' => 'https://careers.mekari.com/jobs/uiux-intern', 'closes_at' => now()->addDays(7)->toDateString(), 'is_featured' => false],
-        ])->each(fn(array $job) => CareerOpportunity::create($job + [
-            'submitted_by' => $alumniUser->id,
-            'approved_by' => $admin->id,
-            'approval_status' => CareerOpportunity::STATUS_APPROVED,
-            'approval_notes' => 'Disetujui seeder admin.',
-            'approved_at' => now()->subDay(),
-        ]));
-
-        CareerOpportunity::create([
-            'title' => 'Mobile Developer (Flutter)',
-            'slug' => 'mobile-developer-flutter',
-            'company' => 'Startup Alumni Labs',
-            'location' => 'Bandung',
-            'employment_type' => 'Full-time',
-            'summary' => 'Lowongan ini diajukan alumni dan menunggu persetujuan admin.',
-            'apply_url' => 'https://www.jobstreet.co.id/en/job/mobile-developer-flutter',
-            'closes_at' => now()->addDays(30)->toDateString(),
-            'is_featured' => false,
-            'submitted_by' => $alumniUser->id,
-            'approval_status' => CareerOpportunity::STATUS_PENDING,
-        ]);
+        CareerOpportunity::factory()->count(6)->create();
 
         collect([
             ['title' => 'Galeri Reuni Akbar 2025', 'media_type' => 'image', 'media_url' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80', 'caption' => 'Momen networking lintas angkatan dalam reuni akbar tahun lalu.', 'event_name' => 'Reuni Akbar 2025', 'published_at' => now()->subMonths(4)],
@@ -171,16 +139,7 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        // Add more alumni
-        \Database\Factories\AlumniProfileFactory::new()->count(10)->create();
-
-        // Add more news articles
-        \Database\Factories\NewsArticleFactory::new()->count(8)->create();
-
-        // Add more events
-        \Database\Factories\EventAgendaFactory::new()->count(6)->create();
-
-        // Add more career opportunities
-        \Database\Factories\CareerOpportunityFactory::new()->count(5)->create();
+        NewsArticle::factory()->count(6)->create();
+        EventAgenda::factory()->count(4)->create();
     }
 }

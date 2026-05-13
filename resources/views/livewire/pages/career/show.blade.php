@@ -74,9 +74,12 @@
                         <img src="{{ $job->submitter->alumniProfile->photo_url }}" alt="{{ $job->submitter->name }}"
                             class="h-32 w-32 rounded-[1.5rem] object-cover flex-shrink-0">
                     @else
-                        <div
-                            class="h-32 w-32 rounded-[1.5rem] bg-linear-to-br from-violet-400 to-fuchsia-400 flex items-center justify-center text-white font-bold text-3xl flex-shrink-0">
-                            {{ substr($job->submitter->name, 0, 1) }}
+                        @php
+                            $submitterInitials =
+                                $job->submitter?->alumniProfile?->initials ?? ($job->submitter?->initials() ?? 'AL');
+                        @endphp
+                        <div class="avatar-fallback h-32 w-32 rounded-[1.5rem] text-3xl flex-shrink-0">
+                            {{ $submitterInitials }}
                         </div>
                     @endif
 

@@ -1,10 +1,10 @@
 @section('title', 'Daftar Alumni')
 
-<div class="py-10 sm:py-14">
-    <section class="section-shell grid items-start gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div class="space-y-6">
+<div class="py-12 sm:py-16">
+    <section class="section-shell grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+        <div class="space-y-7">
             <a href="{{ route('home') }}" wire:navigate
-                class="inline-flex items-center gap-2 text-sm font-medium text-slate-600 transition hover:text-violet-700">
+                class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700">
                 <span aria-hidden="true">&larr;</span>
                 <span>Kembali ke halaman publik</span>
             </a>
@@ -13,54 +13,61 @@
             <p class="section-copy">Setelah daftar, kamu bisa lengkapi profil alumni, mengirim lowongan kerja, dan ikut
                 terkoneksi di jaringan alumni.</p>
             <p class="text-sm text-slate-600">Sudah punya akun? <a href="{{ route('login') }}" wire:navigate
-                    class="font-semibold text-violet-700 hover:text-violet-800">Login di sini</a></p>
-
-            <div class="rounded-2xl border border-slate-200 bg-white/75 p-4 text-sm text-slate-600 shadow-sm">
-                <p class="font-semibold text-slate-900">Data kampus Indonesia</p>
-                <p class="mt-2">Field nama kampus memakai pencarian dari API data kampus Indonesia. Ketik minimal 2
-                    huruf untuk melihat rekomendasi.</p>
-            </div>
+                    class="section-link">Login di sini</a></p>
         </div>
 
-        <div class="glass-panel p-6 sm:p-8" x-data="{
-            campusQuery: @entangle('campusName').live,
-            campusOptions: [],
-            isLoading: false,
-            timer: null,
-            async fetchCampuses() {
-                const q = (this.campusQuery || '').trim();
-                if (q.length < 2) { this.campusOptions = []; return; }
-                this.isLoading = true;
-                try {
-                    const res = await fetch(`{{ route('api.campuses') }}?q=${encodeURIComponent(q)}`, {
-                        headers: { 'Accept': 'application/json' }
-                    });
-                    const json = await res.json();
-                    this.campusOptions = Array.isArray(json.data) ? json.data : [];
-                } catch (_) {
-                    this.campusOptions = [];
-                } finally {
-                    this.isLoading = false;
-                }
-            },
-            onCampusInput() {
-                clearTimeout(this.timer);
-                this.timer = setTimeout(() => this.fetchCampuses(), 220);
-            }
-        }">
-            <h2 class="font-display text-2xl text-slate-900">Daftar Akun Alumni</h2>
-            <p class="mt-1 text-sm text-slate-600">Lengkapi data awal, nanti profil bisa diperbarui kapan saja.</p>
+        <div class="glass-panel p-7 sm:p-9">
+            <h2 class="font-display text-2xl text-slate-900 sm:text-3xl">Daftar Akun Alumni</h2>
+            <p class="mt-1 text-sm text-slate-600">Cari NIM kamu, lalu buat akun dengan email dan password.</p>
 
-            <form wire:submit="register" class="mt-6 space-y-4">
-                <label class="space-y-2 text-sm text-slate-600">
-                    <span>Nama Lengkap</span>
-                    <input wire:model.blur="name" type="text" class="input-shell" placeholder="Nama lengkap">
-                    @error('name')
+            <form wire:submit="register" class="mt-7 space-y-5">
+                <label class="space-y-2 text-sm font-medium text-slate-600">
+                    <span>Cari NIM</span>
+                    <input wire:model.live.debounce.250ms="nimQuery" type="text" class="input-shell"
+                        placeholder="Ketik NIM kamu" autocomplete="off">
+                    <p class="text-xs text-slate-500">NIM harus sudah didaftarkan admin.</p>
+
+                    @if (count($nimResults))
+                        <div
+                            class="max-h-52 overflow-auto rounded-2xl border border-slate-200/80 bg-white/90 p-2 shadow-sm shadow-slate-200/60">
+                            @foreach ($nimResults as $result)
+                                @php
+                                    $isRegistered = $result['is_registered'] ?? false;
+                                @endphp
+                                <button type="button" wire:click="selectAlumni({{ $result['id'] }})"
+                                    @if ($isRegistered) disabled
+                                        class="block w-full cursor-not-allowed rounded-xl px-3 py-2 text-left text-sm text-slate-400 opacity-70"
+                                    @else
+                                        class="block w-full rounded-xl px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--brand-deep)]" @endif>
+                                    <span class="font-semibold">{{ $result['nim'] }}</span>
+                                    <span class="text-slate-500">— {{ $result['name'] }}</span>
+                                    @if ($isRegistered)
+                                        <span
+                                            class="ml-2 inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-emerald-700">Terdaftar</span>
+                                    @endif
+                                    <span class="block text-xs text-slate-500">{{ $result['program'] }} · Angkatan
+                                        {{ $result['batch_year'] }}</span>
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    @error('alumniProfileId')
                         <span class="text-sm text-rose-500">{{ $message }}</span>
                     @enderror
                 </label>
 
-                <label class="space-y-2 text-sm text-slate-600">
+                @if ($this->selectedAlumni)
+                    <div class="card-subtle text-sm text-slate-700">
+                        <p class="font-semibold text-slate-900">Data alumni ditemukan</p>
+                        <p class="mt-2">Nama: <span class="font-medium">{{ $this->selectedAlumni->name }}</span></p>
+                        <p>Program Studi: <span class="font-medium">{{ $this->selectedAlumni->program }}</span></p>
+                        <p>Angkatan: <span class="font-medium">{{ $this->selectedAlumni->batch_year }}</span></p>
+                        <p>Kampus: <span class="font-medium">{{ $this->selectedAlumni->campus_name ?: '-' }}</span></p>
+                    </div>
+                @endif
+
+                <label class="space-y-2 text-sm font-medium text-slate-600">
                     <span>Email</span>
                     <input wire:model.blur="email" type="email" class="input-shell" placeholder="email@contoh.com">
                     @error('email')
@@ -68,8 +75,8 @@
                     @enderror
                 </label>
 
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <label class="space-y-2 text-sm text-slate-600">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <label class="space-y-2 text-sm font-medium text-slate-600">
                         <span>Password</span>
                         <input wire:model.blur="password" type="password" class="input-shell"
                             placeholder="Minimal 8 karakter">
@@ -78,71 +85,11 @@
                         @enderror
                     </label>
 
-                    <label class="space-y-2 text-sm text-slate-600">
+                    <label class="space-y-2 text-sm font-medium text-slate-600">
                         <span>Konfirmasi Password</span>
                         <input wire:model.blur="passwordConfirmation" type="password" class="input-shell"
                             placeholder="Ulangi password">
                         @error('passwordConfirmation')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <label class="space-y-2 text-sm text-slate-600 sm:col-span-2">
-                        <span>Nama Kampus</span>
-                        <input x-model="campusQuery" @input="onCampusInput" type="text" class="input-shell"
-                            placeholder="Ketik nama kampus, contoh: Universitas Indonesia" autocomplete="off">
-                        <p class="text-xs text-slate-500">Boleh pilih dari rekomendasi atau isi manual jika kampus belum tersedia di API.</p>
-                        <div x-show="isLoading" class="text-xs text-slate-500">Memuat data kampus...</div>
-
-                        <template x-if="campusOptions.length">
-                            <div
-                                class="max-h-48 overflow-auto rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
-                                <template x-for="(campus, idx) in campusOptions" :key="idx">
-                                    <button type="button" @click="campusQuery = campus; campusOptions = [];"
-                                        class="block w-full rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-violet-50 hover:text-violet-800"
-                                        x-text="campus"></button>
-                                </template>
-                            </div>
-                        </template>
-
-                        @error('campusName')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>Program Studi</span>
-                        <input wire:model.blur="program" type="text" class="input-shell"
-                            placeholder="Teknik Informatika">
-                        @error('program')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>Angkatan</span>
-                        <input wire:model.blur="batchYear" type="number" class="input-shell" placeholder="2018">
-                        @error('batchYear')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>Tahun Lulus (opsional)</span>
-                        <input wire:model.blur="graduationYear" type="number" class="input-shell" placeholder="2022">
-                        @error('graduationYear')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>No. HP (opsional)</span>
-                        <input wire:model.blur="phone" type="text" class="input-shell" placeholder="08xxxxxxxxxx">
-                        @error('phone')
                             <span class="text-sm text-rose-500">{{ $message }}</span>
                         @enderror
                     </label>

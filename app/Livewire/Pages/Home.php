@@ -18,18 +18,18 @@ class Home extends Component
 {
     public function render(): View
     {
-        $alumniCount = AlumniProfile::query()->count();
+        $registeredAlumniCount = AlumniProfile::query()->whereNotNull('user_id', 'and')->count('*');
 
         $stats = [
-            ['label' => 'Total Alumni Terdata', 'value' => $alumniCount],
-            ['label' => 'Lowongan Aktif', 'value' => CareerOpportunity::query()->open()->count()],
-            ['label' => 'Agenda Mendatang', 'value' => EventAgenda::query()->upcoming()->count()],
-            ['label' => 'Sebaran Kota Kerja', 'value' => AlumniProfile::query()->whereNotNull('city')->distinct('city')->count('city')],
+            ['label' => 'Total Alumni Terdaftar', 'value' => $registeredAlumniCount],
+            ['label' => 'Lowongan Aktif', 'value' => CareerOpportunity::query()->open()->count('*')],
+            ['label' => 'Agenda Mendatang', 'value' => EventAgenda::query()->upcoming()->count('*')],
+            ['label' => 'Sebaran Kota Kerja', 'value' => AlumniProfile::query()->whereNotNull('city', 'and')->distinct()->count('city')],
         ];
 
         $topCities = AlumniProfile::query()
             ->selectRaw('city, count(*) as total')
-            ->whereNotNull('city')
+            ->whereNotNull('city', 'and')
             ->groupBy('city')
             ->orderByDesc('total')
             ->limit(4)
@@ -49,6 +49,16 @@ class Home extends Component
             ];
         }
 
+        $contactChannels = SiteSetting::getValue('contact_channels', []);
+
+        if (empty($contactChannels)) {
+            $contactChannels = [
+                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
+                ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
+                ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
+            ];
+        }
+
         return view('livewire.pages.home', [
             'stats' => $stats,
             'topCities' => $topCities,
@@ -56,13 +66,9 @@ class Home extends Component
             'featuredAlumni' => AlumniProfile::query()->where('is_featured', true)->limit(4)->get(),
             'latestNews' => NewsArticle::query()->published()->limit(3)->get(),
             'upcomingEvents' => EventAgenda::query()->upcoming()->limit(3)->get(),
-            'testimonials' => Testimonial::query()->orderBy('sort_order')->limit(3)->get(),
-            'contactChannels' => [
-                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
-                ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
-                ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
-            ],
-            'homeFaqs' => FaqItem::query()->orderBy('sort_order')->limit(3)->get(),
+            'testimonials' => Testimonial::query()->orderBy('sort_order', 'asc')->limit(3)->get(),
+            'contactChannels' => $contactChannels,
+            'homeFaqs' => FaqItem::query()->orderBy('sort_order', 'asc')->limit(3)->get(),
         ]);
     }
 }

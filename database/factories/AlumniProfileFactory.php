@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -16,7 +15,8 @@ class AlumniProfileFactory extends Factory
         $industries = ['E-commerce', 'Financial Services', 'Tech Startup', 'Government', 'Education'];
 
         return [
-            'user_id' => fake()->optional()->randomElement(User::where('role', 'alumni')->pluck('id')->toArray()),
+            'user_id' => null,
+            'nim' => fake()->unique()->numerify('20##########'),
             'name' => $name,
             'slug' => Str::slug($name),
             'email' => fake()->unique()->safeEmail(),

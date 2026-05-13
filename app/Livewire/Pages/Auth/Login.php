@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Auth;
 
+use App\Models\AlumniProfile;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -17,7 +18,7 @@ class Login extends Component
     protected function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
+            'email' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:6'],
         ];
     }
@@ -26,7 +27,36 @@ class Login extends Component
     {
         $credentials = $this->validate();
 
-        if (! Auth::attempt($credentials)) {
+        $identifier = trim((string) $credentials['email']);
+        $resolvedEmail = $identifier;
+
+        if (! filter_var($identifier, FILTER_VALIDATE_EMAIL)) {
+            $profile = AlumniProfile::query()
+                ->where('nim', $identifier)
+                ->first();
+
+            if (! $profile) {
+                $this->addError('email', 'NIM atau email tidak ditemukan.');
+
+                return;
+            }
+
+            if (! $profile->user_id) {
+                $this->addError('email', 'NIM belum memiliki akun. Silakan daftar terlebih dahulu.');
+
+                return;
+            }
+
+            $resolvedEmail = (string) $profile->user?->email;
+
+            if ($resolvedEmail === '') {
+                $this->addError('email', 'Akun untuk NIM ini belum siap. Silakan hubungi admin.');
+
+                return;
+            }
+        }
+
+        if (! Auth::attempt(['email' => $resolvedEmail, 'password' => $credentials['password']])) {
             $this->addError('email', 'Email atau password tidak valid.');
 
             return;
@@ -37,7 +67,7 @@ class Login extends Component
         $user = Auth::user();
 
         if ($user?->isAdmin()) {
-            $this->redirect(route('admin.jobs'), navigate: true);
+            $this->redirect(route('admin.dashboard'), navigate: true);
 
             return;
         }

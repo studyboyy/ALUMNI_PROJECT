@@ -64,14 +64,25 @@
             @forelse ($alumni as $alumnus)
                 <a href="{{ route('alumni.show', $alumnus) }}" wire:navigate
                     class="glass-panel interactive-card block overflow-hidden p-4">
-                    <img src="{{ $alumnus->photo_url }}" alt="{{ $alumnus->name }}"
-                        class="h-60 w-full rounded-[1.5rem] object-cover">
+                    @if ($alumnus->photo_url)
+                        <img src="{{ $alumnus->photo_url }}" alt="{{ $alumnus->name }}"
+                            class="h-60 w-full rounded-[1.5rem] object-cover">
+                    @else
+                        <div class="avatar-fallback h-60 w-full rounded-[1.5rem] text-4xl">
+                            {{ $alumnus->initials }}
+                        </div>
+                    @endif
                     <div class="mt-4 space-y-2">
-                        <div class="flex items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
                             <p class="font-display text-2xl text-slate-900">{{ $alumnus->name }}</p>
-                            @if ($alumnus->is_featured)
-                                <span class="badge-pill">Featured</span>
-                            @endif
+                            <div class="flex flex-wrap items-center gap-2">
+                                @if ($alumnus->user_id)
+                                    <span class="badge-pill">Terdaftar</span>
+                                @endif
+                                @if ($alumnus->is_featured)
+                                    <span class="badge-pill">Featured</span>
+                                @endif
+                            </div>
                         </div>
                         <p class="text-sm text-violet-700">{{ $alumnus->program }} · Angkatan
                             {{ $alumnus->batch_year }}</p>
@@ -94,7 +105,8 @@
             <div>
                 <p class="section-eyebrow">Update Data Alumni</p>
                 <h2 class="section-title">Kelola profil alumni langsung dari dashboard internal.</h2>
-                <p class="section-copy">Alumni bisa mendaftar, login, lalu memperbarui data profil tanpa perlu formulir eksternal.</p>
+                <p class="section-copy">Alumni bisa mendaftar, login, lalu memperbarui data profil tanpa perlu formulir
+                    eksternal.</p>
             </div>
             @auth
                 <a href="{{ route('alumni.update-profile') }}" wire:navigate class="purple-btn">Update Profil Saya</a>
