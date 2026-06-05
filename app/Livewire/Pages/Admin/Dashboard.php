@@ -6,6 +6,7 @@ use App\Models\AlumniProfile;
 use App\Models\CareerOpportunity;
 use App\Models\EventAgenda;
 use App\Models\NewsArticle;
+use App\Models\TracerStudyResponse;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
@@ -22,6 +23,7 @@ class Dashboard extends Component
 
         $newsCount = NewsArticle::query()->published()->count();
         $eventCount = EventAgenda::query()->upcoming()->count();
+        $tracerStudyCount = TracerStudyResponse::query()->count();
 
         $jobStatusCounts = CareerOpportunity::query()
             ->selectRaw('approval_status, count(*) as total')
@@ -54,6 +56,11 @@ class Dashboard extends Component
                 'label' => 'Berita & Agenda',
                 'value' => $newsCount + $eventCount,
                 'note' => 'Konten publik aktif.',
+            ],
+            [
+                'label' => 'Responden Tracer Study',
+                'value' => $tracerStudyCount,
+                'note' => 'Alumni yang telah mengisi form.',
             ],
         ];
 

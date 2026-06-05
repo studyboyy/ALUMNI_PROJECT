@@ -1,102 +1,115 @@
 @section('title', 'Daftar Alumni')
 
-<div class="py-12 sm:py-16">
-    <section class="section-shell grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-        <div class="space-y-7">
-            <a href="{{ route('home') }}" wire:navigate
-                class="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 transition hover:text-slate-700">
-                <span aria-hidden="true">&larr;</span>
-                <span>Kembali ke halaman publik</span>
-            </a>
-            <p class="section-eyebrow">Registrasi Alumni</p>
-            <h1 class="section-title max-w-2xl">Buat akun alumni untuk update profil dan kontribusi lowongan.</h1>
-            <p class="section-copy">Setelah daftar, kamu bisa lengkapi profil alumni, mengirim lowongan kerja, dan ikut
-                terkoneksi di jaringan alumni.</p>
-            <p class="text-sm text-slate-600">Sudah punya akun? <a href="{{ route('login') }}" wire:navigate
-                    class="section-link">Login di sini</a></p>
-        </div>
+<div class="flex min-h-screen items-center justify-center px-4 py-12">
+    <div class="w-full max-w-4xl">
+        <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
 
-        <div class="glass-panel p-7 sm:p-9">
-            <h2 class="font-display text-2xl text-slate-900 sm:text-3xl">Daftar Akun Alumni</h2>
-            <p class="mt-1 text-sm text-slate-600">Cari NIM kamu, lalu buat akun dengan email dan password.</p>
+            {{-- Kiri --}}
+            <div class="flex flex-col justify-center space-y-5">
+                <a href="{{ route('home') }}" wire:navigate
+                    class="inline-flex items-center gap-1.5 text-sm font-medium" style="color:var(--ink-muted)">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    Kembali ke beranda
+                </a>
+                <div>
+                    <p class="section-eyebrow">Registrasi Alumni</p>
+                    <h1 class="section-title">Buat akun untuk update profil dan ajukan lowongan.</h1>
+                    <p class="mt-3 section-copy">
+                        Setelah daftar, kamu bisa lengkapi profil alumni, mengirim lowongan kerja, dan terkoneksi di jaringan alumni FTI.
+                    </p>
+                </div>
+                <p class="text-sm" style="color:var(--ink-muted)">
+                    Sudah punya akun?
+                    <a href="{{ route('login') }}" wire:navigate class="font-semibold" style="color:var(--brand)">Masuk di sini</a>
+                </p>
+            </div>
 
-            <form wire:submit="register" class="mt-7 space-y-5">
-                <label class="space-y-2 text-sm font-medium text-slate-600">
-                    <span>Cari NIM</span>
-                    <input wire:model.live.debounce.250ms="nimQuery" type="text" class="input-shell"
-                        placeholder="Ketik NIM kamu" autocomplete="off">
-                    <p class="text-xs text-slate-500">NIM harus sudah didaftarkan admin.</p>
+            {{-- Kanan: Form --}}
+            <div class="glass-panel p-7 sm:p-8">
+                <h2 class="font-display text-2xl" style="color:var(--ink)">Daftar Akun Alumni</h2>
+                <p class="mt-1.5 text-sm" style="color:var(--ink-muted)">Cari NIM kamu, lalu buat akun dengan email dan password.</p>
 
-                    @if (count($nimResults))
-                        <div
-                            class="max-h-52 overflow-auto rounded-2xl border border-slate-200/80 bg-white/90 p-2 shadow-sm shadow-slate-200/60">
-                            @foreach ($nimResults as $result)
-                                @php
-                                    $isRegistered = $result['is_registered'] ?? false;
-                                @endphp
-                                <button type="button" wire:click="selectAlumni({{ $result['id'] }})"
-                                    @if ($isRegistered) disabled
-                                        class="block w-full cursor-not-allowed rounded-xl px-3 py-2 text-left text-sm text-slate-400 opacity-70"
-                                    @else
-                                        class="block w-full rounded-xl px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-[color:var(--brand-soft)] hover:text-[color:var(--brand-deep)]" @endif>
-                                    <span class="font-semibold">{{ $result['nim'] }}</span>
-                                    <span class="text-slate-500">— {{ $result['name'] }}</span>
-                                    @if ($isRegistered)
-                                        <span
-                                            class="ml-2 inline-flex rounded-full bg-emerald-50 px-2 py-0.5 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-emerald-700">Terdaftar</span>
-                                    @endif
-                                    <span class="block text-xs text-slate-500">{{ $result['program'] }} · Angkatan
-                                        {{ $result['batch_year'] }}</span>
-                                </button>
-                            @endforeach
+                <form wire:submit="register" class="mt-7 space-y-5">
+
+                    {{-- NIM Search --}}
+                    <div class="form-group">
+                        <label class="form-label">Cari NIM</label>
+                        <input wire:model.live.debounce.250ms="nimQuery" type="text" class="input-shell"
+                            placeholder="Ketik NIM kamu" autocomplete="off">
+                        <p class="form-hint">NIM harus sudah didaftarkan oleh admin.</p>
+
+                        @if (count($nimResults))
+                            <div class="mt-1.5 max-h-48 overflow-auto rounded-xl border bg-white p-1.5 shadow-lg"
+                                style="border-color:var(--border-md)">
+                                @foreach ($nimResults as $result)
+                                    @php $isReg = $result['is_registered'] ?? false; @endphp
+                                    <button type="button"
+                                        wire:click="selectAlumni({{ $result['id'] }})"
+                                        @if($isReg) disabled @endif
+                                        class="block w-full rounded-lg px-3 py-2.5 text-left text-sm transition
+                                            {{ $isReg ? 'cursor-not-allowed opacity-50' : 'hover:bg-gray-50' }}">
+                                        <span class="font-semibold" style="color:var(--ink)">{{ $result['nim'] }}</span>
+                                        <span style="color:var(--ink-muted)"> — {{ $result['name'] }}</span>
+                                        @if ($isReg)
+                                            <span class="ml-1.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-emerald-700">Terdaftar</span>
+                                        @endif
+                                        <span class="mt-0.5 block text-xs" style="color:var(--ink-muted)">
+                                            {{ $result['program'] }} · Angkatan {{ $result['batch_year'] }}
+                                        </span>
+                                    </button>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @error('alumniProfileId')
+                            <span class="form-error">{{ $message }}</span>
+                        @enderror
+                    </div>
+
+                    {{-- Alumni terpilih --}}
+                    @if ($this->selectedAlumni)
+                        <div class="rounded-xl border border-emerald-100 bg-emerald-50 p-3.5">
+                            <p class="text-sm font-semibold text-emerald-800">✓ Alumni ditemukan</p>
+                            <div class="mt-1.5 space-y-0.5 text-sm text-emerald-700">
+                                <p>{{ $this->selectedAlumni->name }}</p>
+                                <p>{{ $this->selectedAlumni->program }} · Angkatan {{ $this->selectedAlumni->batch_year }}</p>
+                                @if($this->selectedAlumni->campus_name)
+                                    <p>{{ $this->selectedAlumni->campus_name }}</p>
+                                @endif
+                            </div>
                         </div>
                     @endif
 
-                    @error('alumniProfileId')
-                        <span class="text-sm text-rose-500">{{ $message }}</span>
-                    @enderror
-                </label>
-
-                @if ($this->selectedAlumni)
-                    <div class="card-subtle text-sm text-slate-700">
-                        <p class="font-semibold text-slate-900">Data alumni ditemukan</p>
-                        <p class="mt-2">Nama: <span class="font-medium">{{ $this->selectedAlumni->name }}</span></p>
-                        <p>Program Studi: <span class="font-medium">{{ $this->selectedAlumni->program }}</span></p>
-                        <p>Angkatan: <span class="font-medium">{{ $this->selectedAlumni->batch_year }}</span></p>
-                        <p>Kampus: <span class="font-medium">{{ $this->selectedAlumni->campus_name ?: '-' }}</span></p>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input wire:model.blur="email" type="email" class="input-shell"
+                            placeholder="email@contoh.com" autocomplete="email">
+                        @error('email') <span class="form-error">{{ $message }}</span> @enderror
                     </div>
-                @endif
 
-                <label class="space-y-2 text-sm font-medium text-slate-600">
-                    <span>Email</span>
-                    <input wire:model.blur="email" type="email" class="input-shell" placeholder="email@contoh.com">
-                    @error('email')
-                        <span class="text-sm text-rose-500">{{ $message }}</span>
-                    @enderror
-                </label>
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input wire:model.blur="password" type="password" class="input-shell"
+                                placeholder="Min. 8 karakter" autocomplete="new-password">
+                            @error('password') <span class="form-error">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Konfirmasi Password</label>
+                            <input wire:model.blur="passwordConfirmation" type="password" class="input-shell"
+                                placeholder="Ulangi password" autocomplete="new-password">
+                            @error('passwordConfirmation') <span class="form-error">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
 
-                <div class="grid gap-5 sm:grid-cols-2">
-                    <label class="space-y-2 text-sm font-medium text-slate-600">
-                        <span>Password</span>
-                        <input wire:model.blur="password" type="password" class="input-shell"
-                            placeholder="Minimal 8 karakter">
-                        @error('password')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-
-                    <label class="space-y-2 text-sm font-medium text-slate-600">
-                        <span>Konfirmasi Password</span>
-                        <input wire:model.blur="passwordConfirmation" type="password" class="input-shell"
-                            placeholder="Ulangi password">
-                        @error('passwordConfirmation')
-                            <span class="text-sm text-rose-500">{{ $message }}</span>
-                        @enderror
-                    </label>
-                </div>
-
-                <button type="submit" class="purple-btn w-full">Daftar Alumni</button>
-            </form>
+                    <button type="submit" class="purple-btn w-full justify-center mt-2" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Daftar Sekarang</span>
+                        <span wire:loading>Mendaftarkan…</span>
+                    </button>
+                </form>
+            </div>
         </div>
-    </section>
+    </div>
 </div>

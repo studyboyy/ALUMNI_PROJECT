@@ -9,41 +9,19 @@
 
     <title>@yield('title', config('app.name', 'Alumni FTI'))</title>
 
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=playfair+display:600,700,800|poppins:400,500,600,700,800"
-        rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     @stack('head')
 
     @livewireStyles
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="theme-light min-h-screen bg-slate-50 text-slate-900 antialiased">
-    <div class="theme-shell min-h-screen">
-        <div class="theme-particles theme-particles--far" aria-hidden="true">
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-        </div>
-
-        <div class="theme-particles theme-particles--near" aria-hidden="true">
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-            <span class="theme-particle"></span>
-        </div>
-
-        <main id="auth-content" class="relative z-10">
-            {{ $slot }}
-        </main>
-    </div>
+<body class="theme-light min-h-screen antialiased" style="background-color: var(--bg-base)">
+    <main class="min-h-screen">
+        {{ $slot }}
+    </main>
 
     @livewireScripts
     @stack('scripts')

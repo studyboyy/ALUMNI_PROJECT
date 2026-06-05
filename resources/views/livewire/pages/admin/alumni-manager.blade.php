@@ -8,6 +8,14 @@
                 <h1 class="section-title">Kelola data alumni.</h1>
             </div>
             <div class="flex flex-wrap items-center justify-end gap-3">
+                <a href="{{ route('admin.alumni.export') }}"
+                    class="ghost-btn flex items-center gap-1.5">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Export Excel
+                </a>
                 <button wire:click="create" type="button" class="section-link">Tambah alumni</button>
                 <a href="{{ route('admin.jobs') }}" wire:navigate class="section-link">Ke approval lowongan</a>
             </div>

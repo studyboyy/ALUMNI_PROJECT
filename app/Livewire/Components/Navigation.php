@@ -16,6 +16,7 @@ class Navigation extends Component
             ['label' => 'Tracer Study', 'route' => 'tracer-study.index', 'exact' => false],
             ['label' => 'Berita & Agenda', 'route' => 'news.index', 'exact' => false],
             ['label' => 'Karier & Kolaborasi', 'route' => 'career.index', 'exact' => false],
+            ['label' => 'Kontak', 'route' => 'contact.index', 'exact' => false],
         ];
 
         return view('livewire.components.navigation', [

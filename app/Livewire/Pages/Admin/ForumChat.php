@@ -96,6 +96,13 @@ class ForumChat extends Component
         $this->replyToId = null;
     }
 
+    public function deleteMessage(int $messageId): void
+    {
+        ChatMessage::query()->whereKey($messageId)->delete();
+        $this->loadMessages();
+        $this->dispatch('toast', type: 'success', message: 'Pesan berhasil dihapus.');
+    }
+
     public function render(): View
     {
         return view('livewire.pages.admin.forum-chat');

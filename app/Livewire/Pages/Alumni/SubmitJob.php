@@ -45,7 +45,7 @@ class SubmitJob extends Component
 
         CareerOpportunity::query()->create([
             'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']),
+            'slug' => $this->generateUniqueSlug($validated['title']),
             'company' => $validated['company'],
             'location' => $validated['location'],
             'employment_type' => $validated['employmentType'],
@@ -60,6 +60,20 @@ class SubmitJob extends Component
         $this->reset(['title', 'company', 'location', 'summary', 'applyUrl', 'closesAt']);
         $this->employmentType = 'Full-time';
         $this->dispatch('toast', type: 'success', message: 'Lowongan berhasil diajukan dan menunggu persetujuan admin.');
+    }
+
+    private function generateUniqueSlug(string $title): string
+    {
+        $base = Str::slug($title);
+        $slug = $base;
+        $suffix = 1;
+
+        while (CareerOpportunity::query()->where('slug', $slug)->exists()) {
+            $suffix++;
+            $slug = $base . '-' . $suffix;
+        }
+
+        return $slug;
     }
 
     public function render(): View

@@ -1,83 +1,90 @@
 @section('title', 'Kontak & Bantuan Alumni FTI')
 
-<div class="space-y-12 py-10 lg:py-14">
-    <section class="section-shell grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div class="space-y-5">
-            <p class="section-eyebrow">Kontak & Bantuan</p>
-            <h1 class="section-title max-w-2xl">Kontak admin, peta lokasi, form pesan, dan FAQ dalam satu halaman.</h1>
-            <p class="section-copy">Ini adalah halaman layanan publik untuk alumni yang membutuhkan bantuan, ingin
-                bertanya, atau mengirim saran kepada pengelola website.</p>
+<div class="py-10 lg:py-12">
 
-            <div class="glass-panel space-y-4 p-6">
-                @foreach ($contactChannels as $channel)
-                    <div>
-                        <p class="text-xs uppercase tracking-[0.22em] text-slate-500">{{ $channel['label'] }}</p>
-                        <p class="mt-2 text-base text-slate-900">{{ $channel['value'] }}</p>
-                    </div>
-                @endforeach
+    <section class="section-shell mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+
+        {{-- Kiri: Info + Map --}}
+        <div class="space-y-5">
+            <div>
+                <p class="section-eyebrow">Kontak & Bantuan</p>
+                <h1 class="section-title max-w-xl">Hubungi admin atau kirim pesan langsung.</h1>
+                <p class="mt-3 section-copy">Halaman layanan publik untuk alumni yang membutuhkan bantuan atau ingin mengirim saran.</p>
             </div>
 
-            <div class="overflow-hidden rounded-4xl border border-slate-200">
-                <iframe title="Lokasi FTI" src="{{ $mapEmbedUrl }}" class="h-80 w-full" loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="glass-panel p-5">
+                <p class="section-eyebrow mb-4">Saluran Kontak</p>
+                <div class="space-y-4">
+                    @foreach ($contactChannels as $channel)
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-wider" style="color:var(--ink-muted)">{{ $channel['label'] }}</p>
+                            <p class="mt-1 text-sm font-medium" style="color:var(--ink)">{{ $channel['value'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="overflow-hidden rounded-xl border" style="border-color:var(--border)">
+                <iframe title="Lokasi FTI" src="{{ $mapEmbedUrl }}"
+                    class="h-52 w-full" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </div>
 
-        <div class="glass-panel p-6">
-            <p class="font-display text-3xl text-slate-900">Kirim pesan atau saran</p>
+        {{-- Kanan: Form --}}
+        <div class="glass-panel p-6 sm:p-7">
+            <h2 class="font-display text-2xl" style="color:var(--ink)">Kirim Pesan</h2>
+            <p class="mt-1.5 text-sm" style="color:var(--ink-muted)">Isi form di bawah dan kami akan merespons secepatnya.</p>
 
-            <form wire:submit="save" class="mt-6 space-y-4">
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>Nama</span>
+            <form wire:submit="save" class="mt-7 space-y-5">
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <div class="form-group">
+                        <label class="form-label">Nama <span class="required">*</span></label>
                         <input wire:model.blur="name" type="text" class="input-shell" placeholder="Nama lengkap">
-                        @error('name')
-                            <span class="text-sm text-rose-300">{{ $message }}</span>
-                        @enderror
-                    </label>
-                    <label class="space-y-2 text-sm text-slate-600">
-                        <span>Email</span>
+                        @error('name') <span class="form-error">{{ $message }}</span> @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email <span class="required">*</span></label>
                         <input wire:model.blur="email" type="email" class="input-shell" placeholder="nama@email.com">
-                        @error('email')
-                            <span class="text-sm text-rose-300">{{ $message }}</span>
-                        @enderror
-                    </label>
+                        @error('email') <span class="form-error">{{ $message }}</span> @enderror
+                    </div>
                 </div>
 
-                <label class="space-y-2 text-sm text-slate-600">
-                    <span>Subjek</span>
+                <div class="form-group">
+                    <label class="form-label">Subjek <span class="required">*</span></label>
                     <input wire:model.blur="subject" type="text" class="input-shell" placeholder="Topik pesan">
-                    @error('subject')
-                        <span class="text-sm text-rose-300">{{ $message }}</span>
-                    @enderror
-                </label>
+                    @error('subject') <span class="form-error">{{ $message }}</span> @enderror
+                </div>
 
-                <label class="space-y-2 text-sm text-slate-600">
-                    <span>Pesan</span>
-                    <textarea wire:model.blur="message" rows="6" class="input-shell" placeholder="Tuliskan kebutuhan atau saran Anda"></textarea>
-                    @error('message')
-                        <span class="text-sm text-rose-300">{{ $message }}</span>
-                    @enderror
-                </label>
+                <div class="form-group">
+                    <label class="form-label">Pesan <span class="required">*</span></label>
+                    <textarea wire:model.blur="message" rows="5" class="input-shell"
+                        placeholder="Tuliskan kebutuhan atau saran Anda…"></textarea>
+                    @error('message') <span class="form-error">{{ $message }}</span> @enderror
+                </div>
 
-                <button type="submit" class="purple-btn">Kirim
-                    Pesan</button>
+                <button type="submit" class="purple-btn" wire:loading.attr="disabled">
+                    <span wire:loading.remove>Kirim Pesan</span>
+                    <span wire:loading>Mengirim…</span>
+                </button>
+
             </form>
         </div>
     </section>
 
+    {{-- FAQ --}}
     <section class="section-shell">
         <div class="section-heading">
             <div>
                 <p class="section-eyebrow">FAQ</p>
-                <h2 class="section-title">Pertanyaan umum yang sering diajukan alumni.</h2>
+                <h2 class="section-title">Pertanyaan umum alumni.</h2>
             </div>
         </div>
-        <div class="grid gap-4 lg:grid-cols-3">
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($faqs as $faq)
-                <article class="glass-panel interactive-card p-5">
-                    <p class="font-display text-2xl text-slate-900">{{ $faq->question }}</p>
-                    <p class="mt-4 text-sm leading-7 text-slate-500">{{ $faq->answer }}</p>
+                <article class="glass-panel p-5">
+                    <p class="font-semibold" style="color:var(--ink)">{{ $faq->question }}</p>
+                    <p class="mt-2.5 text-sm leading-relaxed" style="color:var(--ink-muted)">{{ $faq->answer }}</p>
                 </article>
             @endforeach
         </div>

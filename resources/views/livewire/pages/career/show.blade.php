@@ -1,140 +1,111 @@
-@section('title', $job->title . ' - ' . $job->company)
+@section('title', $job->title . ' — ' . $job->company)
 
-<div class="space-y-8 py-10 lg:py-14">
-    <section class="section-shell">
-        <a href="{{ route('career.index') }}" wire:navigate
-            class="inline-flex items-center gap-2 text-sm text-violet-700 hover:text-violet-800 mb-6">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            Kembali ke Lowongan
-        </a>
+<div class="py-10 lg:py-12">
+    <section class="section-shell grid gap-6 lg:grid-cols-[1fr_300px]">
 
-        <div class="glass-panel p-8 space-y-6">
-            <div class="flex items-start justify-between gap-4">
-                <div class="flex-1">
-                    <div class="space-y-2">
-                        <h1 class="font-display text-4xl text-slate-900">{{ $job->title }}</h1>
-                        <p class="text-lg text-slate-600">{{ $job->company }}</p>
-                        <div class="flex flex-wrap gap-3 mt-4">
+        {{-- Main --}}
+        <div class="space-y-5">
+            <a href="{{ route('career.index') }}" wire:navigate
+                class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Karier & Kolaborasi
+            </a>
+
+            <div class="glass-panel p-6">
+                <div class="flex flex-wrap items-start justify-between gap-4">
+                    <div class="flex-1 space-y-2">
+                        <h1 class="font-display text-3xl text-gray-900">{{ $job->title }}</h1>
+                        <p class="text-base text-gray-600">{{ $job->company }}</p>
+                        <div class="flex flex-wrap gap-2 pt-1">
                             <span class="badge-pill">{{ $job->employment_type }}</span>
                             <span class="badge-pill">{{ $job->location }}</span>
                             @if ($job->is_featured)
-                                <span class="badge-pill bg-violet-100 text-violet-700">Featured</span>
+                                <span class="badge-pill">Featured</span>
                             @endif
                         </div>
                     </div>
-                </div>
-                <div class="flex-shrink-0">
                     <a href="{{ $job->apply_url }}" target="_blank" rel="noreferrer"
-                        class="purple-btn inline-flex items-center gap-2">
-                        Apply Sekarang
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-6l6 6m0 0l-6 6m6-6H3">
-                            </path>
-                        </svg>
-                    </a>
+                        class="purple-btn flex-shrink-0">Apply Sekarang ↗</a>
                 </div>
-            </div>
 
-            <div class="border-t border-slate-200 pt-6">
-                <p class="text-xs uppercase tracking-[0.18em] text-slate-500 mb-4">Batas Aplikasi</p>
-                <p class="text-2xl font-semibold text-slate-900">{{ $job->closes_at->translatedFormat('d MMMM Y') }}</p>
-                <p class="text-sm text-slate-600 mt-2">
-                    @if ($job->closes_at->isPast())
-                        <span class="text-rose-600">Sudah ditutup</span>
-                    @elseif ($job->closes_at->diffInDays() === 0)
-                        <span class="text-amber-600">Ditutup hari ini</span>
-                    @else
-                        <span class="text-green-600">{{ $job->closes_at->diffInDays() }} hari tersisa</span>
-                    @endif
-                </p>
-            </div>
+                <div class="mt-5 border-t border-gray-100 pt-5">
+                    <p class="text-xs font-medium uppercase tracking-wider text-gray-400">Batas Aplikasi</p>
+                    <p class="mt-1.5 text-xl font-semibold text-gray-900">
+                        {{ $job->closes_at->translatedFormat('d MMMM Y') }}
+                    </p>
+                    <p class="mt-0.5 text-sm">
+                        @if ($job->closes_at->isPast())
+                            <span class="text-red-500">Sudah ditutup</span>
+                        @elseif ($job->closes_at->diffInDays() === 0)
+                            <span class="text-amber-500">Ditutup hari ini</span>
+                        @else
+                            <span class="text-emerald-600">{{ $job->closes_at->diffInDays() }} hari tersisa</span>
+                        @endif
+                    </p>
+                </div>
 
-            <div class="border-t border-slate-200 pt-6">
-                <p class="text-xs uppercase tracking-[0.18em] text-slate-500 mb-3">Deskripsi Lengkap</p>
-                <div class="prose prose-sm max-w-none text-slate-700 leading-7 whitespace-pre-wrap">
-                    {{ $job->summary }}
+                <div class="mt-5 border-t border-gray-100 pt-5">
+                    <p class="text-xs font-medium uppercase tracking-wider text-gray-400 mb-3">Deskripsi</p>
+                    <div class="whitespace-pre-wrap text-sm leading-relaxed text-gray-600">{{ $job->summary }}</div>
                 </div>
             </div>
         </div>
-    </section>
 
-    @if ($job->submitter)
-        <section class="section-shell">
-            <div class="section-heading">
-                <p class="section-eyebrow">Hubungi Pembuat Lowongan</p>
-                <h2 class="section-title">Tanya langsung kepada pihak yang membuka lowongan ini.</h2>
-            </div>
-
-            <div class="glass-panel p-8">
-                <div class="flex gap-6">
+        {{-- Sidebar: submitter --}}
+        @if ($job->submitter)
+            <div class="glass-panel h-fit p-5">
+                <p class="section-eyebrow mb-4">Diajukan oleh</p>
+                <div class="flex items-center gap-3">
                     @if ($job->submitter?->alumniProfile?->photo_url)
-                        <img src="{{ $job->submitter->alumniProfile->photo_url }}" alt="{{ $job->submitter->name }}"
-                            class="h-32 w-32 rounded-[1.5rem] object-cover flex-shrink-0">
+                        <img src="{{ $job->submitter->alumniProfile->photo_url }}"
+                            alt="{{ $job->submitter->name }}"
+                            class="h-12 w-12 flex-shrink-0 rounded-xl object-cover">
                     @else
-                        @php
-                            $submitterInitials =
-                                $job->submitter?->alumniProfile?->initials ?? ($job->submitter?->initials() ?? 'AL');
-                        @endphp
-                        <div class="avatar-fallback h-32 w-32 rounded-[1.5rem] text-3xl flex-shrink-0">
-                            {{ $submitterInitials }}
-                        </div>
+                        @php $si = $job->submitter?->alumniProfile?->initials ?? ($job->submitter?->initials() ?? 'AL'); @endphp
+                        <div class="avatar-fallback h-12 w-12 flex-shrink-0 rounded-xl text-sm">{{ $si }}</div>
                     @endif
-
-                    <div class="flex-1">
-                        <p class="font-display text-3xl text-slate-900">{{ $job->submitter->name }}</p>
+                    <div class="min-w-0">
+                        <p class="font-semibold text-gray-900">{{ $job->submitter->name }}</p>
                         @if ($job->submitter?->alumniProfile?->job_title)
-                            <p class="text-lg text-violet-700 mt-2">{{ $job->submitter->alumniProfile->job_title }}</p>
+                            <p class="text-xs text-gray-500">{{ $job->submitter->alumniProfile->job_title }}</p>
                         @endif
-                        @if ($job->submitter?->alumniProfile?->employer)
-                            <p class="text-sm text-slate-600 mt-1">{{ $job->submitter->alumniProfile->employer }}</p>
-                        @endif
-
-                        <div class="mt-6 space-y-3">
-                            <div class="flex items-center gap-3">
-                                <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                                <a href="mailto:{{ $job->submitter->email }}"
-                                    class="text-slate-700 hover:text-violet-700 font-medium">{{ $job->submitter->email }}</a>
-                            </div>
-                            @if ($job->submitter?->alumniProfile?->phone)
-                                <div class="flex items-center gap-3">
-                                    <svg class="h-5 w-5 text-slate-400" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 5a2 2 0 012-2h3.28a1 1 0 00.948.684l1.498 7.492a1 1 0 00.502.756l2.048 1.029a1 1 0 001.092-.219l1.414-1.414a2 2 0 012.828 0l2.122 2.122a2 2 0 010 2.828l-2.5 2.5a2 2 0 01-2.828 0l-4.616-4.616a2 2 0 00-2.828 0l-2.5 2.5a2 2 0 010 2.828">
-                                        </path>
-                                    </svg>
-                                    <a href="tel:{{ $job->submitter->alumniProfile->phone }}"
-                                        class="text-slate-700 hover:text-violet-700 font-medium">{{ $job->submitter->alumniProfile->phone }}</a>
-                                </div>
-                            @endif
-                        </div>
-
-                        <p class="text-sm text-slate-500 mt-6 italic">Hubungi pembuat lowongan untuk informasi lebih
-                            lengkap atau pertanyaan tambahan.</p>
                     </div>
                 </div>
-            </div>
-        </section>
-    @endif
 
-    <section class="section-shell">
-        <div class="text-center py-8">
-            <a href="{{ $job->apply_url }}" target="_blank" rel="noreferrer"
-                class="purple-btn inline-flex items-center gap-2">
-                Apply Ke Lowongan
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4m-4-6l6 6m0 0l-6 6m6-6H3"></path>
-                </svg>
-            </a>
-        </div>
+                <div class="mt-4 space-y-2.5">
+                    <a href="mailto:{{ $job->submitter->email }}"
+                        class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                        <svg class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span class="truncate">{{ $job->submitter->email }}</span>
+                    </a>
+                    @if ($job->submitter?->alumniProfile?->phone)
+                        <a href="tel:{{ $job->submitter->alumniProfile->phone }}"
+                            class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                            <svg class="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                            </svg>
+                            {{ $job->submitter->alumniProfile->phone }}
+                        </a>
+                    @endif
+                </div>
+
+                <div class="mt-5 border-t border-gray-100 pt-4">
+                    <a href="{{ $job->apply_url }}" target="_blank" rel="noreferrer"
+                        class="purple-btn w-full justify-center">Apply Sekarang ↗</a>
+                </div>
+            </div>
+        @else
+            <div class="glass-panel h-fit p-5 text-center">
+                <a href="{{ $job->apply_url }}" target="_blank" rel="noreferrer"
+                    class="purple-btn w-full justify-center">Apply Sekarang ↗</a>
+            </div>
+        @endif
+
     </section>
 </div>

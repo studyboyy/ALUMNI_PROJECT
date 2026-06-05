@@ -93,15 +93,19 @@ class UpdateProfile extends Component
         $profile = Auth::user()?->alumniProfile ?? new \App\Models\AlumniProfile();
 
         if ($this->photo_file) {
+            // Upload foto baru
             $path = $this->photo_file->storePublicly('alumni-photos', 'public');
             $profile->photo_url = asset('storage/' . $path);
-        } else if (!$profile->photo_url) {
-            $profile->photo_url = $this->photo_url ?: null;
         }
+        // Jika tidak ada foto baru, biarkan photo_url yang sudah ada tidak berubah
+        // (alumni tidak bisa "hapus" foto lewat form ini karena tidak ada tombol hapus yang eksplisit)
 
         $profile->user_id = Auth::id();
         $profile->name = $validated['name'];
-        $profile->slug = Str::slug($validated['name']) . '-' . Str::random(5);
+        // Hanya generate slug baru jika profil belum punya slug (pertama kali)
+        if (! $profile->exists || empty($profile->slug)) {
+            $profile->slug = Str::slug($validated['name']) . '-' . Str::random(5);
+        }
         $profile->email = $validated['email'];
         $profile->phone = $validated['phone'] ?: null;
         $profile->program = $validated['program'];

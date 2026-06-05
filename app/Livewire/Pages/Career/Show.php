@@ -17,9 +17,10 @@ class Show extends Component
         $job->load(['submitter', 'submitter.alumniProfile']);
         $this->job = $job;
 
-        // Redirect jika job tidak approved atau sudah closed
+        // Redirect jika job tidak approved — gunakan $this->redirect() agar eksekusi berhenti
         if ($job->approval_status !== CareerOpportunity::STATUS_APPROVED) {
-            redirect()->route('career.index');
+            $this->redirect(route('career.index'), navigate: true);
+            return;
         }
     }
 

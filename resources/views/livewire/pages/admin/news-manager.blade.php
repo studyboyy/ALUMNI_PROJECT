@@ -1,272 +1,177 @@
-@section('title', 'Admin Kelola Berita')
+@section('title', 'Kelola Berita')
 
-@push('head')
-    <script src="https://cdn.tiny.cloud/1/1umi7k21480sffk7bf9gc4j8q0hjlxkttzhk6hw45md6wfpn/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
-@endpush
+<div class="space-y-8">
 
-<div class="space-y-10">
-    <section>
-        <div class="section-heading">
-            <div>
-                <p class="section-eyebrow">Admin Panel Berita</p>
-                <h1 class="section-title">Buat dan kelola berita dengan editor yang kaya fitur.</h1>
-            </div>
-            <a href="{{ route('news.index') }}" wire:navigate class="section-link">Lihat halaman berita publik</a>
+    {{-- Header --}}
+    <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+            <p class="section-eyebrow">Admin Panel</p>
+            <h1 class="section-title">Kelola Berita & Artikel</h1>
+            <p class="mt-1 text-sm" style="color:var(--ink-muted)">Buat, edit, dan publish berita alumni.</p>
         </div>
+        <a href="{{ route('news.index') }}" wire:navigate class="ghost-btn">
+            Lihat halaman berita publik
+        </a>
+    </div>
 
-        <div class="glass-panel p-6">
-            <div class="grid gap-4 sm:grid-cols-2">
-                <label class="space-y-2 text-sm text-slate-600">
-                    <span>Judul Berita</span>
-                    <input wire:model.blur="title" class="input-shell" type="text" placeholder="Judul berita">
-                    @error('title')
-                        <span class="text-sm text-rose-500">{{ $message }}</span>
-                    @enderror
-                </label>
+    {{-- Form --}}
+    <div class="glass-panel p-6">
+        <h2 class="mb-5 text-base font-semibold" style="color:var(--ink)">
+            {{ $editingId ? 'Edit Berita' : 'Buat Berita Baru' }}
+        </h2>
 
-                <label class="space-y-2 text-sm text-slate-600">
-                    <span>Kategori</span>
+        <div class="space-y-5">
+
+            {{-- Judul + Kategori --}}
+            <div class="grid gap-5 sm:grid-cols-2">
+                <div class="form-group">
+                    <label class="form-label">Judul Berita <span class="required">*</span></label>
+                    <input wire:model.blur="title" type="text" class="input-shell"
+                        placeholder="Judul berita yang menarik…">
+                    @error('title') <span class="form-error">{{ $message }}</span> @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kategori</label>
                     <select wire:model="category" class="input-shell">
                         <option>Berita</option>
                         <option>Agenda</option>
                         <option>Prestasi</option>
+                        <option>Kolaborasi</option>
+                        <option>Workshop</option>
                     </select>
-                </label>
+                </div>
             </div>
 
-            <label class="mt-4 block space-y-2 text-sm text-slate-600">
-                <span>Cover Image (URL atau Upload)</span>
+            {{-- Cover Image --}}
+            <div class="form-group">
+                <label class="form-label">Cover Image</label>
                 <div class="grid gap-3 sm:grid-cols-2">
-                    <input wire:model.blur="coverImageUrl" class="input-shell" type="url"
-                        placeholder="https://... atau upload file di bawah">
-                    <div class="relative">
-                        <input wire:model="coverImageFile" class="input-shell absolute inset-0 cursor-pointer opacity-0"
-                            type="file" accept="image/*">
-                        <div
-                            class="flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-3 text-slate-600 transition hover:border-violet-300 hover:bg-violet-50">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span>{{ $coverImageFile ? 'File: ' . $coverImageFile->getClientOriginalName() : 'Pilih file' }}</span>
-                        </div>
-                    </div>
+                    <input wire:model.blur="coverImageUrl" type="url" class="input-shell"
+                        placeholder="https://… atau upload file di samping">
+                    <input wire:model="coverImageFile" type="file" accept="image/*"
+                        class="block w-full text-sm file:mr-3 file:cursor-pointer file:rounded-lg file:border-0 file:px-3 file:py-2 file:text-sm file:font-medium"
+                        style="color:var(--ink-muted)">
                 </div>
                 @if ($coverImageFile)
-                    <div class="mt-3">
-                        <p class="mb-2 text-xs font-semibold text-slate-700">Preview:</p>
-                        <img src="{{ $coverImageFile->temporaryUrl() }}" alt="Preview"
-                            class="h-32 w-full rounded-lg object-cover">
-                    </div>
+                    <img src="{{ $coverImageFile->temporaryUrl() }}" alt="Preview"
+                        class="mt-3 h-32 w-full rounded-xl object-cover border" style="border-color:var(--border)">
                 @elseif ($coverImageUrl)
-                    <div class="mt-3">
-                        <p class="mb-2 text-xs font-semibold text-slate-700">Preview:</p>
-                        <img src="{{ $coverImageUrl }}" alt="Preview" class="h-32 w-full rounded-lg object-cover">
-                    </div>
+                    <img src="{{ $coverImageUrl }}" alt="Preview"
+                        class="mt-3 h-32 w-full rounded-xl object-cover border" style="border-color:var(--border)">
                 @endif
-                @error('coverImageUrl')
-                    <span class="text-sm text-rose-500">{{ $message }}</span>
-                @enderror
-                @error('coverImageFile')
-                    <span class="text-sm text-rose-500">{{ $message }}</span>
-                @enderror
-            </label>
+                @error('coverImageUrl') <span class="form-error">{{ $message }}</span> @enderror
+                @error('coverImageFile') <span class="form-error">{{ $message }}</span> @enderror
+            </div>
 
-            <div class="mt-4">
-                <label class="mb-2 block text-sm text-slate-600">Konten Berita (TinyMCE)</label>
-                <div wire:ignore>
-                    <textarea id="news-content-editor" class="input-shell min-h-[22rem]">{!! $content !!}</textarea>
+            {{-- Quill Editor --}}
+            <div class="form-group">
+                <label class="form-label">Isi Berita <span class="required">*</span></label>
+
+                {{-- wire:ignore supaya Livewire tidak re-render area Quill --}}
+                <div wire:ignore class="quill-container">
+                    <div id="quill-editor-wrapper"
+                        class="ql-container-reset"
+                        data-content="{{ htmlspecialchars($content, ENT_QUOTES, 'UTF-8') }}">
+                    </div>
                 </div>
-                @error('content')
-                    <span class="mt-2 block text-sm text-rose-500">{{ $message }}</span>
-                @enderror
+
+                @error('content') <span class="form-error mt-2">{{ $message }}</span> @enderror
             </div>
 
-            <div class="mt-4 flex flex-wrap gap-6 text-sm text-slate-600">
-                <label class="inline-flex items-center gap-2">
-                    <input wire:model="isFeatured" type="checkbox">
-                    <span>Featured</span>
+            {{-- Options --}}
+            <div class="flex flex-wrap items-center gap-6">
+                <label class="flex cursor-pointer items-center gap-2.5 text-sm font-medium" style="color:var(--ink-2)">
+                    <input wire:model="isFeatured" type="checkbox"
+                        class="h-4 w-4 rounded" style="accent-color:var(--brand)">
+                    Featured
                 </label>
-                <label class="inline-flex items-center gap-2">
-                    <input wire:model="publishNow" type="checkbox">
-                    <span>Publish sekarang</span>
+                <label class="flex cursor-pointer items-center gap-2.5 text-sm font-medium" style="color:var(--ink-2)">
+                    <input wire:model="publishNow" type="checkbox"
+                        class="h-4 w-4 rounded" style="accent-color:var(--brand)">
+                    Publish sekarang
                 </label>
             </div>
 
-            <div class="mt-6 flex flex-wrap gap-3">
+            {{-- Actions --}}
+            <div class="flex flex-wrap items-center gap-3 border-t pt-5" style="border-color:var(--border)">
                 @if ($editingId)
-                    <button wire:click="update" type="button" class="purple-btn">Update Berita</button>
-                    <button wire:click="resetForm" type="button"
-                        class="rounded-full border border-slate-300 px-6 py-3 font-semibold text-slate-700 transition hover:border-violet-300 hover:text-violet-700">Batal
-                        Edit</button>
+                    <button wire:click="update" type="button" class="purple-btn" wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="update">Simpan Perubahan</span>
+                        <span wire:loading wire:target="update">Menyimpan…</span>
+                    </button>
+                    <button wire:click="resetForm" type="button" class="ghost-btn">Batal Edit</button>
                 @else
-                    <button wire:click="create" type="button" class="purple-btn">Buat Berita</button>
+                    <button wire:click="create" type="button" class="purple-btn" wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="create">Buat Berita</span>
+                        <span wire:loading wire:target="create">Menyimpan…</span>
+                    </button>
                 @endif
             </div>
         </div>
-    </section>
+    </div>
 
-    <section>
-        <div class="section-heading">
+    {{-- Daftar Berita --}}
+    <div>
+        <div class="mb-4 flex items-end justify-between">
             <div>
                 <p class="section-eyebrow">Daftar Berita</p>
-                <h2 class="section-title">Kelola publish, edit, dan hapus berita.</h2>
+                <h2 class="section-title">Semua artikel yang ada.</h2>
             </div>
         </div>
 
-        <div class="grid gap-5">
-            @foreach ($articles as $article)
+        <div class="space-y-3">
+            @forelse ($articles as $article)
                 <article class="glass-panel p-5">
                     <div class="flex flex-wrap items-start justify-between gap-4">
-                        <div>
-                            <p class="font-display text-2xl text-slate-900">{{ $article->title }}</p>
-                            <p class="mt-1 text-sm text-slate-600">{{ $article->category }} ·
-                                {{ $article->published_at ? 'Published' : 'Draft' }}</p>
-                            <p class="mt-2 text-sm leading-7 text-slate-500">{{ $article->excerpt }}</p>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="badge-pill">{{ $article->category }}</span>
+                                <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold
+                                    {{ $article->published_at ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700' }}">
+                                    {{ $article->published_at ? 'Published' : 'Draft' }}
+                                </span>
+                                @if ($article->is_featured)
+                                    <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                                        style="background:var(--brand-soft);color:var(--brand-deep)">Featured</span>
+                                @endif
+                            </div>
+                            <p class="font-display text-xl" style="color:var(--ink)">{{ $article->title }}</p>
+                            <p class="mt-1 text-sm line-clamp-2" style="color:var(--ink-muted)">{{ $article->excerpt }}</p>
+                            @if ($article->published_at)
+                                <p class="mt-1 text-xs" style="color:var(--ink-muted)">
+                                    {{ $article->published_at->translatedFormat('d F Y') }}
+                                </p>
+                            @endif
                         </div>
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-shrink-0 flex-wrap gap-2">
                             <button wire:click="edit({{ $article->id }})" type="button"
-                                class="rounded-full border border-slate-300 px-4 py-2 text-sm text-slate-700 transition hover:border-violet-300 hover:text-violet-700">Edit</button>
+                                class="ghost-btn px-3 py-1.5 text-xs">Edit</button>
                             <button wire:click="togglePublish({{ $article->id }})" type="button"
-                                class="rounded-full border border-violet-300 px-4 py-2 text-sm text-violet-700 transition hover:bg-violet-50">{{ $article->published_at ? 'Unpublish' : 'Publish' }}</button>
-                            <button wire:click="delete({{ $article->id }})" type="button"
-                                class="rounded-full border border-rose-300 px-4 py-2 text-sm text-rose-600 transition hover:bg-rose-50">Hapus</button>
+                                class="ghost-btn px-3 py-1.5 text-xs">
+                                {{ $article->published_at ? 'Unpublish' : 'Publish' }}
+                            </button>
+                            <button wire:click="delete({{ $article->id }})"
+                                wire:confirm="Hapus artikel '{{ $article->title }}'?"
+                                type="button"
+                                class="rounded-lg border px-3 py-1.5 text-xs font-semibold transition hover:bg-red-50"
+                                style="border-color:#fca5a5;color:#ef4444">Hapus</button>
                         </div>
                     </div>
                 </article>
-            @endforeach
+            @empty
+                <div class="glass-panel py-12 text-center text-sm" style="color:var(--ink-muted)">
+                    Belum ada berita. Buat artikel pertama di form di atas.
+                </div>
+            @endforelse
         </div>
 
-        <div class="mt-8">{{ $articles->links() }}</div>
-    </section>
+        <div class="mt-5">{{ $articles->links() }}</div>
+    </div>
 </div>
 
 @push('scripts')
-    <script>
-        function initTinyMceNewsEditor() {
-            const targetId = 'news-content-editor';
-            const target = document.getElementById(targetId);
-
-            if (!target || typeof tinymce === 'undefined') return;
-
-            const existing = tinymce.get(targetId);
-            if (existing) return;
-
-            tinymce.init({
-                selector: '#' + targetId,
-                height: 420,
-                menubar: true,
-                branding: false,
-                promotion: false,
-                plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table wordcount',
-                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table | forecolor backcolor | removeformat code preview',
-                content_style: 'body { font-family: Poppins, sans-serif; font-size: 15px; line-height: 1.7; color: #0f172a; }',
-                entity_encoding: 'raw',
-                nonbreaking_force_tab: false,
-                images_upload_url: '{{ route('admin.upload-image') }}',
-                automatic_uploads: true,
-                file_picker_types: 'image',
-                images_reuse_filename: false,
-                images_upload_handler: (blobInfo, progress) => new Promise((resolve, reject) => {
-                    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute(
-                        'content');
-
-                    if (!csrfToken) {
-                        reject('CSRF token tidak ditemukan. Refresh halaman lalu coba lagi.');
-                        return;
-                    }
-
-                    const formData = new FormData();
-                    formData.append('file', blobInfo.blob(), blobInfo.filename());
-                    formData.append('_token', csrfToken);
-
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', '{{ route('admin.upload-image') }}');
-                    xhr.withCredentials = true;
-                    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-
-                    xhr.upload.onprogress = (event) => {
-                        if (event.lengthComputable) {
-                            progress((event.loaded / event.total) * 100);
-                        }
-                    };
-
-                    xhr.onload = () => {
-                        if (xhr.status === 419) {
-                            reject(
-                                'Session berakhir (419). Silakan refresh halaman dan login ulang jika diminta.'
-                            );
-                            return;
-                        }
-
-                        if (xhr.status < 200 || xhr.status >= 300) {
-                            reject('Upload gagal (HTTP ' + xhr.status + ').');
-                            return;
-                        }
-
-                        let json;
-
-                        try {
-                            json = JSON.parse(xhr.responseText);
-                        } catch (error) {
-                            reject('Respons upload tidak valid.');
-                            return;
-                        }
-
-                        if (!json || typeof json.location !== 'string') {
-                            reject(json?.error?.message ??
-                                'URL gambar tidak ditemukan pada respons upload.');
-                            return;
-                        }
-
-                        resolve(json.location);
-                    };
-
-                    xhr.onerror = () => {
-                        reject('Terjadi gangguan jaringan saat upload gambar.');
-                    };
-
-                    xhr.send(formData);
-                }),
-                setup(editor) {
-                    editor.on('init', () => {
-                        editor.setContent(@js($content));
-                    });
-
-                    const syncToLivewire = () => {
-                        const componentElement = editor.getElement().closest('[wire\\:id]');
-                        if (!componentElement) return;
-
-                        const wireId = componentElement.getAttribute('wire:id');
-                        const instance = Livewire.find(wireId);
-                        if (!instance) return;
-
-                        instance.set('content', editor.getContent());
-                    };
-
-                    editor.on('change keyup undo redo', syncToLivewire);
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', initTinyMceNewsEditor);
-        document.addEventListener('livewire:navigated', initTinyMceNewsEditor);
-
-        document.addEventListener('livewire:init', () => {
-            Livewire.on('editor-sync', ({
-                content
-            }) => {
-                const editor = tinymce.get('news-content-editor');
-
-                if (!editor) {
-                    initTinyMceNewsEditor();
-                    return;
-                }
-
-                editor.setContent(content || '');
-            });
-        });
-    </script>
+<script>
+    // URL upload gambar — disuntikkan dari PHP agar editor.js bisa akses
+    window.__uploadImageUrl = @js(route('admin.upload-image'));
+</script>
 @endpush

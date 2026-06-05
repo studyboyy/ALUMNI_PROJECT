@@ -14,6 +14,12 @@ class Show extends Component
 
     public function mount(NewsArticle $newsArticle): void
     {
+        // Tolak akses ke artikel yang belum dipublish
+        if ($newsArticle->published_at === null) {
+            $this->redirect(route('news.index'), navigate: true);
+            return;
+        }
+
         $this->newsArticle = $newsArticle;
     }
 

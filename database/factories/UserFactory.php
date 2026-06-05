@@ -12,33 +12,35 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    // Pool nama Indonesia agar konsisten dengan AlumniProfileFactory
+    private static array $indonesianNames = [
+        'Raka Pratama', 'Fadhil Nugroho', 'Dimas Arief', 'Rizqi Ananda', 'Hendra Saputra',
+        'Bagas Kurniawan', 'Aldi Setiawan', 'Taufik Hidayat', 'Wahyu Santoso', 'Irfan Maulana',
+        'Nadia Azzahra', 'Sinta Larasati', 'Alya Nurfadila', 'Nabila Rahma', 'Aulia Putri',
+        'Desi Ratnasari', 'Fitri Handayani', 'Laila Zahra', 'Mutia Dewi', 'Rini Kusuma',
+    ];
+
+    private static int $nameIndex = 0;
+
     public function definition(): array
     {
+        $name = self::$indonesianNames[self::$nameIndex % count(self::$indonesianNames)];
+        self::$nameIndex++;
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'name'               => $name,
+            'email'              => Str::slug($name) . '.' . fake()->unique()->numerify('##') . '@gmail.com',
+            'email_verified_at'  => now(),
+            'password'           => static::$password ??= Hash::make('password'),
+            'remember_token'     => Str::random(10),
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
+        return $this->state(fn(array $attributes) => [
             'email_verified_at' => null,
         ]);
     }

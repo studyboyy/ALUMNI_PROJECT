@@ -59,10 +59,16 @@
                                     {{ $message['body'] }}
                                 </p>
 
-                                <div class="mt-2 flex {{ $isMine ? 'justify-end' : 'justify-start' }}">
+                                <div class="mt-2 flex {{ $isMine ? 'justify-end' : 'justify-start' }} gap-3">
                                     <button type="button" wire:click="reply({{ $message['id'] }})"
                                         class="text-xs font-semibold text-slate-500 hover:text-violet-700">
                                         Balas
+                                    </button>
+                                    <button type="button"
+                                        wire:click="deleteMessage({{ $message['id'] }})"
+                                        wire:confirm="Hapus pesan ini?"
+                                        class="text-xs font-semibold text-rose-500 hover:text-rose-700">
+                                        Hapus
                                     </button>
                                 </div>
                             </article>

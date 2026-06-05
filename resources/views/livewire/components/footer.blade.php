@@ -1,41 +1,55 @@
-<footer class="relative mt-16 border-t border-slate-200/80 bg-linear-to-b from-white/80 to-slate-100/70">
-    <div
-        class="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_12%_0%,rgba(232,93,87,0.2),transparent_42%),radial-gradient(circle_at_86%_0%,rgba(255,138,101,0.22),transparent_40%)]">
-    </div>
-    <div
-        class="relative mx-auto grid max-w-7xl gap-10 px-4 py-14 text-sm text-slate-600 sm:px-6 lg:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
-        <div class="space-y-4">
-            <p class="font-display text-3xl text-slate-900">Bersama Membangun Teknologi dan Karier</p>
-            <p class="max-w-xl text-slate-500">Website alumni FTI ini dirancang sebagai pusat informasi, jejaring,
-                peluang karier, dan kolaborasi lintas angkatan untuk kebutuhan presentasi maupun pengembangan jangka
-                panjang.</p>
+<footer class="mt-16 border-t border-gray-100 bg-white">
+    <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[1.6fr_1fr_1fr]">
+
+            {{-- Brand --}}
+            <div class="space-y-4">
+                <p class="font-display text-2xl text-gray-900">Alumni FTI</p>
+                <p class="max-w-sm text-sm leading-relaxed text-gray-500">
+                    Platform jejaring alumni Fakultas Teknologi Informasi — menghubungkan lintas angkatan untuk karier, kolaborasi, dan komunitas.
+                </p>
+            </div>
+
+            {{-- Links --}}
+            <div>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">Tautan</p>
+                <ul class="space-y-2">
+                    <li><a href="{{ route('profile.index') }}" wire:navigate
+                        class="text-sm text-gray-600 transition hover:text-gray-900">Profil Alumni FTI</a></li>
+                    <li><a href="{{ route('alumni.index') }}" wire:navigate
+                        class="text-sm text-gray-600 transition hover:text-gray-900">Direktori Alumni</a></li>
+                    <li><a href="{{ route('news.index') }}" wire:navigate
+                        class="text-sm text-gray-600 transition hover:text-gray-900">Berita & Agenda</a></li>
+                    <li><a href="{{ route('career.index') }}" wire:navigate
+                        class="text-sm text-gray-600 transition hover:text-gray-900">Karier & Kolaborasi</a></li>
+                    <li><a href="{{ route('tracer-study.index') }}" wire:navigate
+                        class="text-sm text-gray-600 transition hover:text-gray-900">Tracer Study</a></li>
+                </ul>
+            </div>
+
+            {{-- Contact --}}
+            @php
+                $footerContacts = \App\Models\SiteSetting::getValue('contact_channels', [
+                    ['label' => 'Email', 'value' => 'humas@alumni-fti.test'],
+                    ['label' => 'WhatsApp', 'value' => '+62 811-2222-3333'],
+                    ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2'],
+                ]);
+            @endphp
+            <div>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">Kontak</p>
+                <ul class="space-y-2">
+                    @foreach (array_slice($footerContacts, 0, 3) as $contact)
+                        <li>
+                            <span class="text-xs text-gray-400">{{ $contact['label'] ?? '' }}</span>
+                            <p class="text-sm text-gray-700">{{ $contact['value'] ?? '' }}</p>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
         </div>
 
-        <div class="space-y-3">
-            <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Tautan Cepat</p>
-            <a href="{{ route('profile.index') }}" wire:navigate class="block transition hover:text-violet-700">Profil
-                Alumni FTI</a>
-            <a href="{{ route('alumni.index') }}" wire:navigate class="block transition hover:text-violet-700">Direktori
-                Alumni</a>
-            <a href="{{ route('news.index') }}" wire:navigate class="block transition hover:text-violet-700">Berita &
-                Agenda</a>
-            <a href="{{ route('career.index') }}" wire:navigate class="block transition hover:text-violet-700">Karier &
-                Kolaborasi</a>
-        </div>
-
-        @php
-            $footerContacts = \App\Models\SiteSetting::getValue('contact_channels', [
-                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
-                ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
-                ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
-            ]);
-        @endphp
-
-        <div class="space-y-3">
-            <p class="text-xs uppercase tracking-[0.22em] text-slate-500">Kontak</p>
-            @foreach (array_slice($footerContacts, 0, 3) as $contact)
-                <p>{{ $contact['value'] ?? '' }}</p>
-            @endforeach
+        <div class="mt-10 border-t border-gray-100 pt-6 flex flex-wrap items-center justify-between gap-3">
+            <p class="text-xs text-gray-400">© {{ date('Y') }} Alumni FTI. Hak cipta dilindungi.</p>
         </div>
     </div>
 </footer>

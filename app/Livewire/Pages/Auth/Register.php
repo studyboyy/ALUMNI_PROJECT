@@ -6,6 +6,7 @@ use App\Models\AlumniProfile;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -125,24 +126,28 @@ class Register extends Component
     {
         $validated = $this->validate();
 
-        $alumniProfile = AlumniProfile::query()
-            ->whereKey($validated['alumniProfileId'])
-            ->whereNull('user_id')
-            ->firstOrFail();
+        DB::transaction(function () use ($validated) {
+            $alumniProfile = AlumniProfile::query()
+                ->whereKey($validated['alumniProfileId'])
+                ->whereNull('user_id')
+                ->lockForUpdate()
+                ->firstOrFail();
 
-        $user = User::query()->create([
-            'name' => $alumniProfile->name,
-            'email' => $validated['email'],
-            'password' => $validated['password'],
-            'role' => 'alumni',
-        ]);
+            $user = User::query()->create([
+                'name' => $alumniProfile->name,
+                'email' => $validated['email'],
+                'password' => $validated['password'],
+                'role' => 'alumni',
+            ]);
 
-        $alumniProfile->update([
-            'user_id' => $user->id,
-            'email' => $validated['email'],
-        ]);
+            $alumniProfile->update([
+                'user_id' => $user->id,
+                'email' => $validated['email'],
+            ]);
 
-        Auth::login($user);
+            Auth::login($user);
+        });
+
         session()->regenerate();
 
         $this->redirect(route('alumni.dashboard'), navigate: true);

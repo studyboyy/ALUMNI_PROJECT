@@ -10,42 +10,86 @@
             }
         @endphp
 
-        <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-3">
+        {{-- Brand --}}
+        <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-2.5 flex-shrink-0">
             <div class="brand-badge {{ $siteLogo ? 'brand-badge--logo' : '' }}">
                 @if ($siteLogo)
-                    <img src="{{ $logoSrc }}" alt="Logo FTI" class="h-7 w-7 rounded-full object-contain" />
+                    <img src="{{ $logoSrc }}" alt="Logo FTI" class="h-6 w-6 rounded-lg object-contain" />
                 @else
-                    FTI
+                    <span class="text-xs font-bold">FTI</span>
                 @endif
             </div>
             <div>
                 <p class="brand-title">Alumni FTI</p>
-                <p class="brand-subtitle">Jejaring, Karier, Kolaborasi</p>
+                <p class="brand-subtitle">Jejaring · Karier · Kolaborasi</p>
             </div>
         </a>
 
-        <nav class="nav-links">
+        {{-- Desktop nav --}}
+        <nav class="nav-links hidden lg:flex">
             @foreach ($links as $link)
                 <a href="{{ $link['url'] }}" wire:navigate.hover
                     @if ($link['exact']) wire:current.exact="nav-pill-active" @else wire:current="nav-pill-active" @endif
-                    class="nav-pill">
-                    {{ $link['label'] }}
-                </a>
+                    class="nav-pill">{{ $link['label'] }}</a>
             @endforeach
 
             @auth
                 @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.homepage') }}" wire:navigate class="nav-pill">Dashboard
-                        Admin</a>
+                    <a href="{{ route('admin.dashboard') }}" wire:navigate
+                        class="nav-pill ml-1">Admin</a>
                 @else
-                    <a href="{{ route('alumni.forum') }}" wire:navigate class="nav-pill">Forum
-                        Chat</a>
-                    <a href="{{ route('alumni.dashboard') }}" wire:navigate class="nav-pill">Dashboard
-                        Mahasiswa</a>
+                    <a href="{{ route('alumni.dashboard') }}" wire:navigate
+                        class="nav-pill ml-1">Dashboard</a>
                 @endif
             @else
-                <a href="{{ route('register') }}" wire:navigate class="nav-pill nav-pill-cta">Join</a>
+                <a href="{{ route('login') }}" wire:navigate class="nav-pill ml-1">Masuk</a>
+                <a href="{{ route('register') }}" wire:navigate class="nav-pill-cta">Daftar</a>
             @endauth
         </nav>
+
+        {{-- Mobile menu button --}}
+        <div class="flex lg:hidden" x-data="{ open: false }">
+            <button @click="open = !open" type="button"
+                class="ghost-btn p-2"
+                aria-label="Toggle menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                    <path x-show="open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            {{-- Mobile dropdown --}}
+            <div x-show="open" x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0 -translate-y-1"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                @click.outside="open = false"
+                class="absolute left-0 right-0 top-full z-50 border-b border-t border-gray-100 bg-white/95 px-4 py-4 shadow-lg backdrop-blur-md">
+                <nav class="flex flex-col gap-1">
+                    @foreach ($links as $link)
+                        <a href="{{ $link['url'] }}" wire:navigate @click="open = false"
+                            class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900">
+                            {{ $link['label'] }}
+                        </a>
+                    @endforeach
+                    <div class="my-2 border-t border-gray-100"></div>
+                    @auth
+                        @if (auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" wire:navigate @click="open = false"
+                                class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Admin</a>
+                        @else
+                            <a href="{{ route('alumni.dashboard') }}" wire:navigate @click="open = false"
+                                class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Dashboard</a>
+                        @endif
+                    @else
+                        <a href="{{ route('login') }}" wire:navigate @click="open = false"
+                            class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Masuk</a>
+                        <a href="{{ route('register') }}" wire:navigate @click="open = false"
+                            class="purple-btn mt-1 text-center">Daftar</a>
+                    @endauth
+                </nav>
+            </div>
+        </div>
     </div>
 </header>
