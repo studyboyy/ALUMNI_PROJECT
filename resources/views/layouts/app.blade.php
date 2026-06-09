@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    data-theme="{{ \App\Models\SiteSetting::getValue('site_theme', 'coral') }}">
+    data-theme="{{ \App\Models\SiteSetting::getValue('site_theme', 'blue') }}">
 
 <head>
     <meta charset="utf-8">
@@ -17,6 +17,10 @@
 </head>
 
 <body class="theme-light min-h-screen antialiased" style="background-color:var(--bg-base);color:var(--ink)">
+
+    {{-- Livewire loading bar --}}
+    <div wire:loading.delay class="fixed top-0 left-0 right-0 z-[100] h-0.5 animate-pulse"
+         style="background:linear-gradient(90deg,var(--brand),var(--brand-2))"></div>
 
     {{-- Aurora background --}}
     <div class="aurora-bg" aria-hidden="true">

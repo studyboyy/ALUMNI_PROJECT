@@ -232,7 +232,7 @@ class ProfileManager extends Component
     private function contactDefaults(): array
     {
         return [
-            ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
+            ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.ac.id'],
             ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
             ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
         ];
@@ -240,7 +240,7 @@ class ProfileManager extends Component
 
     private function defaultMapUrl(): string
     {
-        return 'https://www.google.com/maps?q=universitas%20teknologi%20indonesia&output=embed';
+        return 'https://www.google.com/maps?q=fakultas%20teknologi%20informasi&output=embed';
     }
 
     private function normalizeMapUrl(string $rawUrl): string

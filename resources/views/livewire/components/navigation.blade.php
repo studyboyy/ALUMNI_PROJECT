@@ -10,8 +10,7 @@
             }
         @endphp
 
-        {{-- Brand --}}
-        <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-2.5 flex-shrink-0">
+        <a href="{{ route('home') }}" wire:navigate class="flex flex-shrink-0 items-center gap-2.5">
             <div class="brand-badge {{ $siteLogo ? 'brand-badge--logo' : '' }}">
                 @if ($siteLogo)
                     <img src="{{ $logoSrc }}" alt="Logo FTI" class="h-6 w-6 rounded-lg object-contain" />
@@ -25,29 +24,29 @@
             </div>
         </a>
 
-        {{-- Desktop nav --}}
         <nav class="nav-links hidden lg:flex">
             @foreach ($links as $link)
                 <a href="{{ $link['url'] }}" wire:navigate.hover
                     @if ($link['exact']) wire:current.exact="nav-pill-active" @else wire:current="nav-pill-active" @endif
-                    class="nav-pill">{{ $link['label'] }}</a>
+                    class="nav-pill relative px-3.5 py-2 text-sm transition-colors duration-150">
+                    {{ $link['label'] }}
+                </a>
             @endforeach
 
-            @auth
-                @if (auth()->user()->isAdmin())
-                    <a href="{{ route('admin.dashboard') }}" wire:navigate
-                        class="nav-pill ml-1">Admin</a>
+            <div class="ml-2 flex items-center gap-1.5 border-l pl-3" style="border-color:var(--border-md)">
+                @auth
+                    @if (auth()->user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" wire:navigate class="nav-pill px-3.5 py-2 text-sm">Admin</a>
+                    @else
+                        <a href="{{ route('alumni.dashboard') }}" wire:navigate class="nav-pill px-3.5 py-2 text-sm">Dashboard</a>
+                    @endif
                 @else
-                    <a href="{{ route('alumni.dashboard') }}" wire:navigate
-                        class="nav-pill ml-1">Dashboard</a>
-                @endif
-            @else
-                <a href="{{ route('login') }}" wire:navigate class="nav-pill ml-1">Masuk</a>
-                <a href="{{ route('register') }}" wire:navigate class="nav-pill-cta">Daftar</a>
-            @endauth
+                    <a href="{{ route('login') }}" wire:navigate class="nav-pill px-3.5 py-2 text-sm">Masuk</a>
+                    <a href="{{ route('register') }}" wire:navigate class="nav-pill-cta rounded-lg px-4 py-2 text-sm font-semibold text-white">Daftar</a>
+                @endauth
+            </div>
         </nav>
 
-        {{-- Mobile menu button --}}
         <div class="flex lg:hidden" x-data="{ open: false }">
             <button @click="open = !open" type="button"
                 class="ghost-btn p-2"
@@ -60,7 +59,6 @@
                 </svg>
             </button>
 
-            {{-- Mobile dropdown --}}
             <div x-show="open" x-transition:enter="transition ease-out duration-150"
                 x-transition:enter-start="opacity-0 -translate-y-1"
                 x-transition:enter-end="opacity-100 translate-y-0"
@@ -86,7 +84,7 @@
                         <a href="{{ route('login') }}" wire:navigate @click="open = false"
                             class="rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50">Masuk</a>
                         <a href="{{ route('register') }}" wire:navigate @click="open = false"
-                            class="purple-btn mt-1 text-center">Daftar</a>
+                           class="purple-btn mt-1 text-center">Daftar</a>
                     @endauth
                 </nav>
             </div>

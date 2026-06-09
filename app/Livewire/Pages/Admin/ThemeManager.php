@@ -10,13 +10,13 @@ use Livewire\Component;
 #[Layout('layouts.admin')]
 class ThemeManager extends Component
 {
-    public string $theme = 'coral';
+    public string $theme = 'blue';
 
     public array $availableThemes = [
-        'coral' => [
-            'name' => 'Aurora Coral',
-            'description' => 'Tema merah-oranye yang hangat dan energik',
-            'colors' => ['Coral', 'Peach'],
+        'blue' => [
+            'name' => 'Aurora Blue',
+            'description' => 'Tema biru cerah yang bersih dan modern',
+            'colors' => ['Blue', 'Cyan'],
         ],
         'mint' => [
             'name' => 'Aurora Mint',
@@ -32,7 +32,12 @@ class ThemeManager extends Component
 
     public function mount(): void
     {
-        $this->theme = SiteSetting::getValue('site_theme', 'coral');
+        $theme = SiteSetting::getValue('site_theme', 'blue');
+        $this->theme = $theme === 'coral' ? 'blue' : $theme;
+
+        if ($theme === 'coral') {
+            SiteSetting::setValue('site_theme', 'blue');
+        }
     }
 
     public function setTheme(string $theme): void

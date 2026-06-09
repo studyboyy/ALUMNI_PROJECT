@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
         // ── ADMIN ──────────────────────────────────
         User::factory()->create([
             'name'     => 'Admin Alumni FTI',
-            'email'    => 'admin@alumni-fti.test',
+            'email'    => 'admin@alumni-fti.ac.id',
             'role'     => 'admin',
             'password' => Hash::make('Admin123!'),
         ]);

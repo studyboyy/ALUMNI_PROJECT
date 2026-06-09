@@ -1,4 +1,4 @@
-@section('title', 'Dashboard Alumni')
+﻿@section('title', 'Dashboard Alumni')
 
 <div class="py-10 lg:py-12">
     <div class="section-shell space-y-5">
@@ -13,15 +13,15 @@
                 <div class="mt-5 grid gap-3 sm:grid-cols-3">
                     <article class="card-subtle">
                         <p class="text-xs text-gray-500">Profil Lengkap</p>
-                        <p class="mt-1.5 font-display text-2xl text-gray-900">{{ $completionRate }}%</p>
+                        <p class="mt-1.5 font-sans text-2xl text-gray-900">{{ $completionRate }}%</p>
                     </article>
                     <article class="card-subtle">
                         <p class="text-xs text-gray-500">Lowongan Diajukan</p>
-                        <p class="mt-1.5 font-display text-2xl text-gray-900">{{ $jobStats['submitted'] }}</p>
+                        <p class="mt-1.5 font-sans text-2xl text-gray-900">{{ $jobStats['submitted'] }}</p>
                     </article>
                     <article class="card-subtle">
                         <p class="text-xs text-gray-500">Menunggu Review</p>
-                        <p class="mt-1.5 font-display text-2xl text-gray-900">{{ $jobStats['pending'] }}</p>
+                        <p class="mt-1.5 font-sans text-2xl text-gray-900">{{ $jobStats['pending'] }}</p>
                     </article>
                 </div>
 
@@ -79,7 +79,7 @@
                 <div class="mb-4 flex items-center justify-between">
                     <div>
                         <p class="section-eyebrow">Riwayat Lowongan</p>
-                        <h2 class="mt-0.5 font-display text-xl text-gray-900">Pengajuan lowongan Anda.</h2>
+                        <h2 class="mt-0.5 font-sans text-xl text-gray-900">Pengajuan lowongan Anda.</h2>
                     </div>
                     <a href="{{ route('alumni.submit-job') }}" wire:navigate class="section-link">Kelola</a>
                 </div>

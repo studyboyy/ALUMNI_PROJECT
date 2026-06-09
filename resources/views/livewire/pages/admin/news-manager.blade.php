@@ -1,4 +1,4 @@
-@section('title', 'Kelola Berita')
+﻿@section('title', 'Kelola Berita')
 
 <div class="space-y-8">
 
@@ -135,11 +135,11 @@
                                         style="background:var(--brand-soft);color:var(--brand-deep)">Featured</span>
                                 @endif
                             </div>
-                            <p class="font-display text-xl" style="color:var(--ink)">{{ $article->title }}</p>
+                            <p class="font-sans text-xl" style="color:var(--ink)">{{ $article->title }}</p>
                             <p class="mt-1 text-sm line-clamp-2" style="color:var(--ink-muted)">{{ $article->excerpt }}</p>
                             @if ($article->published_at)
                                 <p class="mt-1 text-xs" style="color:var(--ink-muted)">
-                                    {{ $article->published_at->translatedFormat('d F Y') }}
+                                    {{ $article->published_at->format('d M Y') }}
                                 </p>
                             @endif
                         </div>

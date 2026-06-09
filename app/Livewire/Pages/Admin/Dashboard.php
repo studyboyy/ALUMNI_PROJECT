@@ -64,6 +64,30 @@ class Dashboard extends Component
             ],
         ];
 
+        $contentHighlights = [
+            [
+                'label' => 'Berita Publik',
+                'value' => $newsCount,
+                'note' => 'Artikel aktif yang tampil di website.',
+            ],
+            [
+                'label' => 'Agenda Mendatang',
+                'value' => $eventCount,
+                'note' => 'Acara yang sudah terjadwal.',
+            ],
+            [
+                'label' => 'Tracer Study',
+                'value' => $tracerStudyCount,
+                'note' => 'Respon alumni yang sudah masuk.',
+            ],
+            [
+                'label' => 'Lowongan Aktif',
+                'value' => $openJobs,
+                'note' => 'Peluang kerja yang siap dibuka.',
+            ],
+        ];
+        $contentMax = max(collect($contentHighlights)->max('value') ?? 0, 1);
+
         $registrationTotal = max($totalAlumni, 1);
         $registrationBreakdown = [
             [
@@ -139,6 +163,8 @@ class Dashboard extends Component
             'cityStats' => $cityStats,
             'programMax' => $programMax,
             'cityMax' => $cityMax,
+            'contentHighlights' => $contentHighlights,
+            'contentMax' => $contentMax,
         ]);
     }
 }

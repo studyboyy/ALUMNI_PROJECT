@@ -12,14 +12,14 @@ class Show extends Component
 {
     public CareerOpportunity $job;
 
-    public function mount(CareerOpportunity $job): void
+    public function mount(CareerOpportunity $careerOpportunity): void
     {
-        $job->load(['submitter', 'submitter.alumniProfile']);
-        $this->job = $job;
+        $careerOpportunity->load(['submitter', 'submitter.alumniProfile']);
+        $this->job = $careerOpportunity;
 
-        // Redirect jika job tidak approved — gunakan $this->redirect() agar eksekusi berhenti
-        if ($job->approval_status !== CareerOpportunity::STATUS_APPROVED) {
-            $this->redirect(route('career.index'), navigate: true);
+        if ($careerOpportunity->approval_status !== CareerOpportunity::STATUS_APPROVED) {
+            $this->redirectRoute('career.index', navigate: true);
+
             return;
         }
     }

@@ -1,4 +1,4 @@
-@section('title', 'Submit Lowongan Alumni')
+﻿@section('title', 'Submit Lowongan Alumni')
 
 <div class="py-10 lg:py-12">
     <div class="section-shell space-y-6">
@@ -111,7 +111,7 @@
             <div class="grid gap-4 sm:grid-cols-2">
                 @forelse ($myJobs as $job)
                     <article class="glass-panel p-5">
-                        <p class="font-display text-xl" style="color:var(--ink)">{{ $job->title }}</p>
+                        <p class="font-sans text-xl" style="color:var(--ink)">{{ $job->title }}</p>
                         <p class="mt-1 text-sm" style="color:var(--ink-muted)">{{ $job->company }} · {{ $job->location }}</p>
                         <span class="mt-3 inline-flex rounded-full px-2.5 py-1 text-xs font-semibold
                             {{ $job->approval_status === 'approved' ? 'bg-emerald-50 text-emerald-700' :

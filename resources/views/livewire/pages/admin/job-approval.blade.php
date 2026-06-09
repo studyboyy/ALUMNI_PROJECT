@@ -1,4 +1,4 @@
-@section('title', 'Admin Approval Lowongan')
+﻿@section('title', 'Admin Approval Lowongan')
 
 <div class="space-y-10">
     <section>
@@ -31,7 +31,7 @@
                 <article class="glass-panel p-6">
                     <div class="flex flex-wrap items-start justify-between gap-4">
                         <div>
-                            <p class="font-display text-2xl text-slate-900">{{ $job->title }}</p>
+                            <p class="font-sans text-lg font-semibold tracking-tight text-slate-900">{{ $job->title }}</p>
                             <p class="mt-1 text-sm text-slate-600">{{ $job->company }} · {{ $job->location }} ·
                                 {{ $job->employment_type }}</p>
                             <p class="mt-1 text-sm text-slate-500">Pengaju: {{ $job->submitter?->name ?? 'Alumni' }}</p>
@@ -64,7 +64,7 @@
         <div class="grid gap-4 lg:grid-cols-2">
             @foreach ($latestDecisions as $decision)
                 <article class="glass-panel p-5">
-                    <p class="font-display text-2xl text-slate-900">{{ $decision->title }}</p>
+                    <p class="font-sans text-lg font-semibold tracking-tight text-slate-900">{{ $decision->title }}</p>
                     <p class="mt-2 text-sm text-slate-600">Status: {{ $decision->approval_status }}</p>
                     <p class="text-sm text-slate-500">Pengaju: {{ $decision->submitter?->name ?? '-' }} · Admin:
                         {{ $decision->approver?->name ?? '-' }}</p>

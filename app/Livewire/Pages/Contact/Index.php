@@ -46,7 +46,7 @@ class Index extends Component
 
         if (empty($contactChannels)) {
             $contactChannels = [
-                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
+                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.ac.id'],
                 ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
                 ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
             ];
@@ -57,7 +57,7 @@ class Index extends Component
             'contactChannels' => $contactChannels,
             'mapEmbedUrl' => SiteSetting::getValue(
                 'contact_map_embed_url',
-                'https://www.google.com/maps?q=universitas%20teknologi%20indonesia&output=embed'
+                'https://www.google.com/maps?q=fakultas%20teknologi%20informasi&output=embed'
             ),
         ]);
     }

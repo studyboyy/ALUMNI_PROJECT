@@ -1,11 +1,11 @@
-@section('title', 'Kelola Homepage')
+﻿@section('title', 'Kelola Homepage')
 
 <div class="space-y-6">
     <section class="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Hero Carousel</p>
-                <h2 class="mt-1 font-display text-3xl text-slate-900">Atur slide hero halaman utama</h2>
+                <h2 class="mt-1 font-sans text-lg font-semibold tracking-tight text-slate-900">Atur slide hero halaman utama</h2>
             </div>
             <button wire:click="addSlide" type="button"
                 class="rounded-full border border-violet-200 bg-violet-50 px-4 py-2 text-sm font-semibold text-violet-700 transition hover:bg-violet-100">Tambah

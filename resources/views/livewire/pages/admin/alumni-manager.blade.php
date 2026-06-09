@@ -1,4 +1,4 @@
-@section('title', 'Admin Kelola Alumni')
+﻿@section('title', 'Admin Kelola Alumni')
 
 <div class="space-y-8">
     <section>
@@ -35,7 +35,7 @@
             @foreach ($alumni as $item)
                 <article class="glass-panel relative flex items-start justify-between gap-4 p-5 pb-12">
                     <div class="flex-1">
-                        <p class="font-display text-2xl text-slate-900">{{ $item->name }}</p>
+                        <p class="font-sans text-lg font-semibold tracking-tight text-slate-900">{{ $item->name }}</p>
                         <p class="mt-1 text-sm text-slate-600">NIM: {{ $item->nim ?: '-' }}</p>
                         <p class="mt-1 text-sm text-slate-600">{{ $item->program }} · Angkatan {{ $item->batch_year }}
                         </p>
@@ -75,7 +75,7 @@
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
             <div class="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-8">
                 <div class="mb-6 flex items-center justify-between">
-                    <h2 class="text-2xl font-bold text-slate-900">{{ $editingId ? 'Edit Alumni' : 'Tambah Alumni' }}
+                    <h2 class="font-sans text-lg font-semibold tracking-tight text-slate-900">{{ $editingId ? 'Edit Alumni' : 'Tambah Alumni' }}
                     </h2>
                     <button wire:click="resetForm" type="button" class="text-slate-500 hover:text-slate-700">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

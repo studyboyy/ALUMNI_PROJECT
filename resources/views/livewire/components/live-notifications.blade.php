@@ -36,7 +36,7 @@
                         @else
                             <p class="mt-0.5 text-xs text-gray-500">
                                 Status: {{ strtoupper($item->approval_status) }}
-                                @if($item->approved_at) · {{ optional($item->approved_at)->translatedFormat('d M Y') }} @endif
+                                @if($item->approved_at) · {{ $item->approved_at->format('d M Y') }} @endif
                             </p>
                         @endif
                     </article>

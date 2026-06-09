@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    data-theme="{{ \App\Models\SiteSetting::getValue('site_theme', 'coral') }}">
+    data-theme="{{ \App\Models\SiteSetting::getValue('site_theme', 'blue') }}">
 
 <head>
     <meta charset="utf-8">
@@ -39,7 +39,7 @@
 
     <div class="flex min-h-screen">
 
-        {{-- ── SIDEBAR ── --}}
+        {{-- -- SIDEBAR -- --}}
         <aside class="admin-sidebar lg:fixed lg:inset-y-0 lg:left-0 lg:w-64">
 
             {{-- Brand --}}
@@ -240,13 +240,13 @@
             </nav>
         </aside>
 
-        {{-- ── MAIN ── --}}
+        {{-- -- MAIN -- --}}
         <main class="flex min-w-0 flex-1 flex-col lg:ml-64">
 
             {{-- Topbar --}}
             <div class="admin-topbar">
                 <div class="flex items-center justify-between gap-4">
-                    <h1 class="font-display text-xl" style="color:var(--ink)">
+                    <h1 class="font-sans text-lg font-semibold tracking-tight" style="color:var(--ink)">
                         @yield('title', 'Admin Alumni FTI')
                     </h1>
                     <form method="POST" action="{{ route('logout') }}">
@@ -256,7 +256,7 @@
                 </div>
             </div>
 
-            <div class="flex-1 px-5 py-6 sm:px-8 lg:px-10">
+            <div class="admin-content flex-1 px-4 py-5 sm:px-6 lg:px-8">
                 {{ $slot }}
             </div>
         </main>

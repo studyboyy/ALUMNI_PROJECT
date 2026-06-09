@@ -1,8 +1,8 @@
-@section('title', 'Kontak & Bantuan Alumni FTI')
+﻿@section('title', 'Kontak & Bantuan Alumni FTI')
 
 <div class="py-10 lg:py-12">
 
-    <section class="section-shell mb-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+    <section class="section-shell mb-8 grid items-start gap-6 lg:grid-cols-[0.9fr_1.1fr]">
 
         {{-- Kiri: Info + Map --}}
         <div class="space-y-5">
@@ -31,8 +31,8 @@
         </div>
 
         {{-- Kanan: Form --}}
-        <div class="glass-panel p-6 sm:p-7">
-            <h2 class="font-display text-2xl" style="color:var(--ink)">Kirim Pesan</h2>
+        <div class="glass-panel self-start p-6 sm:p-7">
+            <h2 class="font-sans text-2xl" style="color:var(--ink)">Kirim Pesan</h2>
             <p class="mt-1.5 text-sm" style="color:var(--ink-muted)">Isi form di bawah dan kami akan merespons secepatnya.</p>
 
             <form wire:submit="save" class="mt-7 space-y-5">

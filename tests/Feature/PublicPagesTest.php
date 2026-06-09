@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AlumniProfile;
+use App\Models\CareerOpportunity;
 use App\Models\NewsArticle;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -44,4 +45,19 @@ test('alumni and article pages resolve by slug', function () {
 
     $this->get('/data-alumni/' . $alumnus->slug)->assertOk()->assertSee('Salsa Permata');
     $this->get('/berita-agenda/' . $article->slug)->assertOk()->assertSee('Artikel Demo');
+});
+
+test('career opportunity pages resolve by slug', function () {
+    $job = CareerOpportunity::factory()->create([
+        'title' => 'Backend Engineer Alumni',
+        'slug' => 'backend-engineer-alumni',
+        'company' => 'FTI Career Lab',
+        'approval_status' => CareerOpportunity::STATUS_APPROVED,
+        'closes_at' => now()->addMonth(),
+    ]);
+
+    $this->get('/karier-kolaborasi/' . $job->slug)
+        ->assertOk()
+        ->assertSee('Backend Engineer Alumni')
+        ->assertSee('FTI Career Lab');
 });

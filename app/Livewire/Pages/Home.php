@@ -53,7 +53,7 @@ class Home extends Component
 
         if (empty($contactChannels)) {
             $contactChannels = [
-                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.test'],
+                ['label' => 'Email Humas', 'value' => 'humas@alumni-fti.ac.id'],
                 ['label' => 'WhatsApp Admin', 'value' => '+62 811-2222-3333'],
                 ['label' => 'Sekretariat', 'value' => 'Gedung FTI Lt. 2, Kampus Utama'],
             ];
@@ -64,7 +64,7 @@ class Home extends Component
             'topCities' => $topCities,
             'heroSlides' => $heroSlides,
             'featuredAlumni' => AlumniProfile::query()->where('is_featured', true)->limit(4)->get(),
-            'latestNews' => NewsArticle::query()->published()->limit(3)->get(),
+            'latestNews' => NewsArticle::query()->published()->limit(5)->get(),
             'upcomingEvents' => EventAgenda::query()->upcoming()->limit(3)->get(),
             'testimonials' => Testimonial::query()->orderBy('sort_order', 'asc')->limit(3)->get(),
             'contactChannels' => $contactChannels,

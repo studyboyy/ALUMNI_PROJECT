@@ -116,6 +116,8 @@ class MediaManager extends Component
 
     public function render(): View
     {
-        return view('livewire.pages.admin.media-manager');
+        return view('livewire.pages.admin.media-manager', [
+            'categoryCount' => max(count(array_filter($this->categories, fn (string $category) => $category !== 'all')), 0),
+        ]);
     }
 }

@@ -1,11 +1,11 @@
-@section('title', 'Kelola Profil & Kontak')
+﻿@section('title', 'Kelola Profil & Kontak')
 
 <div class="space-y-6">
     <section class="glass-panel p-6">
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Brand</p>
-                <h2 class="mt-1 font-display text-3xl text-slate-900">Logo FTI</h2>
+                <h2 class="mt-1 font-sans text-lg font-semibold tracking-tight text-slate-900">Logo FTI</h2>
                 <p class="mt-2 text-sm text-slate-500">Logo tampil di navbar publik dan panel admin.</p>
             </div>
             @if ($logoUrl || $logoUpload)
@@ -49,7 +49,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Profil Alumni</p>
-                <h2 class="mt-1 font-display text-3xl text-slate-900">Visi, Misi, dan Sejarah</h2>
+                <h2 class="mt-1 font-sans text-lg font-semibold tracking-tight text-slate-900">Visi, Misi, dan Sejarah</h2>
                 <p class="mt-2 text-sm text-slate-500">Atur konten utama halaman profil alumni.</p>
             </div>
             <button wire:click="addTimelineItem" type="button" class="outline-btn">Tambah Sejarah</button>
@@ -121,7 +121,7 @@
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
                 <p class="text-xs uppercase tracking-[0.18em] text-slate-500">Kontak & Bantuan</p>
-                <h2 class="mt-1 font-display text-3xl text-slate-900">Kontak Utama</h2>
+                <h2 class="mt-1 font-sans text-lg font-semibold tracking-tight text-slate-900">Kontak Utama</h2>
                 <p class="mt-2 text-sm text-slate-500">Kontak ini tampil di halaman kontak, beranda, dan footer.</p>
             </div>
             <button wire:click="addContactChannel" type="button" class="outline-btn">Tambah Kontak</button>

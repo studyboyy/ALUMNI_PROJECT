@@ -22,10 +22,13 @@ class CareerOpportunityFactory extends Factory
             'https://careers.tokopedia.com/jobs/' . fake()->slug(),
         ];
 
+        $title   = fake()->randomElement($positions);
+        $company = fake()->randomElement($companies);
+
         return [
-            'title' => fake()->randomElement($positions),
-            'slug' => Str::slug(fake()->randomElement($positions) . ' ' . fake()->name()),
-            'company' => fake()->randomElement($companies),
+            'title'           => $title,
+            'slug'            => Str::slug($title . '-' . $company . '-' . fake()->numerify('###')),
+            'company'         => $company,
             'location' => fake()->randomElement(['Jakarta', 'Bandung', 'Yogyakarta', 'Surabaya', 'Remote']),
             'employment_type' => fake()->randomElement(['Full-time', 'Contract', 'Internship']),
             'summary' => fake()->paragraph(),

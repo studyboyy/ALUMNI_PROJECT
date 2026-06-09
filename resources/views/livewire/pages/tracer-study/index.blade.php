@@ -1,4 +1,4 @@
-@section('title', 'Tracer Study Alumni FTI')
+﻿@section('title', 'Tracer Study Alumni FTI')
 
 <div class="py-10 lg:py-12">
 
@@ -55,7 +55,7 @@
                     </svg>
                 </div>
                 <div>
-                    <p class="font-display text-2xl" style="color:var(--ink)">Terima kasih, {{ $name }}!</p>
+                    <p class="font-sans text-2xl" style="color:var(--ink)">Terima kasih, {{ $name }}!</p>
                     <p class="mt-1 text-sm" style="color:var(--ink-muted)">Respons Anda tersimpan dan sangat berarti bagi pengembangan FTI.</p>
                 </div>
                 <a href="#hasil" class="outline-btn mt-2">Lihat Ringkasan Data</a>
@@ -69,7 +69,7 @@
                             d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <p class="font-display text-2xl" style="color:var(--ink)">Anda sudah mengisi form ini</p>
+                <p class="font-sans text-2xl" style="color:var(--ink)">Anda sudah mengisi form ini</p>
                 <p class="text-sm" style="color:var(--ink-muted)">Terima kasih atas partisipasi Anda!</p>
             </div>
 
