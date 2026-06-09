@@ -24,8 +24,8 @@ test('admin can export alumni data as a formatted xlsx file', function () {
     $response->assertHeader('Content-Disposition', 'attachment; filename="data-alumni-' . now()->format('Y-m-d') . '.xlsx"');
 
     expect(substr($response->getContent(), 0, 2))->toBe('PK');
-    expect($response->getContent())->toContain('xl/worksheets/sheet1.xml');
-    expect($response->getContent())->toContain('Data Alumni');
+    expect(readXlsxEntry($response->getContent(), 'xl/worksheets/sheet1.xml'))->toContain('Raka Pratama');
+    expect(readXlsxEntry($response->getContent(), 'xl/workbook.xml'))->toContain('Data Alumni');
 });
 
 test('admin can export tracer study data as a formatted xlsx file', function () {
@@ -58,6 +58,23 @@ test('admin can export tracer study data as a formatted xlsx file', function () 
     $response->assertHeader('Content-Disposition', 'attachment; filename="tracer-study-' . now()->format('Y-m-d') . '.xlsx"');
 
     expect(substr($response->getContent(), 0, 2))->toBe('PK');
-    expect($response->getContent())->toContain('xl/worksheets/sheet1.xml');
-    expect($response->getContent())->toContain('Tracer Study');
+    expect(readXlsxEntry($response->getContent(), 'xl/worksheets/sheet1.xml'))->toContain('Nadia Azzahra');
+    expect(readXlsxEntry($response->getContent(), 'xl/workbook.xml'))->toContain('Tracer Study');
 });
+
+function readXlsxEntry(string $contents, string $entry): string
+{
+    $path = tempnam(sys_get_temp_dir(), 'xlsx-test-');
+    file_put_contents($path, $contents);
+
+    $zip = new \ZipArchive();
+    expect($zip->open($path))->toBeTrue();
+
+    $entryContents = $zip->getFromName($entry);
+    $zip->close();
+    unlink($path);
+
+    expect($entryContents)->not->toBeFalse();
+
+    return (string) $entryContents;
+}
