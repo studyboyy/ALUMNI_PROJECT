@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AlumniProfile;
+use App\Support\SimpleXlsxWriter;
 use Illuminate\Http\Response;
 
 class AlumniExportController extends Controller
@@ -21,16 +22,8 @@ class AlumniExportController extends Controller
             'Bidang Industri', 'Kota', 'Provinsi', 'LinkedIn',
         ];
 
-        // Tulis ke buffer in-memory
-        $handle = fopen('php://temp', 'r+');
-
-        // BOM UTF-8 supaya Excel langsung baca dengan benar
-        fwrite($handle, "\xEF\xBB\xBF");
-
-        fputcsv($handle, $columns);
-
-        foreach ($alumni as $i => $row) {
-            fputcsv($handle, [
+        $rows = $alumni->map(function (AlumniProfile $row, int $i): array {
+            return [
                 $i + 1,
                 $row->name,
                 $row->nim ?? '-',
@@ -47,19 +40,19 @@ class AlumniExportController extends Controller
                 $row->city ?? '-',
                 $row->province ?? '-',
                 $row->linkedin_url ?? '-',
-            ]);
-        }
+            ];
+        })->all();
 
-        rewind($handle);
-        $csv = stream_get_contents($handle);
-        fclose($handle);
+        $xlsx = SimpleXlsxWriter::make('Data Alumni', $columns, $rows, [
+            7, 24, 18, 28, 18, 24, 26, 12, 14, 20, 26, 24, 22, 18, 20, 34,
+        ]);
 
-        $filename = 'data-alumni-' . now()->format('Y-m-d') . '.csv';
+        $filename = 'data-alumni-' . now()->format('Y-m-d') . '.xlsx';
 
-        return response($csv, 200, [
-            'Content-Type'        => 'text/csv; charset=UTF-8',
+        return response($xlsx, 200, [
+            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length'      => strlen($csv),
+            'Content-Length'      => strlen($xlsx),
             'Pragma'              => 'no-cache',
             'Cache-Control'       => 'no-store, no-cache, must-revalidate',
         ]);

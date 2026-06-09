@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TracerStudyResponse;
+use App\Support\SimpleXlsxWriter;
 use Illuminate\Http\Response;
 
 class TracerStudyExportController extends Controller
@@ -23,15 +24,8 @@ class TracerStudyExportController extends Controller
             'Rating Kurikulum (1-5)', 'Saran', 'Tanggal Isi',
         ];
 
-        $handle = fopen('php://temp', 'r+');
-
-        // BOM UTF-8
-        fwrite($handle, "\xEF\xBB\xBF");
-
-        fputcsv($handle, $columns);
-
-        foreach ($responses as $i => $row) {
-            fputcsv($handle, [
+        $rows = $responses->map(function (TracerStudyResponse $row, int $i): array {
+            return [
                 $i + 1,
                 $row->name,
                 $row->nim ?? '-',
@@ -51,19 +45,19 @@ class TracerStudyExportController extends Controller
                 $row->curriculum_rating ?? '-',
                 $row->suggestion ?? '-',
                 $row->created_at?->format('d/m/Y H:i'),
-            ]);
-        }
+            ];
+        })->all();
 
-        rewind($handle);
-        $csv = stream_get_contents($handle);
-        fclose($handle);
+        $xlsx = SimpleXlsxWriter::make('Tracer Study', $columns, $rows, [
+            7, 24, 18, 28, 18, 24, 12, 14, 20, 26, 24, 22, 18, 20, 24, 20, 20, 42, 18,
+        ]);
 
-        $filename = 'tracer-study-' . now()->format('Y-m-d') . '.csv';
+        $filename = 'tracer-study-' . now()->format('Y-m-d') . '.xlsx';
 
-        return response($csv, 200, [
-            'Content-Type'        => 'text/csv; charset=UTF-8',
+        return response($xlsx, 200, [
+            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length'      => strlen($csv),
+            'Content-Length'      => strlen($xlsx),
             'Pragma'              => 'no-cache',
             'Cache-Control'       => 'no-store, no-cache, must-revalidate',
         ]);

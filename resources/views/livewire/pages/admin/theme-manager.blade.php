@@ -33,29 +33,29 @@
         </div>
 
         <div class="grid gap-5 lg:grid-cols-3">
-            <button wire:click="setTheme('blue')" type="button"
+            <button wire:click="setTheme('coral')" type="button"
                 class="group text-left transition"
                 style="transform:translateZ(0)">
-                <div class="glass-panel overflow-hidden p-4 sm:p-5 {{ $theme === 'blue' ? 'ring-2 ring-[color:rgba(var(--brand-rgb),.45)]' : '' }}">
+                <div class="glass-panel overflow-hidden p-4 sm:p-5 {{ $theme === 'coral' ? 'ring-2 ring-[color:rgba(var(--brand-rgb),.45)]' : '' }}">
                     <div class="flex h-40 gap-2 overflow-hidden rounded-2xl">
-                        <div class="flex-1 bg-gradient-to-b from-[#2563eb] to-[#38bdf8]"></div>
-                        <div class="flex-1 bg-gradient-to-b from-[#1d4ed8] to-[#06b6d4]"></div>
-                        <div class="flex-1 bg-gradient-to-b from-[#eff6ff] to-[#dbeafe]"></div>
+                        <div class="flex-1 bg-gradient-to-b from-[#e85d57] to-[#ff8a65]"></div>
+                        <div class="flex-1 bg-gradient-to-b from-[#c64640] to-[#e85d57]"></div>
+                        <div class="flex-1 bg-gradient-to-b from-[#fff1ec] to-[#ffe5e0]"></div>
                     </div>
                     <div class="mt-4 flex items-start justify-between gap-4">
                         <div>
-                            <h3 class="text-lg font-semibold" style="color:var(--ink)">Aurora Blue</h3>
-                            <p class="mt-1 text-sm leading-6" style="color:var(--ink-muted)">Bersih, modern, dan terasa lebih profesional untuk dashboard alumni.</p>
+                            <h3 class="text-lg font-semibold" style="color:var(--ink)">Aurora Coral</h3>
+                            <p class="mt-1 text-sm leading-6" style="color:var(--ink-muted)">Hangat, energik, dan cocok untuk nuansa yang lebih hidup.</p>
                         </div>
-                        @if ($theme === 'blue')
+                        @if ($theme === 'coral')
                             <span class="rounded-full px-3 py-1 text-xs font-semibold" style="background:var(--brand-soft);color:var(--brand-deep)">
                                 Aktif
                             </span>
                         @endif
                     </div>
                     <div class="mt-4 flex gap-2">
-                        <span class="rounded-full px-3 py-1 text-xs font-semibold text-white" style="background:#2563eb">Blue</span>
-                        <span class="rounded-full px-3 py-1 text-xs font-semibold text-white" style="background:#06b6d4">Cyan</span>
+                        <span class="rounded-full px-3 py-1 text-xs font-semibold text-white" style="background:#e85d57">Coral</span>
+                        <span class="rounded-full px-3 py-1 text-xs font-semibold text-white" style="background:#ff8a65">Peach</span>
                     </div>
                 </div>
             </button>
