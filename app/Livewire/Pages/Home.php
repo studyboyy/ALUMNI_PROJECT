@@ -63,7 +63,11 @@ class Home extends Component
             'stats' => $stats,
             'topCities' => $topCities,
             'heroSlides' => $heroSlides,
-            'featuredAlumni' => AlumniProfile::query()->where('is_featured', true)->limit(4)->get(),
+            'workingAlumni' => AlumniProfile::query()
+                ->where('employment_status', 'Bekerja')
+                ->orderByDesc('updated_at')
+                ->limit(4)
+                ->get(),
             'latestNews' => NewsArticle::query()->published()->limit(5)->get(),
             'upcomingEvents' => EventAgenda::query()->upcoming()->limit(3)->get(),
             'testimonials' => Testimonial::query()->orderBy('sort_order', 'asc')->limit(3)->get(),

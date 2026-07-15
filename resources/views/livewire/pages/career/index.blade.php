@@ -20,8 +20,8 @@
                         <p class="mt-1 text-xs font-medium" style="color:var(--ink-muted)">Lowongan aktif</p>
                     </div>
                     <div class="rounded-xl border bg-white px-4 py-3 shadow-sm" style="border-color:var(--border)">
-                        <p class="text-2xl font-semibold leading-none" style="color:var(--ink)">{{ $featuredMentors->count() }}</p>
-                        <p class="mt-1 text-xs font-medium" style="color:var(--ink-muted)">Mentor tersedia</p>
+                        <p class="text-2xl font-semibold leading-none" style="color:var(--ink)">{{ $workingAlumni->count() }}</p>
+                        <p class="mt-1 text-xs font-medium" style="color:var(--ink-muted)">Alumni profesional</p>
                     </div>
                     <div class="rounded-xl border bg-white px-4 py-3 shadow-sm" style="border-color:var(--border)">
                         <p class="text-2xl font-semibold leading-none" style="color:var(--ink)">{{ $collaborations->count() }}</p>
@@ -185,19 +185,19 @@
         </div>
     </section>
 
-    {{-- Mentors + Collaborations --}}
+    {{-- Working alumni + collaborations --}}
     <section class="section-shell grid gap-5 lg:grid-cols-2">
         <div class="glass-panel p-6">
             <div class="mb-5 flex items-end justify-between gap-4">
                 <div>
-                    <p class="section-eyebrow">Mentoring Alumni</p>
-                    <h2 class="mt-1 font-sans text-xl font-semibold" style="color:var(--ink)">Belajar dari alumni berpengalaman.</h2>
+                    <p class="section-eyebrow">Jejaring Profesional</p>
+                    <h2 class="mt-1 font-sans text-xl font-semibold" style="color:var(--ink)">Alumni yang aktif di dunia kerja.</h2>
                 </div>
             </div>
 
             <div class="space-y-3">
-                @forelse ($featuredMentors as $mentor)
-                    <article class="flex gap-4 rounded-xl border bg-white p-4" style="border-color:var(--border)">
+                @forelse ($workingAlumni as $mentor)
+                    <a href="{{ route('alumni.show', $mentor) }}" wire:navigate class="flex gap-4 rounded-xl border bg-white p-4 transition hover:shadow-md" style="border-color:var(--border)">
                         <div class="flex-shrink-0">
                             @if ($mentor->photo_url)
                                 <img src="{{ $mentor->photo_url }}" alt="{{ $mentor->name }}"
@@ -218,7 +218,7 @@
                                 </p>
                             @endif
                         </div>
-                    </article>
+                    </a>
                 @empty
                     <div class="py-10 text-center">
                         <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl"
@@ -229,8 +229,8 @@
                                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
                         </div>
-                        <p class="font-semibold text-sm" style="color:var(--ink)">Belum ada mentor</p>
-                        <p class="text-xs mt-1" style="color:var(--ink-muted)">Mentor dari alumni FTI akan tampil di sini.</p>
+                        <p class="font-semibold text-sm" style="color:var(--ink)">Belum ada alumni bekerja</p>
+                        <p class="text-xs mt-1" style="color:var(--ink-muted)">Alumni dengan data pekerjaan akan tampil di sini.</p>
                     </div>
                 @endforelse
             </div>

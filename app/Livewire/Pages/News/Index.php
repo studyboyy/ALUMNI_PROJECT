@@ -18,7 +18,11 @@ class Index extends Component
             'featuredArticle' => NewsArticle::query()->published()->where('is_featured', true)->first(),
             'articles' => NewsArticle::query()->published()->get(),
             'upcomingEvents' => EventAgenda::query()->upcoming()->limit(3)->get(),
-            'galleryItems' => GalleryItem::query()->orderByDesc('published_at')->limit(4)->get(),
+            'galleryItems' => GalleryItem::query()
+                ->whereNotNull('published_at')
+                ->orderByDesc('published_at')
+                ->limit(4)
+                ->get(),
         ]);
     }
 }

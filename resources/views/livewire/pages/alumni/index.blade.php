@@ -118,10 +118,10 @@
 
                         <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
 
-                        @if ($alumnus->is_featured)
+                        @if ($alumnus->employment_status === 'Bekerja')
                             <div class="absolute left-3 top-3">
                                 <span class="rounded-full border border-white/15 bg-white/90 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-[var(--brand-deep)] backdrop-blur-sm">
-                                    ⭐ Featured
+                                    Sudah Bekerja
                                 </span>
                             </div>
                         @endif

@@ -23,7 +23,7 @@ class Show extends Component
             'relatedAlumni' => AlumniProfile::query()
                 ->where('program', $this->alumniProfile->program)
                 ->whereKeyNot($this->alumniProfile->getKey())
-                ->orderByDesc('is_featured')
+                ->orderByRaw("case when employment_status = 'Bekerja' then 0 else 1 end")
                 ->orderBy('name')
                 ->limit(3)
                 ->get(),

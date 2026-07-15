@@ -56,7 +56,7 @@ class Index extends Component
                     'batch_year' => $this->batchYear,
                     'employer' => $this->employer,
                 ])
-                ->orderByDesc('is_featured')
+                ->orderByRaw("case when employment_status = 'Bekerja' then 0 else 1 end")
                 ->orderBy('name')
                 ->paginate(6),
             'programs' => AlumniProfile::query()->select('program')->distinct()->orderBy('program')->pluck('program'),

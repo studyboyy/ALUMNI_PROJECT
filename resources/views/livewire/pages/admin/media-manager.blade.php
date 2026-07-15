@@ -1,13 +1,13 @@
-@section('title', 'Kelola Media')
+@section('title', 'Kelola Galeri & Media')
 
 <div class="w-full space-y-8">
     <section class="w-full">
         <div class="grid gap-5 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
             <div class="glass-panel p-6 sm:p-7">
-                <p class="section-eyebrow">Media Gallery</p>
-                <h1 class="section-title mt-2">Kelola semua gambar website dari satu tempat.</h1>
+                <p class="section-eyebrow">Galeri & Media</p>
+                <h1 class="section-title mt-2">Kelola Galeri publik dan aset website.</h1>
                 <p class="section-copy mt-3 max-w-2xl">
-                    Upload, cari, salin URL, dan hapus media secara cepat tanpa keluar dari dashboard.
+                    Media yang dipublikasikan di sini langsung tampil pada Galeri di halaman Berita & Agenda.
                 </p>
             </div>
 
@@ -15,8 +15,8 @@
                 <p class="section-eyebrow mb-4">Ringkasan</p>
                 <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
                     <div class="rounded-2xl border bg-white px-4 py-3" style="border-color:var(--border)">
-                        <p class="text-[0.65rem] font-semibold uppercase tracking-widest text-gray-400">Total Gambar</p>
-                        <p class="mt-1 text-2xl font-semibold" style="color:var(--ink)">{{ count($images) }}</p>
+                        <p class="text-[0.65rem] font-semibold uppercase tracking-widest text-gray-400">Item Galeri</p>
+                        <p class="mt-1 text-2xl font-semibold" style="color:var(--ink)">{{ $galleryItems->count() }}</p>
                     </div>
                     <div class="rounded-2xl border bg-white px-4 py-3" style="border-color:var(--border)">
                         <p class="text-[0.65rem] font-semibold uppercase tracking-widest text-gray-400">Kategori</p>
@@ -42,6 +42,23 @@
                 </div>
 
                 <form wire:submit="upload" class="space-y-4">
+                    <label class="space-y-2 text-sm text-slate-600">
+                        <span>Judul Galeri</span>
+                        <input wire:model="title" type="text" class="input-shell" placeholder="Contoh: Reuni Akbar Alumni">
+                        @error('title') <span class="form-error">{{ $message }}</span> @enderror
+                    </label>
+
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <label class="space-y-2 text-sm text-slate-600">
+                            <span>Nama kegiatan <span class="text-slate-400">(opsional)</span></span>
+                            <input wire:model="eventName" type="text" class="input-shell" placeholder="Nama kegiatan">
+                        </label>
+                        <label class="space-y-2 text-sm text-slate-600">
+                            <span>Keterangan <span class="text-slate-400">(opsional)</span></span>
+                            <input wire:model="caption" type="text" class="input-shell" placeholder="Keterangan singkat">
+                        </label>
+                    </div>
+
                     <label class="block">
                         <input wire:model="file" type="file" accept="image/*" class="sr-only">
                         <div
@@ -68,6 +85,11 @@
                             <button type="button" wire:click="$set('file', null)" class="outline-btn">Batal</button>
                         </div>
                     @endif
+
+                    <label class="flex items-center gap-3 text-sm" style="color:var(--ink-2)">
+                        <input wire:model="publishNow" type="checkbox" class="h-4 w-4 rounded border-gray-300">
+                        Tampilkan langsung di Galeri publik
+                    </label>
                 </form>
             </div>
 
@@ -89,6 +111,7 @@
                         <span>Kategori</span>
                         <select wire:model="selectedCategory" class="input-shell">
                             <option value="all">Semua Kategori</option>
+                            <option value="gallery-images">Galeri Publik</option>
                             <option value="alumni-photos">Foto Alumni</option>
                             <option value="news-images">Gambar Berita</option>
                             <option value="homepage-images">Gambar Homepage</option>
@@ -101,6 +124,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="w-full">
+        <div class="mb-4 flex items-end justify-between gap-4">
+            <div>
+                <p class="section-eyebrow">Galeri Publik</p>
+                <h2 class="mt-1 font-sans text-xl font-semibold" style="color:var(--ink)">Konten yang terhubung ke halaman pengguna</h2>
+            </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            @forelse ($galleryItems as $item)
+                <article class="overflow-hidden rounded-xl border bg-white" style="border-color:var(--border)">
+                    <img src="{{ $item->media_url }}" alt="{{ $item->title }}" class="aspect-[4/3] w-full object-cover">
+                    <div class="space-y-3 p-4">
+                        <div>
+                            <p class="font-semibold" style="color:var(--ink)">{{ $item->title }}</p>
+                            <p class="mt-1 text-xs" style="color:var(--ink-muted)">{{ $item->event_name ?: 'Tanpa nama kegiatan' }}</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            <button type="button" wire:click="toggleGalleryPublication({{ $item->id }})" class="outline-btn text-xs">
+                                {{ $item->published_at ? 'Sembunyikan' : 'Tampilkan' }}
+                            </button>
+                            <button type="button" wire:click="deleteGalleryItem({{ $item->id }})" wire:confirm="Hapus item Galeri ini?" class="ghost-btn text-xs text-rose-600">
+                                Hapus
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            @empty
+                <div class="glass-panel col-span-full px-8 py-12 text-center">
+                    <p class="font-semibold" style="color:var(--ink)">Belum ada item Galeri</p>
+                    <p class="mt-1 text-sm" style="color:var(--ink-muted)">Upload media untuk menampilkannya di halaman Berita & Agenda.</p>
+                </div>
+            @endforelse
         </div>
     </section>
 

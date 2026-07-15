@@ -46,10 +46,6 @@
                     <div class="flex flex-wrap gap-2">
                         <button wire:click="edit({{ $item->id }})" type="button"
                             class="rounded-full border border-slate-300 px-3 py-2 text-xs text-slate-700 transition hover:border-violet-300 hover:text-violet-700">Edit</button>
-                        <button wire:click="toggleFeatured({{ $item->id }})" type="button"
-                            class="rounded-full border px-3 py-2 text-xs uppercase tracking-widest transition {{ $item->is_featured ? 'border-violet-300 bg-violet-50 text-violet-800 hover:bg-violet-100' : 'border-slate-300 text-slate-700 hover:border-violet-300 hover:text-violet-700' }}">
-                            {{ $item->is_featured ? 'Unggulan' : 'Featured' }}
-                        </button>
                         <button wire:click="delete({{ $item->id }})" type="button"
                             class="rounded-full border border-rose-300 px-3 py-2 text-xs text-rose-600 transition hover:bg-rose-50">Hapus</button>
                     </div>

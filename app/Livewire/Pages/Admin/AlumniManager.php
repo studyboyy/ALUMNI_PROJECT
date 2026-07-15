@@ -18,12 +18,17 @@ class AlumniManager extends Component
     public string $search = '';
 
     public bool $showModal = false;
+
     public ?int $editingId = null;
 
     public string $nim = '';
+
     public string $name = '';
+
     public string $program = '';
+
     public string $campus_name = '';
+
     public string $batch_year = '';
 
     protected string $paginationTheme = 'tailwind';
@@ -74,7 +79,7 @@ class AlumniManager extends Component
 
         $alumni = $this->editingId
             ? AlumniProfile::query()->findOrFail($this->editingId)
-            : new AlumniProfile();
+            : new AlumniProfile;
 
         if (! $this->editingId) {
             $alumni->slug = $this->generateUniqueSlug($validated['name'], $validated['nim']);
@@ -97,24 +102,16 @@ class AlumniManager extends Component
 
     private function generateUniqueSlug(string $name, string $nim): string
     {
-        $base = Str::slug($name) . '-' . Str::slug($nim);
+        $base = Str::slug($name).'-'.Str::slug($nim);
         $slug = $base;
         $suffix = 1;
 
         while (AlumniProfile::query()->where('slug', $slug)->exists()) {
             $suffix++;
-            $slug = $base . '-' . $suffix;
+            $slug = $base.'-'.$suffix;
         }
 
         return $slug;
-    }
-
-    public function toggleFeatured(int $id): void
-    {
-        $alumni = AlumniProfile::query()->findOrFail($id);
-        $alumni->update(['is_featured' => ! $alumni->is_featured]);
-
-        $this->dispatch('toast', type: 'success', message: 'Status alumni unggulan berhasil diperbarui.');
     }
 
     public function delete(int $id): void
@@ -144,7 +141,7 @@ class AlumniManager extends Component
                         ->orWhere('campus_name', 'like', "%{$this->search}%")
                         ->orWhere('employer', 'like', "%{$this->search}%");
                 })
-                ->orderByDesc('is_featured')
+                ->orderByRaw("case when employment_status = 'Bekerja' then 0 else 1 end")
                 ->orderBy('name')
                 ->paginate(10),
         ]);

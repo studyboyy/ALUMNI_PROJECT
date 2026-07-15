@@ -39,7 +39,7 @@
                     </div>
                     <div class="flex flex-wrap items-center gap-3 pt-1">
                         <div class="flex -space-x-2">
-                            @foreach($featuredAlumni->take(4) as $a)
+                            @foreach($workingAlumni->take(4) as $a)
                                 @if($a->photo_url)
                                     <img src="{{ $a->photo_url }}" class="h-8 w-8 rounded-full border-2 border-white object-cover" alt="">
                                 @endif
@@ -113,18 +113,18 @@
         </div>
     </section>
 
-    {{-- ── FEATURED ALUMNI ── --}}
+    {{-- Alumni dengan status pekerjaan terverifikasi dari profil --}}
     <section class="section-shell py-10">
         <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-                <p class="section-eyebrow">Alumni Unggulan</p>
-                <h2 class="section-title">Alumni aktif di industri dan komunitas.</h2>
+                <p class="section-eyebrow">Alumni Sudah Bekerja</p>
+                <h2 class="section-title">Jejaring alumni yang aktif di dunia kerja.</h2>
             </div>
             <a href="{{ route('alumni.index') }}" wire:navigate class="section-link">Lihat semua</a>
         </div>
 
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            @foreach ($featuredAlumni as $alumnus)
+            @forelse ($workingAlumni as $alumnus)
                 <a href="{{ route('alumni.show', $alumnus) }}" wire:navigate
                     class="group relative overflow-hidden rounded-2xl border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                     style="border-color:var(--border)">
@@ -162,7 +162,12 @@
                     <div class="absolute inset-x-0 bottom-0 h-0.5 scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
                          style="background:linear-gradient(90deg,var(--brand),var(--brand-2))"></div>
                 </a>
-            @endforeach
+            @empty
+                <div class="glass-panel col-span-full px-8 py-12 text-center">
+                    <p class="font-semibold" style="color:var(--ink)">Belum ada data alumni bekerja</p>
+                    <p class="mt-1 text-sm" style="color:var(--ink-muted)">Data akan tampil setelah status pekerjaan alumni diperbarui.</p>
+                </div>
+            @endforelse
         </div>
     </section>
 

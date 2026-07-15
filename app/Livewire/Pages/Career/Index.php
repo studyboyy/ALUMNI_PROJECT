@@ -17,13 +17,20 @@ class Index extends Component
     {
         return view('livewire.pages.career.index', [
             'jobs' => CareerOpportunity::query()->open()->with(['submitter', 'submitter.alumniProfile'])->get(),
-            'featuredMentors' => AlumniProfile::query()->where('is_featured', true)->limit(3)->get(),
+            'workingAlumni' => AlumniProfile::query()
+                ->where('employment_status', 'Bekerja')
+                ->where(function ($query) {
+                    $query->whereNotNull('job_title')->orWhereNotNull('employer');
+                })
+                ->orderByDesc('updated_at')
+                ->limit(3)
+                ->get(),
             'collaborations' => WorkProgram::query()->whereIn('category', ['Karier', 'Kolaborasi'])->orderBy('sort_order')->get(),
             'myPendingJobs' => Auth::check()
                 ? CareerOpportunity::query()
-                ->where('submitted_by', Auth::id())
-                ->where('approval_status', CareerOpportunity::STATUS_PENDING)
-                ->count()
+                    ->where('submitted_by', Auth::id())
+                    ->where('approval_status', CareerOpportunity::STATUS_PENDING)
+                    ->count()
                 : 0,
         ]);
     }
