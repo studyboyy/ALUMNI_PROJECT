@@ -1,0 +1,240 @@
+@startuml
+title Entity Relationship Diagram Portal Alumni FTI
+left to right direction
+skinparam shadowing false
+skinparam linetype ortho
+hide circle
+
+entity "users" as USERS {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * email : VARCHAR <<UQ>>
+  email_verified_at : TIMESTAMP <<NULL>>
+  * password : VARCHAR
+  * role : VARCHAR
+  job_notifications_seen_at : TIMESTAMP <<NULL>>
+  remember_token : VARCHAR <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "alumni_profiles" as ALUMNI_PROFILES {
+  * id : BIGINT <<PK>>
+  --
+  user_id : BIGINT <<FK, NULL, UQ-logical>>
+  nim : VARCHAR(32) <<UQ, NULL>>
+  * name : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  email : VARCHAR <<NULL>>
+  phone : VARCHAR <<NULL>>
+  * program : VARCHAR
+  campus_name : VARCHAR <<NULL>>
+  * batch_year : SMALLINT UNSIGNED
+  graduation_year : SMALLINT UNSIGNED <<NULL>>
+  employer : VARCHAR <<NULL>>
+  job_title : VARCHAR <<NULL>>
+  city : VARCHAR <<NULL>>
+  province : VARCHAR <<NULL>>
+  industry : VARCHAR <<NULL>>
+  * employment_status : VARCHAR
+  bio : TEXT <<NULL>>
+  achievements : JSON <<NULL>>
+  linkedin_url : VARCHAR <<NULL>>
+  photo_url : VARCHAR <<NULL>>
+  testimonial_quote : TEXT <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "career_opportunities" as CAREER_OPPORTUNITIES {
+  * id : BIGINT <<PK>>
+  --
+  submitted_by : BIGINT <<FK, NULL>>
+  approved_by : BIGINT <<FK, NULL>>
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * company : VARCHAR
+  * location : VARCHAR
+  * employment_type : VARCHAR
+  * summary : TEXT
+  * apply_url : VARCHAR
+  * closes_at : DATE
+  * is_featured : BOOLEAN
+  * approval_status : VARCHAR
+  approval_notes : TEXT <<NULL>>
+  approved_at : TIMESTAMP <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "chat_messages" as CHAT_MESSAGES {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  reply_to_id : BIGINT <<FK, NULL>>
+  * body : TEXT
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "tracer_study_responses" as TRACER_RESPONSES {
+  * id : BIGINT <<PK>>
+  --
+  user_id : BIGINT <<FK, NULL>>
+  * name : VARCHAR
+  nim : VARCHAR <<NULL>>
+  * email : VARCHAR <<UQ>>
+  phone : VARCHAR <<NULL>>
+  * program : VARCHAR
+  * batch_year : SMALLINT UNSIGNED
+  graduation_year : SMALLINT UNSIGNED <<NULL>>
+  * employment_status : VARCHAR
+  employer : VARCHAR <<NULL>>
+  job_title : VARCHAR <<NULL>>
+  industry : VARCHAR <<NULL>>
+  city : VARCHAR <<NULL>>
+  province : VARCHAR <<NULL>>
+  job_relevance : VARCHAR <<NULL>>
+  waiting_time_months : TINYINT UNSIGNED <<NULL>>
+  curriculum_rating : TINYINT <<NULL>>
+  suggestion : TEXT <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "news_articles" as NEWS_ARTICLES {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * category : VARCHAR
+  * excerpt : TEXT
+  * content : LONGTEXT
+  cover_image_url : VARCHAR <<NULL>>
+  published_at : TIMESTAMP <<NULL>>
+  * is_featured : BOOLEAN
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "event_agendas" as EVENT_AGENDAS {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * category : VARCHAR
+  * summary : TEXT
+  * location : VARCHAR
+  * starts_at : TIMESTAMP
+  registration_url : VARCHAR <<NULL>>
+  * is_featured : BOOLEAN
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "gallery_items" as GALLERY_ITEMS {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * media_type : VARCHAR
+  * media_url : VARCHAR
+  caption : TEXT <<NULL>>
+  event_name : VARCHAR <<NULL>>
+  published_at : TIMESTAMP <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "organization_members" as ORGANIZATION_MEMBERS {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * role : VARCHAR
+  division : VARCHAR <<NULL>>
+  * period : VARCHAR
+  focus_area : VARCHAR <<NULL>>
+  photo_url : VARCHAR <<NULL>>
+  * sort_order : INT UNSIGNED
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "work_programs" as WORK_PROGRAMS {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * category : VARCHAR
+  * summary : TEXT
+  impact_target : VARCHAR <<NULL>>
+  * status : VARCHAR
+  * sort_order : INT UNSIGNED
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "testimonials" as TESTIMONIALS {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * batch_year : SMALLINT UNSIGNED
+  * role : VARCHAR
+  * company : VARCHAR
+  * quote : TEXT
+  photo_url : VARCHAR <<NULL>>
+  * sort_order : INT UNSIGNED
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "faq_items" as FAQ_ITEMS {
+  * id : BIGINT <<PK>>
+  --
+  * question : VARCHAR
+  * answer : TEXT
+  * sort_order : INT UNSIGNED
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "contact_messages" as CONTACT_MESSAGES {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * email : VARCHAR
+  * subject : VARCHAR
+  * message : TEXT
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "site_settings" as SITE_SETTINGS {
+  * id : BIGINT <<PK>>
+  --
+  * key : VARCHAR <<UQ>>
+  value : JSON <<NULL>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+USERS |o--o| ALUMNI_PROFILES : "user_id\nON DELETE CASCADE"
+USERS ||--o{ CHAT_MESSAGES : "user_id\nON DELETE CASCADE"
+CHAT_MESSAGES |o--o{ CHAT_MESSAGES : "reply_to_id\nON DELETE SET NULL"
+USERS |o--o{ TRACER_RESPONSES : "user_id\nON DELETE SET NULL"
+USERS |o--o{ CAREER_OPPORTUNITIES : "submitted_by\nON DELETE SET NULL"
+USERS |o--o{ CAREER_OPPORTUNITIES : "approved_by\nON DELETE SET NULL"
+
+note bottom of ALUMNI_PROFILES
+  is_featured sudah dihapus melalui migration.
+  Status objektif alumni memakai employment_status.
+end note
+
+note bottom of CAREER_OPPORTUNITIES
+  approval_status: pending, approved, rejected
+end note
+
+note bottom of TRACER_RESPONSES
+  email unik mencegah respons ganda.
+  user_id nullable karena pengunjung dapat mengisi.
+end note
+@enduml

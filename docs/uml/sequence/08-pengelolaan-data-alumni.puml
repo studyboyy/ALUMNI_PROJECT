@@ -1,0 +1,43 @@
+@startuml
+title Sequence Diagram Pengelolaan Data Alumni
+autonumber
+skinparam shadowing false
+
+actor "Admin" as Admin
+boundary "Kelola Data Alumni" as View
+control "AlumniManager (Livewire)" as Manager
+entity "AlumniProfile" as Profile
+control "AlumniExportController" as Export
+control "SimpleXlsxWriter" as Writer
+database "Database" as DB
+
+Admin -> View : Buka Kelola Data Alumni
+View -> Manager : render()
+Manager -> Profile : Query pencarian + pagination
+Profile -> DB : SELECT alumni_profiles
+DB --> View : Daftar alumni
+
+alt Tambah atau ubah alumni
+  Admin -> View : Isi formulir dan Simpan
+  View -> Manager : save()
+  Manager -> Manager : Validasi dan siapkan slug
+  Manager -> Profile : create()/update()
+  Profile -> DB : INSERT/UPDATE alumni_profiles
+  DB --> Manager : Berhasil
+  Manager --> View : Toast berhasil
+else Hapus alumni
+  Admin -> View : Pilih Hapus
+  View -> Manager : delete(id)
+  Manager -> Profile : findOrFail(id).delete()
+  Profile -> DB : DELETE alumni_profiles
+  DB --> View : Toast berhasil
+else Ekspor data
+  Admin -> Export : GET admin/alumni/export
+  Export -> Profile : Ambil data alumni
+  Profile -> DB : SELECT alumni_profiles
+  DB --> Export : Koleksi alumni
+  Export -> Writer : Bentuk workbook terformat
+  Writer --> Export : Binary XLSX
+  Export --> Admin : Respons unduhan XLSX
+end
+@enduml

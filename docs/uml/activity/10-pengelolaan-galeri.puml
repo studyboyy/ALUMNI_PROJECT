@@ -1,0 +1,47 @@
+@startuml
+title Activity Diagram Pengelolaan dan Publikasi Galeri
+skinparam shadowing false
+
+|Admin|
+start
+:Buka menu Kelola Galeri;
+:Pilih gambar;
+:Isi judul, nama kegiatan, keterangan,\ndan pilihan publikasi;
+:Unggah gambar;
+
+|Sistem|
+:Validasi tipe dan ukuran gambar;
+if (Valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+  stop
+else (Ya)
+  :Simpan gambar ke storage publik;
+  :Simpan metadata GalleryItem;
+  if (Publikasikan sekarang?) then (Ya)
+    :Isi published_at;
+  else (Tidak)
+    :Biarkan published_at kosong;
+  endif
+  :Tampilkan notifikasi berhasil;
+endif
+
+|Admin|
+if (Mengubah publikasi?) then (Ya)
+  |Sistem|
+  :Aktifkan atau kosongkan published_at;
+endif
+|Admin|
+if (Menghapus item?) then (Ya)
+  :Konfirmasi penghapusan;
+  |Sistem|
+  :Hapus metadata dan/atau berkas media;
+endif
+
+|Pengguna|
+:Buka menu Galeri;
+|Sistem|
+:Ambil item dengan published_at terisi;
+:Urutkan dari publikasi terbaru;
+:Tampilkan Galeri publik;
+stop
+@enduml

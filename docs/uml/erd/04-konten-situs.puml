@@ -1,0 +1,93 @@
+@startuml
+title ERD Konten Situs
+left to right direction
+skinparam shadowing false
+
+entity news_articles {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * category : VARCHAR
+  * excerpt : TEXT
+  * content : LONGTEXT
+  cover_image_url : VARCHAR?
+  published_at : TIMESTAMP?
+  is_featured : BOOLEAN
+}
+entity event_agendas {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * category : VARCHAR
+  * summary : TEXT
+  * location : VARCHAR
+  * starts_at : TIMESTAMP
+  registration_url : VARCHAR?
+  is_featured : BOOLEAN
+}
+entity gallery_items {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * media_type : VARCHAR
+  * media_url : VARCHAR
+  caption : TEXT?
+  event_name : VARCHAR?
+  published_at : TIMESTAMP?
+}
+entity organization_members {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * role : VARCHAR
+  division : VARCHAR?
+  * period : VARCHAR
+  sort_order : INT
+}
+entity work_programs {
+  * id : BIGINT <<PK>>
+  --
+  * title : VARCHAR
+  * category : VARCHAR
+  * summary : TEXT
+  impact_target : VARCHAR?
+  status : VARCHAR
+  sort_order : INT
+}
+entity testimonials {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * batch_year : SMALLINT
+  * role : VARCHAR
+  * company : VARCHAR
+  * quote : TEXT
+  sort_order : INT
+}
+entity faq_items {
+  * id : BIGINT <<PK>>
+  --
+  * question : VARCHAR
+  * answer : TEXT
+  sort_order : INT
+}
+entity contact_messages {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * email : VARCHAR
+  * subject : VARCHAR
+  * message : TEXT
+}
+entity site_settings {
+  * id : BIGINT <<PK>>
+  --
+  * key : VARCHAR <<UQ>>
+  value : JSON?
+}
+note bottom of gallery_items
+  published_at terisi = tampil di Galeri publik.
+end note
+@enduml

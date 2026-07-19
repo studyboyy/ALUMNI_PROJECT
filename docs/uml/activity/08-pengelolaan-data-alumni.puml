@@ -1,0 +1,45 @@
+@startuml
+title Activity Diagram Pengelolaan Data Alumni
+skinparam shadowing false
+
+|Admin|
+start
+:Login dan buka Kelola Data Alumni;
+|Sistem|
+:Tampilkan data alumni dengan pencarian\ndan pagination;
+|Admin|
+if (Aksi?) then (Tambah)
+  :Isi data alumni baru;
+elseif (Aksi ubah?) then (Ubah)
+  :Pilih alumni;
+  |Sistem|
+  :Isi formulir dari data terpilih;
+  |Admin|
+  :Ubah data alumni;
+elseif (Aksi hapus?) then (Hapus)
+  :Pilih alumni dan konfirmasi hapus;
+  |Sistem|
+  :Hapus profil alumni;
+  :Tampilkan notifikasi berhasil;
+  stop
+else (Ekspor)
+  |Sistem|
+  :Ambil seluruh data alumni;
+  :Bentuk workbook XLSX terformat;
+  :Kirim file unduhan;
+  stop
+endif
+
+|Admin|
+:Simpan formulir;
+|Sistem|
+:Validasi data dan keunikan identitas;
+if (Valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+else (Ya)
+  :Buat slug bila diperlukan;
+  :Simpan data alumni;
+  :Tampilkan notifikasi berhasil;
+endif
+stop
+@enduml

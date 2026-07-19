@@ -1,0 +1,99 @@
+@startuml
+title Class Diagram Konten Situs
+left to right direction
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class SiteSetting <<Model>> {
+  +key: string
+  +value: array?
+  {static} +getValue(key, default): mixed
+  {static} +setValue(key, value): void
+}
+class NewsArticle <<Model>> {
+  +title: string
+  +slug: string
+  +category: string
+  +excerpt: text
+  +content: longtext
+  +cover_image_url: string?
+  +published_at: datetime?
+  +is_featured: bool
+  +scopePublished(query): Builder
+}
+class EventAgenda <<Model>> {
+  +title: string
+  +slug: string
+  +category: string
+  +summary: text
+  +location: string
+  +starts_at: datetime
+  +registration_url: string?
+  +scopeUpcoming(query): Builder
+}
+class GalleryItem <<Model>> {
+  +title: string
+  +media_type: string
+  +media_url: string
+  +caption: text?
+  +event_name: string?
+  +published_at: datetime?
+}
+class OrganizationMember <<Model>> {
+  +name: string
+  +role: string
+  +division: string?
+  +period: string
+  +sort_order: int
+}
+class WorkProgram <<Model>> {
+  +title: string
+  +category: string
+  +summary: text
+  +impact_target: string?
+  +status: string
+  +sort_order: int
+}
+class Testimonial <<Model>> {
+  +name: string
+  +batch_year: int
+  +role: string
+  +company: string
+  +quote: text
+  +sort_order: int
+}
+class FaqItem <<Model>> {
+  +question: string
+  +answer: text
+  +sort_order: int
+}
+class ContactMessage <<Model>> {
+  +name: string
+  +email: string
+  +subject: string
+  +message: text
+}
+class HomepageManager <<Livewire>> { +addSlide(): void; +removeSlide(index): void; +save(): void }
+class ProfileManager <<Livewire>> { +saveLogo(): void; +save(): void }
+class NewsManager <<Livewire>> { +create(): void; +update(): void; +togglePublish(id): void; +delete(id): void }
+class MediaManager <<Livewire>> { +upload(): void; +toggleGalleryPublication(id): void; +deleteGalleryItem(id): void }
+class OrganizationManager <<Livewire>> { +create(): void; +save(): void; +delete(id): void }
+class WorkProgramManager <<Livewire>> { +create(): void; +save(): void; +delete(id): void }
+class TestimoniManager <<Livewire>> { +create(): void; +save(): void; +delete(id): void }
+class FaqManager <<Livewire>> { +create(): void; +save(): void; +delete(id): void }
+class GalleryIndex <<Livewire>> { +render(): View }
+
+HomepageManager ..> SiteSetting
+ProfileManager ..> SiteSetting
+NewsManager ..> NewsArticle
+MediaManager ..> GalleryItem
+OrganizationManager ..> OrganizationMember
+WorkProgramManager ..> WorkProgram
+TestimoniManager ..> Testimonial
+FaqManager ..> FaqItem
+GalleryIndex ..> GalleryItem
+note bottom of EventAgenda
+  Dipakai untuk tampilan publik,
+  belum memiliki manager CRUD admin.
+end note
+@enduml

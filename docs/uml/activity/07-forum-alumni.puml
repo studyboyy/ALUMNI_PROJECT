@@ -1,0 +1,42 @@
+@startuml
+title Activity Diagram Forum Alumni
+skinparam shadowing false
+
+|Pengguna Terautentikasi|
+start
+:Buka Forum Alumni;
+
+|Sistem|
+:Ambil 50 pesan terbaru beserta pengguna\ndan referensi pesan balasan;
+:Tampilkan pesan secara kronologis;
+:Perbarui daftar melalui polling berkala;
+
+|Pengguna Terautentikasi|
+if (Membalas pesan?) then (Ya)
+  :Pilih pesan yang akan dibalas;
+  |Sistem|
+  :Simpan reply_to_id sementara;
+endif
+|Pengguna Terautentikasi|
+:Tulis dan kirim pesan;
+
+|Sistem|
+:Validasi isi maksimal 1000 karakter;
+if (Valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+else (Ya)
+  :Simpan pesan dan identitas pengirim;
+  :Muat ulang daftar pesan;
+  :Geser tampilan ke pesan terbaru;
+endif
+
+|Admin|
+if (Perlu moderasi?) then (Ya)
+  :Pilih pesan bermasalah;
+  :Hapus pesan;
+  |Sistem|
+  :Hapus data pesan;
+  :Muat ulang forum;
+endif
+stop
+@enduml

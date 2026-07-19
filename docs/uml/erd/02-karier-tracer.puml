@@ -1,0 +1,54 @@
+@startuml
+title ERD Karier dan Tracer Study
+left to right direction
+skinparam shadowing false
+
+entity users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * role : VARCHAR
+}
+entity career_opportunities {
+  * id : BIGINT <<PK>>
+  --
+  submitted_by : BIGINT? <<FK>>
+  approved_by : BIGINT? <<FK>>
+  * title : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * company : VARCHAR
+  * location : VARCHAR
+  * employment_type : VARCHAR
+  * summary : TEXT
+  * apply_url : VARCHAR
+  * closes_at : DATE
+  * approval_status : VARCHAR
+  approval_notes : TEXT?
+  approved_at : TIMESTAMP?
+}
+entity tracer_study_responses {
+  * id : BIGINT <<PK>>
+  --
+  user_id : BIGINT? <<FK>>
+  * name : VARCHAR
+  nim : VARCHAR?
+  * email : VARCHAR <<UQ>>
+  * program : VARCHAR
+  * batch_year : SMALLINT
+  graduation_year : SMALLINT?
+  * employment_status : VARCHAR
+  employer : VARCHAR?
+  job_title : VARCHAR?
+  industry : VARCHAR?
+  job_relevance : VARCHAR?
+  waiting_time_months : TINYINT?
+  curriculum_rating : TINYINT?
+  suggestion : TEXT?
+}
+users |o--o{ career_opportunities : submitted_by / SET NULL
+users |o--o{ career_opportunities : approved_by / SET NULL
+users |o--o{ tracer_study_responses : user_id / SET NULL
+note bottom of career_opportunities
+  approval_status = pending | approved | rejected
+end note
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+title Activity Diagram Pengajuan dan Verifikasi Lowongan
+skinparam shadowing false
+
+|Alumni|
+start
+:Login dan buka Submit Lowongan;
+:Isi judul, perusahaan, lokasi, jenis,\nringkasan, URL lamaran, dan tanggal tutup;
+:Kirim pengajuan;
+
+|Sistem|
+:Validasi data lowongan;
+if (Data valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+  stop
+else (Ya)
+  :Buat slug unik;
+  :Simpan lowongan dengan status pending;
+  :Catat submitted_by;
+  :Tampilkan notifikasi pengajuan berhasil;
+endif
+
+|Admin|
+:Buka Karier & Kolaborasi — Lowongan;
+:Tinjau pengajuan pending;
+if (Keputusan admin?) then (Setujui)
+  |Sistem|
+  :Ubah status menjadi approved;
+  :Catat approved_by dan approved_at;
+  :Lowongan tampil jika belum kedaluwarsa;
+else (Tolak)
+  |Admin|
+  :Masukkan catatan penolakan bila diperlukan;
+  |Sistem|
+  :Ubah status menjadi rejected;
+  :Simpan catatan keputusan;
+  :Lowongan tidak tampil di halaman publik;
+endif
+
+|Alumni|
+:Lihat status pengajuan pada dashboard;
+stop
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+title Use Case Diagram Admin
+left to right direction
+skinparam shadowing false
+actor "Admin" as Admin
+rectangle "Administrasi Portal Alumni FTI" {
+  usecase "Login dan Logout" as Auth
+  usecase "Melihat Dashboard Admin" as Dashboard
+  usecase "Kelola Beranda" as Home
+  usecase "Kelola Profil dan Kontak" as Profile
+  usecase "Kelola Struktur Organisasi" as Organization
+  usecase "Kelola Data Alumni" as Alumni
+  usecase "Ekspor Data Alumni XLSX" as ExportAlumni
+  usecase "Kelola Program Karier\ndan Kolaborasi" as Program
+  usecase "Verifikasi Lowongan" as Approval
+  usecase "Kelola Berita" as News
+  usecase "Unggah Gambar Editor" as EditorImage
+  usecase "Kelola Galeri" as Gallery
+  usecase "Kelola Testimoni" as Testimonial
+  usecase "Kelola FAQ" as Faq
+  usecase "Kelola Respons Tracer Study" as Tracer
+  usecase "Ekspor Tracer Study XLSX" as ExportTracer
+  usecase "Moderasi Forum" as Forum
+  usecase "Menghapus Pesan Forum" as DeleteMessage
+  usecase "Kelola Tema dan Identitas" as Theme
+}
+Admin --> Auth
+Admin --> Dashboard
+Admin --> Home
+Admin --> Profile
+Admin --> Organization
+Admin --> Alumni
+Admin --> Program
+Admin --> Approval
+Admin --> News
+Admin --> Gallery
+Admin --> Testimonial
+Admin --> Faq
+Admin --> Tracer
+Admin --> Forum
+Admin --> Theme
+Alumni ..> ExportAlumni : <<extend>>
+Tracer ..> ExportTracer : <<extend>>
+News ..> EditorImage : <<include>>
+Forum ..> DeleteMessage : <<extend>>
+@enduml

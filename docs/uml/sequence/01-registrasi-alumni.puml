@@ -1,0 +1,48 @@
+@startuml
+title Sequence Diagram Registrasi Alumni
+autonumber
+skinparam shadowing false
+
+actor "Calon Alumni" as Alumni
+boundary "Halaman Registrasi" as View
+control "Register (Livewire)" as Register
+entity "AlumniProfile" as Profile
+entity "User" as User
+control "Auth" as Auth
+database "Database" as DB
+
+Alumni -> View : Buka halaman registrasi
+Alumni -> View : Masukkan kata kunci NIM
+View -> Register : updatedNimQuery()
+Register -> Profile : Cari profil berdasarkan NIM
+Profile -> DB : SELECT alumni_profiles
+DB --> Profile : Daftar profil
+Profile --> Register : Hasil pencarian
+Register --> View : Tampilkan hasil dan status akun
+
+Alumni -> View : Pilih profil
+View -> Register : selectAlumni(profileId)
+Register -> Profile : Cari profil tanpa user_id
+Profile -> DB : SELECT alumni_profile
+DB --> Register : Profil alumni
+Register --> View : Tampilkan profil terpilih
+
+Alumni -> View : Isi email dan password
+Alumni -> View : Kirim registrasi
+View -> Register : register()
+Register -> Register : Validasi data
+Register -> DB : BEGIN TRANSACTION
+Register -> Profile : lockForUpdate(profileId, user_id NULL)
+Profile -> DB : SELECT ... FOR UPDATE
+DB --> Register : Profil valid
+Register -> User : create(name, email, password, role)
+User -> DB : INSERT users
+DB --> User : Akun alumni
+Register -> Profile : update(user_id, email)
+Profile -> DB : UPDATE alumni_profiles
+Register -> DB : COMMIT
+Register -> Auth : login(user)
+Auth --> Register : Sesi terautentikasi
+Register --> View : Redirect Dashboard Alumni
+View --> Alumni : Tampilkan dashboard
+@enduml

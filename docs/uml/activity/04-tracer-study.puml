@@ -1,0 +1,45 @@
+@startuml
+title Activity Diagram Pengisian Tracer Study
+skinparam shadowing false
+
+|Pengguna|
+start
+:Buka halaman Tracer Study;
+
+|Sistem|
+if (Pengguna sudah login?) then (Ya)
+  :Ambil profil alumni;
+  :Isi awal formulir dari profil;
+  :Periksa respons berdasarkan user_id;
+  if (Sudah pernah mengisi?) then (Ya)
+    :Tampilkan status sudah mengisi;
+    stop
+  endif
+endif
+
+|Pengguna|
+:Lengkapi data tracer study;
+:Kirim formulir;
+
+|Sistem|
+:Validasi seluruh field;
+if (Valid?) then (Tidak)
+  :Tampilkan kesalahan validasi;
+  stop
+else (Ya)
+  :Periksa duplikasi berdasarkan email;
+  if (Email sudah digunakan?) then (Ya)
+    :Tampilkan pesan duplikasi email;
+    stop
+  endif
+  if (Login dan user_id sudah tercatat?) then (Ya)
+    :Tampilkan status sudah mengisi;
+    stop
+  else (Tidak)
+    :Simpan respons tracer study;
+    :Tandai formulir telah dikirim;
+    :Tampilkan notifikasi berhasil;
+  endif
+endif
+stop
+@enduml

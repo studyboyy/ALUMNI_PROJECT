@@ -1,0 +1,36 @@
+@startuml
+title Use Case Diagram Pengunjung
+left to right direction
+skinparam shadowing false
+actor "Pengunjung" as Guest
+rectangle "Layanan Publik Portal Alumni FTI" {
+  usecase "Melihat Beranda" as Home
+  usecase "Melihat Profil dan\nStruktur Organisasi" as Profile
+  usecase "Melihat dan Mencari\nData Alumni" as Alumni
+  usecase "Melihat Detail Alumni" as AlumniDetail
+  usecase "Melihat Berita dan\nAgenda" as News
+  usecase "Melihat Detail Berita" as NewsDetail
+  usecase "Melihat Karier dan\nKolaborasi" as Career
+  usecase "Melihat Detail Lowongan" as JobDetail
+  usecase "Melihat Galeri" as Gallery
+  usecase "Melihat Kontak dan FAQ" as Contact
+  usecase "Mengirim Pesan Kontak" as Message
+  usecase "Mengisi Tracer Study" as Tracer
+  usecase "Mendaftar Akun Alumni" as Register
+  usecase "Login" as Login
+}
+Guest --> Home
+Guest --> Profile
+Guest --> Alumni
+Guest --> News
+Guest --> Career
+Guest --> Gallery
+Guest --> Contact
+Guest --> Message
+Guest --> Tracer
+Guest --> Register
+Guest --> Login
+Alumni ..> AlumniDetail : <<extend>>
+News ..> NewsDetail : <<extend>>
+Career ..> JobDetail : <<extend>>
+@enduml

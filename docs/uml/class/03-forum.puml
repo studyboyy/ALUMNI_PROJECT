@@ -1,0 +1,52 @@
+@startuml
+title Class Diagram Forum Alumni
+left to right direction
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class User <<Model>> {
+  +id: bigint
+  +name: string
+  +role: string
+  +alumniProfile(): HasOne
+}
+class AlumniProfile <<Model>> { +photo_url: string?; +getInitialsAttribute(): string }
+class ChatMessage <<Model>> {
+  +id: bigint
+  +user_id: bigint
+  +reply_to_id: bigint?
+  +body: text
+  +user(): BelongsTo
+  +replyTo(): BelongsTo
+  +replies(): HasMany
+}
+class AlumniForumChat <<Livewire>> {
+  +loadMessages(): void
+  +send(): void
+  +reply(id): void
+  +cancelReply(): void
+}
+class AdminForumChat <<Livewire>> {
+  +loadMessages(): void
+  +send(): void
+  +reply(id): void
+  +deleteMessage(id): void
+}
+class ChatMessageSent <<Event>> {
+  +message: ChatMessage
+  +broadcastOn(): array
+  +broadcastAs(): string
+  +broadcastWith(): array
+}
+
+User "1" -- "0..*" ChatMessage : sends
+ChatMessage "0..1" <-- "0..*" ChatMessage : replies
+User "1" -- "0..1" AlumniProfile
+AlumniForumChat ..> ChatMessage
+AdminForumChat ..> ChatMessage
+ChatMessageSent --> ChatMessage
+note bottom of AlumniForumChat
+  Halaman memuat ulang pesan
+  dengan wire:poll.2s.
+end note
+@enduml

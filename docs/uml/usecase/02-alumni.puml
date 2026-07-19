@@ -1,0 +1,32 @@
+@startuml
+title Use Case Diagram Alumni
+left to right direction
+skinparam shadowing false
+actor "Alumni" as Alumni
+rectangle "Layanan Alumni" {
+  usecase "Login dengan Email/NIM" as Login
+  usecase "Logout" as Logout
+  usecase "Melihat Dashboard Alumni" as Dashboard
+  usecase "Memperbarui Profil" as Profile
+  usecase "Mengelola Daftar Prestasi" as Achievement
+  usecase "Mengajukan Lowongan" as SubmitJob
+  usecase "Melihat Status Lowongan" as JobStatus
+  usecase "Mengakses Forum Alumni" as Forum
+  usecase "Mengirim/Membalas Pesan" as SendMessage
+  usecase "Melihat Notifikasi Lowongan" as Notification
+  usecase "Menandai Notifikasi Dibaca" as MarkNotification
+  usecase "Mengisi Tracer Study" as Tracer
+}
+Alumni --> Login
+Alumni --> Logout
+Alumni --> Dashboard
+Alumni --> Profile
+Alumni --> SubmitJob
+Alumni --> JobStatus
+Alumni --> Forum
+Alumni --> Notification
+Alumni --> Tracer
+Profile ..> Achievement : <<include>>
+Forum ..> SendMessage : <<include>>
+Notification ..> MarkNotification : <<extend>>
+@enduml

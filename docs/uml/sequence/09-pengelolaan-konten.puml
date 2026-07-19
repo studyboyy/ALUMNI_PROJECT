@@ -1,0 +1,47 @@
+@startuml
+title Sequence Diagram Pengelolaan Konten dan Sinkronisasi Publik
+autonumber
+skinparam shadowing false
+
+actor "Admin" as Admin
+boundary "Panel Pengelolaan" as AdminView
+control "Komponen Admin Livewire" as Manager
+entity "Model Konten / SiteSetting" as Content
+database "Database" as DB
+actor "Pengguna" as User
+boundary "Halaman Publik" as PublicView
+control "Komponen Halaman Publik" as PublicPage
+
+Admin -> AdminView : Pilih menu pengelolaan
+AdminView -> Manager : mount()/render()
+Manager -> Content : Ambil konten saat ini
+Content -> DB : SELECT data konten
+DB --> Manager : Data konten
+Manager --> AdminView : Tampilkan formulir/daftar
+
+Admin -> AdminView : Tambah, ubah, hapus,\natau atur publikasi
+AdminView -> Manager : Jalankan aksi pengelolaan
+Manager -> Manager : Validasi data
+alt Data valid
+  Manager -> Content : create()/update()/delete()/setValue()
+  Content -> DB : INSERT/UPDATE/DELETE
+  DB --> Manager : Operasi berhasil
+  Manager --> AdminView : Toast berhasil
+else Data tidak valid
+  Manager --> AdminView : Tampilkan error validasi
+end
+
+User -> PublicView : Buka halaman terkait
+PublicView -> PublicPage : render()
+PublicPage -> Content : Query data aktif/terpublikasi
+Content -> DB : SELECT sumber data yang sama
+DB --> PublicPage : Konten terbaru
+PublicPage --> PublicView : Render halaman
+PublicView --> User : Tampilkan hasil perubahan admin
+
+note over Manager, Content
+  Berlaku untuk Beranda, Profil/Kontak,
+  Organisasi, Program, Berita, Testimoni,
+  FAQ, dan Tema sesuai model masing-masing.
+end note
+@enduml

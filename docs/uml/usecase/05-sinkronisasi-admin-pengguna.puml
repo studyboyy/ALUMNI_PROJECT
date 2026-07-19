@@ -1,0 +1,48 @@
+@startuml
+title Use Case Diagram Sinkronisasi Admin dan Pengguna
+left to right direction
+skinparam shadowing false
+actor "Admin" as Admin
+actor "Pengguna" as User
+rectangle "Sinkronisasi Data Portal Alumni FTI" {
+  usecase "Kelola Beranda" as ManageHome
+  usecase "Lihat Beranda" as ViewHome
+  usecase "Kelola Profil/Kontak" as ManageProfile
+  usecase "Lihat Profil/Kontak" as ViewProfile
+  usecase "Kelola Program Karier\ndan Kolaborasi" as ManageProgram
+  usecase "Lihat Karier dan\nKolaborasi" as ViewProgram
+  usecase "Kelola Berita" as ManageNews
+  usecase "Lihat Berita dan\nAgenda" as ViewNews
+  usecase "Kelola Galeri" as ManageGallery
+  usecase "Lihat Galeri" as ViewGallery
+  usecase "Kelola Data Alumni" as ManageAlumni
+  usecase "Lihat Data Alumni" as ViewAlumni
+  usecase "Kelola Testimoni dan FAQ" as ManageSupporting
+  usecase "Lihat Testimoni dan FAQ" as ViewSupporting
+}
+Admin --> ManageHome
+Admin --> ManageProfile
+Admin --> ManageProgram
+Admin --> ManageNews
+Admin --> ManageGallery
+Admin --> ManageAlumni
+Admin --> ManageSupporting
+User --> ViewHome
+User --> ViewProfile
+User --> ViewProgram
+User --> ViewNews
+User --> ViewGallery
+User --> ViewAlumni
+User --> ViewSupporting
+ManageHome ..> ViewHome : "sumber data sama"
+ManageProfile ..> ViewProfile : "sumber data sama"
+ManageProgram ..> ViewProgram : "sumber data sama"
+ManageNews ..> ViewNews : "status publikasi"
+ManageGallery ..> ViewGallery : "published_at terisi"
+ManageAlumni ..> ViewAlumni : "sumber data sama"
+ManageSupporting ..> ViewSupporting : "sumber data sama"
+note bottom of ManageNews
+  Agenda tampil publik, tetapi CRUD Agenda
+  admin belum tersedia pada implementasi.
+end note
+@enduml

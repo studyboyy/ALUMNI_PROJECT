@@ -1,0 +1,79 @@
+@startuml
+title Class Diagram Pengguna dan Alumni
+left to right direction
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class User <<Model>> {
+  +id: bigint
+  +name: string
+  +email: string
+  +password: string
+  +role: string
+  +job_notifications_seen_at: datetime?
+  +isAdmin(): bool
+  +isAlumni(): bool
+  +initials(): string
+  +alumniProfile(): HasOne
+}
+
+class AlumniProfile <<Model>> {
+  +id: bigint
+  +user_id: bigint?
+  +nim: string?
+  +name: string
+  +slug: string
+  +program: string
+  +campus_name: string?
+  +batch_year: int
+  +graduation_year: int?
+  +employment_status: string
+  +employer: string?
+  +job_title: string?
+  +industry: string?
+  +city: string?
+  +province: string?
+  +bio: text?
+  +achievements: array?
+  +linkedin_url: string?
+  +photo_url: string?
+  +testimonial_quote: text?
+  +getRouteKeyName(): string
+  +getInitialsAttribute(): string
+  +scopeFilter(query, filters): Builder
+  +user(): BelongsTo
+}
+
+class Login <<Livewire>> {
+  +authenticate(): void
+}
+class Register <<Livewire>> {
+  +updatedNimQuery(): void
+  +selectAlumni(id): void
+  +register(): void
+}
+class AlumniIndex <<Livewire>> {
+  +updated(name): void
+  +clearFilters(): void
+  +render(): View
+}
+class UpdateProfile <<Livewire>> {
+  +mount(): void
+  +save(): void
+  +addAchievement(value): void
+  +removeAchievement(index): void
+}
+
+User "1" -- "0..1" AlumniProfile
+Login ..> User
+Login ..> AlumniProfile
+Register ..> User
+Register ..> AlumniProfile
+AlumniIndex ..> AlumniProfile
+UpdateProfile ..> User
+UpdateProfile ..> AlumniProfile
+note bottom of AlumniProfile
+  Kategori publik alumni bekerja
+  ditentukan oleh employment_status.
+end note
+@enduml

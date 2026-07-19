@@ -1,0 +1,340 @@
+@startuml
+title Class Diagram Portal Alumni FTI
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+hide empty members
+
+package "Domain Model" {
+  class User <<Model>> {
+    +id: bigint
+    +name: string
+    +email: string
+    -password: string
+    +role: string
+    +email_verified_at: datetime?
+    +job_notifications_seen_at: datetime?
+    +isAdmin(): bool
+    +isAlumni(): bool
+    +initials(): string
+    +alumniProfile(): HasOne
+  }
+
+  class AlumniProfile <<Model>> {
+    +id: bigint
+    +user_id: bigint?
+    +nim: string?
+    +name: string
+    +slug: string
+    +email: string?
+    +phone: string?
+    +program: string
+    +campus_name: string?
+    +batch_year: int
+    +graduation_year: int?
+    +employer: string?
+    +job_title: string?
+    +city: string?
+    +province: string?
+    +industry: string?
+    +employment_status: string
+    +bio: text?
+    +achievements: array?
+    +linkedin_url: string?
+    +photo_url: string?
+    +testimonial_quote: text?
+    +getRouteKeyName(): string
+    +getInitialsAttribute(): string
+    +scopeFilter(query, filters): Builder
+    +user(): BelongsTo
+  }
+
+  class CareerOpportunity <<Model>> {
+    {static} +STATUS_PENDING: string
+    {static} +STATUS_APPROVED: string
+    {static} +STATUS_REJECTED: string
+    +id: bigint
+    +submitted_by: bigint?
+    +approved_by: bigint?
+    +title: string
+    +slug: string
+    +company: string
+    +location: string
+    +employment_type: string
+    +summary: text
+    +apply_url: string
+    +closes_at: date
+    +is_featured: bool
+    +approval_status: string
+    +approval_notes: text?
+    +approved_at: datetime?
+    +submitter(): BelongsTo
+    +approver(): BelongsTo
+    +scopeOpen(query): Builder
+    +scopePending(query): Builder
+  }
+
+  class ChatMessage <<Model>> {
+    +id: bigint
+    +user_id: bigint
+    +reply_to_id: bigint?
+    +body: text
+    +user(): BelongsTo
+    +replyTo(): BelongsTo
+    +replies(): HasMany
+  }
+
+  class TracerStudyResponse <<Model>> {
+    +id: bigint
+    +user_id: bigint?
+    +name: string
+    +nim: string?
+    +email: string
+    +phone: string?
+    +program: string
+    +batch_year: int
+    +graduation_year: int?
+    +employment_status: string
+    +employer: string?
+    +job_title: string?
+    +industry: string?
+    +city: string?
+    +province: string?
+    +job_relevance: string?
+    +waiting_time_months: int?
+    +curriculum_rating: int?
+    +suggestion: text?
+    +user(): BelongsTo
+  }
+
+  class NewsArticle <<Model>> {
+    +id: bigint
+    +title: string
+    +slug: string
+    +category: string
+    +excerpt: text
+    +content: longtext
+    +cover_image_url: string?
+    +published_at: datetime?
+    +is_featured: bool
+    +getRouteKeyName(): string
+    +scopePublished(query): Builder
+  }
+
+  class EventAgenda <<Model>> {
+    +id: bigint
+    +title: string
+    +slug: string
+    +category: string
+    +summary: text
+    +location: string
+    +starts_at: datetime
+    +registration_url: string?
+    +is_featured: bool
+    +scopeUpcoming(query): Builder
+  }
+
+  class GalleryItem <<Model>> {
+    +id: bigint
+    +title: string
+    +media_type: string
+    +media_url: string
+    +caption: text?
+    +event_name: string?
+    +published_at: datetime?
+  }
+
+  class OrganizationMember <<Model>> {
+    +id: bigint
+    +name: string
+    +role: string
+    +division: string?
+    +period: string
+    +focus_area: string?
+    +photo_url: string?
+    +sort_order: int
+  }
+
+  class WorkProgram <<Model>> {
+    +id: bigint
+    +title: string
+    +category: string
+    +summary: text
+    +impact_target: string?
+    +status: string
+    +sort_order: int
+  }
+
+  class Testimonial <<Model>> {
+    +id: bigint
+    +name: string
+    +batch_year: int
+    +role: string
+    +company: string
+    +quote: text
+    +photo_url: string?
+    +sort_order: int
+  }
+
+  class FaqItem <<Model>> {
+    +id: bigint
+    +question: string
+    +answer: text
+    +sort_order: int
+  }
+
+  class ContactMessage <<Model>> {
+    +id: bigint
+    +name: string
+    +email: string
+    +subject: string
+    +message: text
+  }
+
+  class SiteSetting <<Model>> {
+    +id: bigint
+    +key: string
+    +value: array?
+    {static} +getValue(key, default): mixed
+    {static} +setValue(key, value): void
+  }
+}
+
+package "Public & Authentication Components" {
+  class Home <<Livewire>> { +render(): View }
+  class ProfileIndex <<Livewire>> { +render(): View }
+  class AlumniIndex <<Livewire>> { +updated(name): void; +clearFilters(): void; +render(): View }
+  class AlumniShow <<Livewire>> { +mount(profile): void; +render(): View }
+  class NewsIndex <<Livewire>> { +render(): View }
+  class NewsShow <<Livewire>> { +mount(article): void; +render(): View }
+  class CareerIndex <<Livewire>> { +render(): View }
+  class CareerShow <<Livewire>> { +mount(job): void; +render(): View }
+  class GalleryIndex <<Livewire>> { +render(): View }
+  class ContactIndex <<Livewire>> { +save(): void; +render(): View }
+  class TracerStudyIndex <<Livewire>> { +mount(): void; +submit(): void; +render(): View }
+  class Login <<Livewire>> { +authenticate(): void; +render(): View }
+  class Register <<Livewire>> { +updatedNimQuery(): void; +selectAlumni(id): void; +register(): void }
+}
+
+package "Alumni Components" {
+  class AlumniDashboard <<Livewire>> { +render(): View }
+  class UpdateProfile <<Livewire>> { +mount(): void; +save(): void; +addAchievement(value): void; +removeAchievement(index): void }
+  class SubmitJob <<Livewire>> { +submit(): void; +render(): View }
+  class AlumniForumChat <<Livewire>> { +loadMessages(): void; +send(): void; +reply(id): void }
+  class LiveNotifications <<Livewire>> { +toggle(): void; +markAllAsSeen(): void; +render(): View }
+}
+
+package "Admin Components" {
+  class AdminDashboard <<Livewire>> { +render(): View }
+  class HomepageManager <<Livewire>> { +addSlide(): void; +removeSlide(index): void; +save(): void }
+  class ProfileManager <<Livewire>> { +saveLogo(): void; +removeLogo(): void; +save(): void }
+  class AlumniManager <<Livewire>> { +create(): void; +edit(id): void; +save(): void; +delete(id): void }
+  class OrganizationManager <<Livewire>> { +create(): void; +edit(id): void; +save(): void; +delete(id): void }
+  class WorkProgramManager <<Livewire>> { +create(): void; +edit(id): void; +save(): void; +delete(id): void }
+  class NewsManager <<Livewire>> { +create(): void; +edit(id): void; +update(): void; +togglePublish(id): void; +delete(id): void }
+  class MediaManager <<Livewire>> { +upload(): void; +toggleGalleryPublication(id): void; +deleteGalleryItem(id): void; +delete(path): void }
+  class TestimoniManager <<Livewire>> { +create(): void; +edit(id): void; +save(): void; +delete(id): void }
+  class FaqManager <<Livewire>> { +create(): void; +edit(id): void; +save(): void; +delete(id): void }
+  class TracerStudyManager <<Livewire>> { +delete(id): void; +render(): View }
+  class JobApproval <<Livewire>> { +approve(jobId): void; +reject(jobId): void; +render(): View }
+  class AdminForumChat <<Livewire>> { +loadMessages(): void; +send(): void; +reply(id): void; +deleteMessage(id): void }
+  class ThemeManager <<Livewire>> { +setTheme(theme): void; +render(): View }
+}
+
+package "HTTP, Event & Support" {
+  class IsAdmin <<Middleware>> { +handle(request, next): Response }
+  class AlumniExportController <<Controller>> { +export(): Response }
+  class TracerStudyExportController <<Controller>> { +export(): Response }
+  class CampusSearchController <<Controller>> { +__invoke(request): JsonResponse }
+  class ImageUploadController <<Controller>> { +uploadForEditor(request): JsonResponse }
+  class ChatMessageSent <<Event>> { +message: ChatMessage; +broadcastOn(): array; +broadcastAs(): string; +broadcastWith(): array }
+  class SimpleXlsxWriter <<Utility>> { {static} +make(sheetName, columns, rows, widths): string }
+}
+
+' Relasi domain
+User "0..1" -- "0..1" AlumniProfile : memiliki >
+User "1" -- "0..*" ChatMessage : mengirim >
+ChatMessage "0..1" <-- "0..*" ChatMessage : reply_to
+User "0..1" -- "0..*" TracerStudyResponse : mengisi >
+User "0..1" -- "0..*" CareerOpportunity : submitter >
+User "0..1" -- "0..*" CareerOpportunity : approver >
+
+' Dependensi halaman publik
+Home ..> AlumniProfile
+Home ..> CareerOpportunity
+Home ..> EventAgenda
+Home ..> NewsArticle
+Home ..> Testimonial
+Home ..> FaqItem
+Home ..> SiteSetting
+ProfileIndex ..> OrganizationMember
+ProfileIndex ..> WorkProgram
+ProfileIndex ..> SiteSetting
+AlumniIndex ..> AlumniProfile
+AlumniShow ..> AlumniProfile
+NewsIndex ..> NewsArticle
+NewsIndex ..> EventAgenda
+NewsIndex ..> GalleryItem
+NewsShow ..> NewsArticle
+CareerIndex ..> CareerOpportunity
+CareerIndex ..> WorkProgram
+CareerIndex ..> AlumniProfile
+CareerShow ..> CareerOpportunity
+GalleryIndex ..> GalleryItem
+ContactIndex ..> ContactMessage
+ContactIndex ..> FaqItem
+ContactIndex ..> SiteSetting
+TracerStudyIndex ..> TracerStudyResponse
+TracerStudyIndex ..> AlumniProfile
+Login ..> AlumniProfile
+Login ..> User
+Register ..> AlumniProfile
+Register ..> User
+
+' Dependensi alumni dan admin
+AlumniDashboard ..> AlumniProfile
+AlumniDashboard ..> CareerOpportunity
+UpdateProfile ..> AlumniProfile
+SubmitJob ..> CareerOpportunity
+AlumniForumChat ..> ChatMessage
+LiveNotifications ..> CareerOpportunity
+LiveNotifications ..> User
+AdminDashboard ..> AlumniProfile
+AdminDashboard ..> CareerOpportunity
+AdminDashboard ..> NewsArticle
+AdminDashboard ..> EventAgenda
+AdminDashboard ..> TracerStudyResponse
+HomepageManager ..> SiteSetting
+ProfileManager ..> SiteSetting
+AlumniManager ..> AlumniProfile
+OrganizationManager ..> OrganizationMember
+WorkProgramManager ..> WorkProgram
+NewsManager ..> NewsArticle
+MediaManager ..> GalleryItem
+TestimoniManager ..> Testimonial
+FaqManager ..> FaqItem
+TracerStudyManager ..> TracerStudyResponse
+JobApproval ..> CareerOpportunity
+AdminForumChat ..> ChatMessage
+ThemeManager ..> SiteSetting
+
+' Infrastruktur
+AlumniExportController ..> AlumniProfile
+AlumniExportController ..> SimpleXlsxWriter
+TracerStudyExportController ..> TracerStudyResponse
+TracerStudyExportController ..> SimpleXlsxWriter
+NewsManager ..> ImageUploadController : editor image
+ChatMessageSent --> ChatMessage
+IsAdmin ..> User : periksa role
+
+note bottom of AlumniProfile
+  Atribut is_featured alumni telah dihapus.
+  Kategori objektif menggunakan employment_status.
+end note
+
+note bottom of EventAgenda
+  Model digunakan halaman publik dan dashboard,
+  tetapi belum memiliki manager admin.
+end note
+@enduml

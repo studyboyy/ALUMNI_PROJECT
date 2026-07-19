@@ -1,0 +1,27 @@
+@startuml
+title ERD Forum Alumni
+left to right direction
+skinparam shadowing false
+
+entity users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * role : VARCHAR
+}
+entity chat_messages {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  reply_to_id : BIGINT? <<FK>>
+  * body : TEXT
+  * created_at : TIMESTAMP
+}
+users ||--o{ chat_messages : user_id / CASCADE
+chat_messages |o--o{ chat_messages : reply_to_id / SET NULL
+note bottom of chat_messages
+  Satu pesan dapat memiliki banyak balasan.
+  Pesan induk boleh dihapus tanpa
+  menghapus balasan (SET NULL).
+end note
+@enduml

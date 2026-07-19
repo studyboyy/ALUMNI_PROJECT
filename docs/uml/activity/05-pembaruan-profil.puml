@@ -1,0 +1,38 @@
+@startuml
+title Activity Diagram Pembaruan Profil Alumni
+skinparam shadowing false
+
+|Alumni|
+start
+:Login dan buka Update Profil;
+
+|Sistem|
+:Ambil profil milik akun aktif;
+if (Profil tersedia?) then (Tidak)
+  :Tampilkan kondisi profil tidak tersedia;
+  stop
+else (Ya)
+  :Isi formulir dari data profil;
+endif
+
+|Alumni|
+:Ubah data pribadi, pekerjaan, bio,\nLinkedIn, foto, dan testimoni;
+if (Mengubah prestasi?) then (Ya)
+  :Tambah atau hapus item prestasi;
+endif
+:Simpan perubahan;
+
+|Sistem|
+:Validasi data dan berkas foto;
+if (Data valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+  stop
+else (Ya)
+  if (Ada foto baru?) then (Ya)
+    :Simpan foto ke storage publik;
+  endif
+  :Perbarui profil alumni;
+  :Tampilkan notifikasi berhasil;
+endif
+stop
+@enduml

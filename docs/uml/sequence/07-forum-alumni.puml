@@ -1,0 +1,49 @@
+@startuml
+title Sequence Diagram Forum Alumni
+autonumber
+skinparam shadowing false
+
+actor "Alumni/Admin" as User
+boundary "Halaman Forum" as View
+control "ForumChat (Livewire)" as Forum
+entity "ChatMessage" as Message
+database "Database" as DB
+
+User -> View : Buka Forum Alumni
+View -> Forum : mount()
+Forum -> Forum : loadMessages()
+Forum -> Message : Ambil 50 pesan terbaru + relasi
+Message -> DB : SELECT chat_messages, users, replies
+DB --> Forum : Daftar pesan
+Forum --> View : Tampilkan kronologis
+
+loop Setiap 2 detik selama halaman aktif
+  View -> Forum : loadMessages() via wire:poll
+  Forum -> Message : Ambil pesan terbaru
+  Message -> DB : SELECT chat_messages
+  DB --> View : Daftar pesan terbaru
+end
+
+opt Membalas pesan
+  User -> View : Pilih Balas
+  View -> Forum : reply(messageId)
+  Forum --> View : Set replyToId dan fokus input
+end
+
+User -> View : Kirim isi pesan
+View -> Forum : send()
+Forum -> Forum : Validasi body
+Forum -> Message : create(user_id, reply_to_id, body)
+Message -> DB : INSERT chat_messages
+DB --> Forum : Pesan tersimpan
+Forum -> Forum : loadMessages()
+Forum --> View : Perbarui dan scroll pesan
+
+opt Admin menghapus pesan
+  User -> View : Hapus pesan
+  View -> Forum : deleteMessage(messageId)
+  Forum -> Message : delete()
+  Message -> DB : DELETE chat_messages
+  DB --> View : Daftar pesan diperbarui
+end
+@enduml

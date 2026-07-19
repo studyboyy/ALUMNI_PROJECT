@@ -1,0 +1,37 @@
+@startuml
+title Sequence Diagram Direktori dan Detail Alumni
+autonumber
+skinparam shadowing false
+
+actor "Pengguna" as User
+boundary "Halaman Data Alumni" as View
+control "Alumni Index (Livewire)" as Index
+entity "AlumniProfile" as Profile
+database "Database" as DB
+
+User -> View : Buka menu Data Alumni
+View -> Index : render()
+Index -> Profile : filter(filters)
+Profile -> DB : SELECT alumni_profiles + filter + pagination
+DB --> Profile : Data alumni
+Profile --> Index : Koleksi dan pilihan filter
+Index --> View : Render direktori
+View --> User : Tampilkan daftar alumni
+
+opt Pengguna mencari atau memfilter
+  User -> View : Isi search/program/angkatan/perusahaan
+  View -> Index : updated(field)
+  Index -> Index : Reset halaman pagination
+  Index -> Profile : filter(filters)
+  Profile -> DB : SELECT dengan kriteria
+  DB --> View : Hasil direktori terbaru
+end
+
+opt Pengguna membuka detail alumni
+  User -> View : Pilih alumni
+  View -> Profile : Route model binding berdasarkan slug
+  Profile -> DB : SELECT alumni_profile WHERE slug
+  DB --> View : Detail profil alumni
+  View --> User : Tampilkan detail alumni
+end
+@enduml

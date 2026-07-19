@@ -1,0 +1,42 @@
+@startuml
+title Activity Diagram Login Pengguna
+skinparam shadowing false
+
+|Pengguna|
+start
+:Buka halaman Login;
+:Masukkan email/NIM dan password;
+:Kirim formulir login;
+
+|Sistem|
+:Validasi input;
+if (Identifier berupa email?) then (Ya)
+  :Gunakan email sebagai kredensial;
+else (Tidak / NIM)
+  :Cari profil berdasarkan NIM;
+  if (Profil ditemukan?) then (Tidak)
+    :Tampilkan pesan NIM tidak ditemukan;
+    stop
+  else (Ya)
+    if (Profil terhubung ke akun?) then (Tidak)
+      :Tampilkan arahan untuk mendaftar;
+      stop
+    else (Ya)
+      :Ambil email akun dari profil;
+    endif
+  endif
+endif
+:Verifikasi email dan password;
+if (Kredensial valid?) then (Tidak)
+  :Tampilkan pesan login gagal;
+  stop
+else (Ya)
+  :Regenerasi sesi;
+  if (Role admin?) then (Ya)
+    :Arahkan ke Dashboard Admin;
+  else (Alumni)
+    :Arahkan ke Dashboard Alumni;
+  endif
+endif
+stop
+@enduml

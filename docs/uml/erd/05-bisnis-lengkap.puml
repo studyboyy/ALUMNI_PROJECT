@@ -1,0 +1,28 @@
+@startuml
+title ERD Bisnis Lengkap Portal Alumni FTI
+left to right direction
+skinparam shadowing false
+skinparam linetype ortho
+
+entity users { * id : BIGINT <<PK>>; * email : VARCHAR <<UQ>>; * role : VARCHAR }
+entity alumni_profiles { * id : BIGINT <<PK>>; user_id : BIGINT? <<FK>>; nim : VARCHAR? <<UQ>>; * slug : VARCHAR <<UQ>>; * program : VARCHAR; * batch_year : SMALLINT; employment_status : VARCHAR }
+entity career_opportunities { * id : BIGINT <<PK>>; submitted_by : BIGINT? <<FK>>; approved_by : BIGINT? <<FK>>; * slug : VARCHAR <<UQ>>; * approval_status : VARCHAR; * closes_at : DATE }
+entity chat_messages { * id : BIGINT <<PK>>; * user_id : BIGINT <<FK>>; reply_to_id : BIGINT? <<FK>>; * body : TEXT }
+entity tracer_study_responses { * id : BIGINT <<PK>>; user_id : BIGINT? <<FK>>; * email : VARCHAR <<UQ>>; * program : VARCHAR; * employment_status : VARCHAR }
+entity news_articles { * id : BIGINT <<PK>>; * slug : VARCHAR <<UQ>>; * title : VARCHAR; published_at : TIMESTAMP? }
+entity event_agendas { * id : BIGINT <<PK>>; * slug : VARCHAR <<UQ>>; * title : VARCHAR; * starts_at : TIMESTAMP }
+entity gallery_items { * id : BIGINT <<PK>>; * title : VARCHAR; * media_url : VARCHAR; published_at : TIMESTAMP? }
+entity organization_members { * id : BIGINT <<PK>>; * name : VARCHAR; * role : VARCHAR }
+entity work_programs { * id : BIGINT <<PK>>; * title : VARCHAR; * category : VARCHAR; status : VARCHAR }
+entity testimonials { * id : BIGINT <<PK>>; * name : VARCHAR; * quote : TEXT }
+entity faq_items { * id : BIGINT <<PK>>; * question : VARCHAR; * answer : TEXT }
+entity contact_messages { * id : BIGINT <<PK>>; * email : VARCHAR; * message : TEXT }
+entity site_settings { * id : BIGINT <<PK>>; * key : VARCHAR <<UQ>>; value : JSON? }
+
+users |o--o| alumni_profiles : user_id / CASCADE
+users ||--o{ chat_messages : user_id / CASCADE
+chat_messages |o--o{ chat_messages : reply_to_id / SET NULL
+users |o--o{ tracer_study_responses : user_id / SET NULL
+users |o--o{ career_opportunities : submitted_by / SET NULL
+users |o--o{ career_opportunities : approved_by / SET NULL
+@enduml

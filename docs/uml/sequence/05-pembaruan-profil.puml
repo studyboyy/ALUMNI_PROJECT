@@ -1,0 +1,41 @@
+@startuml
+title Sequence Diagram Pembaruan Profil Alumni
+autonumber
+skinparam shadowing false
+
+actor "Alumni" as Alumni
+boundary "Halaman Update Profil" as View
+control "UpdateProfile (Livewire)" as Update
+control "Auth" as Auth
+entity "AlumniProfile" as Profile
+collections "Storage Publik" as Storage
+database "Database" as DB
+
+Alumni -> View : Buka Update Profil
+View -> Update : mount()
+Update -> Auth : user()
+Auth --> Update : User aktif
+Update -> Profile : user.alumniProfile
+Profile -> DB : SELECT profil
+DB --> Update : Data profil
+Update --> View : Isi formulir profil
+
+opt Mengelola prestasi
+  Alumni -> View : Tambah/hapus prestasi
+  View -> Update : addAchievement()/removeAchievement()
+  Update --> View : Perbarui daftar prestasi
+end
+
+Alumni -> View : Ubah data dan simpan
+View -> Update : save()
+Update -> Update : Validasi data dan foto
+opt Foto baru tersedia
+  Update -> Storage : storePublicly(alumni-photos)
+  Storage --> Update : Path foto
+end
+Update -> Profile : update(data, achievements, photo_url)
+Profile -> DB : UPDATE alumni_profiles
+DB --> Update : Berhasil
+Update --> View : Toast profil berhasil diperbarui
+View --> Alumni : Tampilkan profil terbaru
+@enduml

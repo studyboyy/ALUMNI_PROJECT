@@ -1,0 +1,49 @@
+@startuml
+title Sequence Diagram Pengajuan dan Verifikasi Lowongan
+autonumber
+skinparam shadowing false
+
+actor "Alumni" as Alumni
+actor "Admin" as Admin
+boundary "Form Lowongan" as SubmitView
+control "SubmitJob (Livewire)" as Submit
+entity "CareerOpportunity" as Job
+boundary "Kelola Lowongan" as AdminView
+control "JobApproval (Livewire)" as Approval
+database "Database" as DB
+
+Alumni -> SubmitView : Isi dan kirim lowongan
+SubmitView -> Submit : submit()
+Submit -> Submit : Validasi data
+Submit -> Submit : Buat slug unik
+Submit -> Job : create(status=pending, submitted_by)
+Job -> DB : INSERT career_opportunities
+DB --> Submit : Lowongan tersimpan
+Submit --> SubmitView : Toast menunggu verifikasi
+
+Admin -> AdminView : Buka daftar lowongan
+AdminView -> Approval : render()
+Approval -> Job : Ambil lowongan per status
+Job -> DB : SELECT career_opportunities
+DB --> AdminView : Daftar lowongan
+
+alt Admin menyetujui
+  Admin -> AdminView : Klik Setujui
+  AdminView -> Approval : approve(jobId)
+  Approval -> Job : update(approved, approved_by, approved_at)
+  Job -> DB : UPDATE career_opportunities
+  DB --> Approval : Berhasil
+  Approval --> AdminView : Toast disetujui
+else Admin menolak
+  Admin -> AdminView : Klik Tolak
+  AdminView -> Approval : reject(jobId)
+  Approval -> Job : update(rejected, notes)
+  Job -> DB : UPDATE career_opportunities
+  DB --> Approval : Berhasil
+  Approval --> AdminView : Toast ditolak
+end
+
+Alumni -> Job : Buka dashboard/status pengajuan
+Job -> DB : SELECT berdasarkan submitted_by
+DB --> Alumni : Status pending/approved/rejected
+@enduml

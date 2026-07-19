@@ -1,0 +1,43 @@
+@startuml
+title Sequence Diagram Login Pengguna
+autonumber
+skinparam shadowing false
+
+actor "Pengguna" as Actor
+boundary "Halaman Login" as View
+control "Login (Livewire)" as Login
+entity "AlumniProfile" as Profile
+control "Auth" as Auth
+database "Database" as DB
+
+Actor -> View : Masukkan email/NIM dan password
+View -> Login : authenticate()
+Login -> Login : Validasi input
+alt Identifier adalah NIM
+  Login -> Profile : Cari profil berdasarkan NIM
+  Profile -> DB : SELECT alumni_profiles + user
+  DB --> Profile : Profil dan akun
+  alt Profil tidak ditemukan atau belum memiliki akun
+    Profile --> Login : Tidak dapat digunakan
+    Login --> View : Tampilkan pesan kesalahan
+  else Profil memiliki akun
+    Profile --> Login : Email akun
+  end
+end
+Login -> Auth : attempt(email, password)
+Auth -> DB : Verifikasi user dan password
+DB --> Auth : Hasil autentikasi
+alt Kredensial tidak valid
+  Auth --> Login : false
+  Login --> View : Tampilkan pesan login gagal
+else Kredensial valid
+  Auth --> Login : User aktif
+  Login -> Login : Regenerasi session
+  alt role = admin
+    Login --> View : Redirect Dashboard Admin
+  else role = alumni
+    Login --> View : Redirect Dashboard Alumni
+  end
+  View --> Actor : Tampilkan dashboard sesuai role
+end
+@enduml

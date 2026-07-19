@@ -1,0 +1,80 @@
+@startuml
+title Class Diagram Karier dan Tracer Study
+left to right direction
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+class User <<Model>> {
+  +id: bigint
+  +role: string
+}
+class AlumniProfile <<Model>> {
+  +user_id: bigint?
+  +employment_status: string
+  +employer: string?
+  +job_title: string?
+}
+class CareerOpportunity <<Model>> {
+  {static} +STATUS_PENDING: string
+  {static} +STATUS_APPROVED: string
+  {static} +STATUS_REJECTED: string
+  +submitted_by: bigint?
+  +approved_by: bigint?
+  +title: string
+  +slug: string
+  +company: string
+  +location: string
+  +employment_type: string
+  +summary: text
+  +apply_url: string
+  +closes_at: date
+  +approval_status: string
+  +approval_notes: text?
+  +approved_at: datetime?
+  +submitter(): BelongsTo
+  +approver(): BelongsTo
+  +scopeOpen(query): Builder
+  +scopePending(query): Builder
+}
+class TracerStudyResponse <<Model>> {
+  +user_id: bigint?
+  +name: string
+  +nim: string?
+  +email: string
+  +program: string
+  +batch_year: int
+  +graduation_year: int?
+  +employment_status: string
+  +employer: string?
+  +job_title: string?
+  +industry: string?
+  +job_relevance: string?
+  +waiting_time_months: int?
+  +curriculum_rating: int?
+  +suggestion: text?
+  +user(): BelongsTo
+}
+class SubmitJob <<Livewire>> { +submit(): void }
+class JobApproval <<Livewire>> { +approve(jobId): void; +reject(jobId): void }
+class CareerIndex <<Livewire>> { +render(): View }
+class TracerStudyIndex <<Livewire>> { +mount(): void; +submit(): void; +render(): View }
+class TracerStudyManager <<Livewire>> { +delete(id): void; +render(): View }
+class AlumniExportController <<Controller>> { +export(): Response }
+class TracerStudyExportController <<Controller>> { +export(): Response }
+class SimpleXlsxWriter <<Utility>> { {static} +make(...): string }
+
+User "1" -- "0..*" CareerOpportunity : submitter/approver
+User "0..1" -- "0..*" TracerStudyResponse
+User "0..1" -- "0..1" AlumniProfile
+SubmitJob ..> CareerOpportunity
+JobApproval ..> CareerOpportunity
+CareerIndex ..> CareerOpportunity
+CareerIndex ..> AlumniProfile
+TracerStudyIndex ..> TracerStudyResponse
+TracerStudyIndex ..> AlumniProfile
+TracerStudyManager ..> TracerStudyResponse
+AlumniExportController ..> AlumniProfile
+TracerStudyExportController ..> TracerStudyResponse
+AlumniExportController ..> SimpleXlsxWriter
+TracerStudyExportController ..> SimpleXlsxWriter
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+title ERD Pengguna dan Alumni
+left to right direction
+skinparam shadowing false
+
+entity users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * email : VARCHAR <<UQ>>
+  * password : VARCHAR
+  * role : VARCHAR
+  job_notifications_seen_at : TIMESTAMP?
+}
+entity alumni_profiles {
+  * id : BIGINT <<PK>>
+  --
+  user_id : BIGINT? <<FK>>
+  nim : VARCHAR(32)? <<UQ>>
+  * name : VARCHAR
+  * slug : VARCHAR <<UQ>>
+  * program : VARCHAR
+  campus_name : VARCHAR?
+  * batch_year : SMALLINT
+  graduation_year : SMALLINT?
+  employment_status : VARCHAR
+  employer : VARCHAR?
+  job_title : VARCHAR?
+  industry : VARCHAR?
+  city : VARCHAR?
+  province : VARCHAR?
+  bio : TEXT?
+  achievements : JSON?
+  photo_url : VARCHAR?
+}
+users |o--o| alumni_profiles : user_id / CASCADE
+note bottom of alumni_profiles
+  user_id nullable: profil dapat
+  tersedia sebelum registrasi akun.
+end note
+@enduml

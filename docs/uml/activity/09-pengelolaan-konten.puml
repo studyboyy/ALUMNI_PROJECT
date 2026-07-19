@@ -1,0 +1,46 @@
+@startuml
+title Activity Diagram Pengelolaan Konten Situs
+skinparam shadowing false
+
+|Admin|
+start
+:Login ke panel admin;
+:Pilih menu pengelolaan konten;
+if (Jenis konten?) then (Beranda/Profil/Kontak)
+  :Ubah slider, visi, misi, linimasa,\nlogo, peta, atau kanal kontak;
+  |Sistem|
+  :Validasi dan simpan ke SiteSetting;
+elseif (Konten berita?) then (Berita)
+  :Tambah atau pilih berita;
+  :Isi judul, kategori, isi, gambar,\ndan status publikasi;
+  |Sistem|
+  :Validasi, buat slug, dan simpan berita;
+elseif (Konten organisasi?) then (Organisasi)
+  :Tambah, ubah, atau hapus pengurus;
+  |Sistem|
+  :Validasi dan simpan OrganizationMember;
+elseif (Konten program?) then (Program)
+  :Tambah, ubah, atau hapus program;
+  |Sistem|
+  :Validasi dan simpan WorkProgram;
+elseif (Konten testimoni?) then (Testimoni)
+  :Tambah, ubah, atau hapus testimoni;
+  |Sistem|
+  :Validasi dan simpan Testimonial;
+elseif (Konten FAQ?) then (FAQ)
+  :Tambah, ubah, atau hapus FAQ;
+  |Sistem|
+  :Validasi dan simpan FaqItem;
+else (Tema)
+  :Pilih tema situs;
+  |Sistem|
+  :Simpan tema ke SiteSetting;
+endif
+:Tampilkan notifikasi hasil operasi;
+|Pengguna|
+:Membuka halaman publik terkait;
+|Sistem|
+:Ambil data terbaru dari sumber yang sama;
+:Tampilkan konten yang telah disimpan;
+stop
+@enduml

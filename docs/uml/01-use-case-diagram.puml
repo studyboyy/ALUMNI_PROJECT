@@ -1,0 +1,165 @@
+@startuml
+title Use Case Diagram Portal Alumni FTI
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam usecase {
+  BackgroundColor #FFF9F6
+  BorderColor #9B4D3A
+  ArrowColor #6B514A
+}
+
+actor "Pengunjung" as Guest
+actor "Alumni" as Alumni
+actor "Admin" as Admin
+
+rectangle "Portal Alumni FTI" {
+  package "Autentikasi" {
+    usecase "Mencari dan\nMemverifikasi NIM" as UCVerifyNim
+    usecase "Mendaftar Akun Alumni" as UCRegister
+    usecase "Login dengan\nEmail atau NIM" as UCLogin
+    usecase "Logout" as UCLogout
+  }
+
+  package "Layanan Publik" {
+    usecase "Melihat Beranda" as UCHome
+    usecase "Melihat Profil dan\nStruktur Organisasi" as UCProfile
+    usecase "Melihat dan Mencari\nData Alumni" as UCAlumniDirectory
+    usecase "Melihat Detail Alumni" as UCAlumniDetail
+    usecase "Melihat Berita\ndan Agenda" as UCNews
+    usecase "Melihat Detail Berita" as UCNewsDetail
+    usecase "Melihat Karier\ndan Kolaborasi" as UCCareer
+    usecase "Melihat Detail Lowongan" as UCJobDetail
+    usecase "Melihat Galeri" as UCGallery
+    usecase "Melihat Kontak dan FAQ" as UCContact
+    usecase "Mengirim Pesan Kontak" as UCSendContact
+    usecase "Mengisi Tracer Study" as UCTracer
+    usecase "Memeriksa Duplikasi\nRespons Tracer Study" as UCTracerDuplicate
+  }
+
+  package "Layanan Alumni" {
+    usecase "Melihat Dashboard Alumni" as UCAlumniDashboard
+    usecase "Memperbarui Profil" as UCUpdateProfile
+    usecase "Mengelola Daftar Prestasi" as UCAchievement
+    usecase "Mengajukan Lowongan" as UCSubmitJob
+    usecase "Melihat Status\nLowongan yang Diajukan" as UCMyJobStatus
+    usecase "Mengakses Forum Alumni" as UCForum
+    usecase "Mengirim dan\nMembalas Pesan Forum" as UCForumMessage
+    usecase "Melihat dan Menandai\nNotifikasi Lowongan" as UCNotification
+  }
+
+  package "Administrasi" {
+    usecase "Melihat Dashboard Admin" as UCAdminDashboard
+    usecase "Kelola Beranda" as UCManageHome
+    usecase "Kelola Profil dan\nInformasi Kontak" as UCManageProfile
+    usecase "Kelola Struktur Organisasi" as UCManageOrganization
+    usecase "Kelola Data Alumni" as UCManageAlumni
+    usecase "Ekspor Data Alumni XLSX" as UCExportAlumni
+    usecase "Kelola Program Karier\ndan Kolaborasi" as UCManageProgram
+    usecase "Verifikasi Lowongan" as UCApproveJob
+    usecase "Menyetujui Lowongan" as UCApprove
+    usecase "Menolak Lowongan" as UCReject
+    usecase "Kelola Berita" as UCManageNews
+    usecase "Unggah Gambar Editor" as UCEditorUpload
+    usecase "Kelola Galeri" as UCManageGallery
+    usecase "Atur Status Publikasi Galeri" as UCGalleryPublish
+    usecase "Kelola Testimoni" as UCManageTestimonial
+    usecase "Kelola FAQ" as UCManageFaq
+    usecase "Kelola Respons Tracer Study" as UCManageTracer
+    usecase "Ekspor Tracer Study XLSX" as UCExportTracer
+    usecase "Moderasi Forum Alumni" as UCModerateForum
+    usecase "Menghapus Pesan Forum" as UCDeleteMessage
+    usecase "Kelola Tema dan\nIdentitas Situs" as UCManageTheme
+  }
+}
+
+' Hak akses pengunjung
+Guest --> UCHome
+Guest --> UCProfile
+Guest --> UCAlumniDirectory
+Guest --> UCAlumniDetail
+Guest --> UCNews
+Guest --> UCNewsDetail
+Guest --> UCCareer
+Guest --> UCJobDetail
+Guest --> UCGallery
+Guest --> UCContact
+Guest --> UCSendContact
+Guest --> UCTracer
+Guest --> UCRegister
+Guest --> UCLogin
+
+' Alumni juga dapat menggunakan semua layanan publik
+Alumni --> UCHome
+Alumni --> UCProfile
+Alumni --> UCAlumniDirectory
+Alumni --> UCAlumniDetail
+Alumni --> UCNews
+Alumni --> UCNewsDetail
+Alumni --> UCCareer
+Alumni --> UCJobDetail
+Alumni --> UCGallery
+Alumni --> UCContact
+Alumni --> UCSendContact
+Alumni --> UCTracer
+Alumni --> UCLogout
+Alumni --> UCAlumniDashboard
+Alumni --> UCUpdateProfile
+Alumni --> UCSubmitJob
+Alumni --> UCMyJobStatus
+Alumni --> UCForum
+Alumni --> UCNotification
+
+' Admin
+Admin --> UCLogin
+Admin --> UCLogout
+Admin --> UCAdminDashboard
+Admin --> UCManageHome
+Admin --> UCManageProfile
+Admin --> UCManageOrganization
+Admin --> UCManageAlumni
+Admin --> UCManageProgram
+Admin --> UCApproveJob
+Admin --> UCManageNews
+Admin --> UCManageGallery
+Admin --> UCManageTestimonial
+Admin --> UCManageFaq
+Admin --> UCManageTracer
+Admin --> UCModerateForum
+Admin --> UCManageTheme
+
+' Relasi proses wajib dan turunan
+UCRegister ..> UCVerifyNim : <<include>>
+UCAlumniDirectory ..> UCAlumniDetail : <<extend>>
+UCNews ..> UCNewsDetail : <<extend>>
+UCCareer ..> UCJobDetail : <<extend>>
+UCTracer ..> UCTracerDuplicate : <<include>>
+UCUpdateProfile ..> UCAchievement : <<include>>
+UCForum ..> UCForumMessage : <<include>>
+UCManageAlumni ..> UCExportAlumni : <<extend>>
+UCApproveJob ..> UCApprove : <<extend>>
+UCApproveJob ..> UCReject : <<extend>>
+UCManageNews ..> UCEditorUpload : <<include>>
+UCManageGallery ..> UCGalleryPublish : <<include>>
+UCManageTracer ..> UCExportTracer : <<extend>>
+UCModerateForum ..> UCForumMessage : <<include>>
+UCModerateForum ..> UCDeleteMessage : <<extend>>
+
+note right of UCApproveJob
+  Lowongan alumni berstatus pending.
+  Admin dapat menyetujui atau menolak.
+end note
+
+note right of UCTracer
+  Dapat diisi pengunjung atau alumni.
+  Sistem mencegah pengisian berulang
+  berdasarkan email dan user_id.
+end note
+
+note bottom of UCManageNews
+  Implementasi admin saat ini mengelola berita.
+  Data agenda tampil di halaman publik, tetapi
+  belum memiliki CRUD admin tersendiri.
+end note
+@enduml

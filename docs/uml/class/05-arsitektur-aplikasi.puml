@@ -1,0 +1,65 @@
+@startuml
+title Class Diagram Arsitektur Aplikasi
+left to right direction
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+package "Presentation" {
+  class Navigation <<Livewire Component>> { +render(): View }
+  class Home <<Livewire Page>> { +render(): View }
+  class AlumniDashboard <<Livewire Page>> { +render(): View }
+  class AdminDashboard <<Livewire Page>> { +render(): View }
+  class AlumniManager <<Livewire Page>> { +save(): void; +delete(id): void }
+  class NewsManager <<Livewire Page>> { +create(): void; +update(): void }
+  class MediaManager <<Livewire Page>> { +upload(): void; +delete(path): void }
+}
+package "Application Services" {
+  class AlumniExportController <<Controller>> { +export(): Response }
+  class TracerStudyExportController <<Controller>> { +export(): Response }
+  class CampusSearchController <<Controller>> { +__invoke(request): JsonResponse }
+  class ImageUploadController <<Controller>> { +uploadForEditor(request): JsonResponse }
+  class IsAdmin <<Middleware>> { +handle(request, next): Response }
+  class SimpleXlsxWriter <<Utility>> { {static} +make(...): string }
+  class ChatMessageSent <<Event>> { +broadcastOn(): array; +broadcastWith(): array }
+}
+package "Persistence" {
+  class User <<Eloquent Model>>
+  class AlumniProfile <<Eloquent Model>>
+  class NewsArticle <<Eloquent Model>>
+  class GalleryItem <<Eloquent Model>>
+  class TracerStudyResponse <<Eloquent Model>>
+  class CareerOpportunity <<Eloquent Model>>
+  class ChatMessage <<Eloquent Model>>
+  class SiteSetting <<Eloquent Model>>
+}
+class Database <<Infrastructure>>
+class PublicStorage <<Infrastructure>>
+class Auth <<Framework Service>>
+
+Navigation ..> Home
+AlumniDashboard ..> AlumniProfile
+AdminDashboard ..> AlumniProfile
+AdminDashboard ..> CareerOpportunity
+AlumniManager ..> AlumniProfile
+NewsManager ..> NewsArticle
+MediaManager ..> GalleryItem
+AlumniExportController ..> AlumniProfile
+TracerStudyExportController ..> TracerStudyResponse
+AlumniExportController ..> SimpleXlsxWriter
+TracerStudyExportController ..> SimpleXlsxWriter
+ImageUploadController ..> PublicStorage
+MediaManager ..> PublicStorage
+IsAdmin ..> Auth
+ChatMessageSent ..> ChatMessage
+Home ..> SiteSetting
+Home ..> Database
+Auth ..> User
+User ..> Database
+AlumniProfile ..> Database
+NewsArticle ..> Database
+GalleryItem ..> Database
+note bottom of Database
+  MySQL pada lingkungan lokal/produksi;
+  SQLite in-memory pada test.
+end note
+@enduml

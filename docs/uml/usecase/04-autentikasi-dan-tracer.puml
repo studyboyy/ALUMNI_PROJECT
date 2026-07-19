@@ -1,0 +1,33 @@
+@startuml
+title Use Case Diagram Autentikasi dan Tracer Study
+left to right direction
+skinparam shadowing false
+actor "Pengunjung" as Guest
+actor "Alumni" as Alumni
+actor "Admin" as Admin
+rectangle "Autentikasi dan Tracer Study" {
+  usecase "Mencari Profil Berdasarkan NIM" as SearchNim
+  usecase "Memeriksa Status Akun NIM" as CheckNim
+  usecase "Mendaftar Akun Alumni" as Register
+  usecase "Login dengan Email atau NIM" as Login
+  usecase "Mengalihkan ke Dashboard\nberdasarkan Role" as Redirect
+  usecase "Logout" as Logout
+  usecase "Mengisi Tracer Study" as Tracer
+  usecase "Memeriksa Duplikasi Email" as EmailCheck
+  usecase "Memeriksa Duplikasi User" as UserCheck
+}
+Guest --> SearchNim
+Guest --> Register
+Guest --> Login
+Guest --> Tracer
+Alumni --> Login
+Alumni --> Logout
+Alumni --> Tracer
+Admin --> Login
+Admin --> Logout
+Register ..> SearchNim : <<include>>
+Register ..> CheckNim : <<include>>
+Login ..> Redirect : <<include>>
+Tracer ..> EmailCheck : <<include>>
+Tracer ..> UserCheck : <<include>>
+@enduml

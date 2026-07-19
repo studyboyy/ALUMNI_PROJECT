@@ -27,6 +27,7 @@
 
                 <div class="mt-5 flex flex-wrap gap-2.5">
                     <a href="{{ route('alumni.update-profile') }}" wire:navigate class="purple-btn">Update Profil</a>
+                    <a href="{{ route('alumni.forum') }}" wire:navigate class="outline-btn">Forum Chat</a>
                     <a href="{{ route('alumni.submit-job') }}" wire:navigate class="outline-btn">Ajukan Lowongan</a>
                     @if ($profile?->slug)
                         <a href="{{ route('alumni.show', $profile->slug) }}" wire:navigate class="ghost-btn">Lihat Profil Publik</a>

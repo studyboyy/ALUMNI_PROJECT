@@ -1,0 +1,51 @@
+@startuml
+title Activity Diagram Registrasi Alumni
+skinparam shadowing false
+
+|Calon Alumni|
+start
+:Buka halaman Daftar Alumni;
+:Masukkan kata kunci NIM;
+
+|Sistem|
+:Cari profil alumni berdasarkan NIM;
+if (Profil ditemukan?) then (Ya)
+  if (Profil sudah memiliki akun?) then (Ya)
+    :Tampilkan pesan NIM sudah terdaftar;
+    |Calon Alumni|
+    :Buka halaman Login;
+    stop
+  else (Tidak)
+    :Tampilkan identitas alumni;
+  endif
+else (Tidak)
+  :Tampilkan hasil pencarian kosong;
+  |Calon Alumni|
+  :Perbaiki NIM atau hubungi admin;
+  stop
+endif
+
+|Calon Alumni|
+:Pilih profil alumni;
+:Masukkan email, password,\ndan konfirmasi password;
+:Kirim formulir registrasi;
+
+|Sistem|
+:Validasi profil, email, dan password;
+if (Data valid?) then (Tidak)
+  :Tampilkan pesan validasi;
+  |Calon Alumni|
+  :Perbaiki formulir;
+  stop
+else (Ya)
+  :Mulai transaksi database;
+  :Kunci profil yang belum memiliki akun;
+  :Buat akun dengan role alumni;
+  :Hubungkan akun dengan profil alumni;
+  :Commit transaksi;
+  :Autentikasi akun baru;
+  :Regenerasi sesi;
+  :Arahkan ke Dashboard Alumni;
+endif
+stop
+@enduml

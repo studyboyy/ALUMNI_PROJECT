@@ -1,0 +1,50 @@
+@startuml
+title Sequence Diagram Pengelolaan dan Publikasi Galeri
+autonumber
+skinparam shadowing false
+
+actor "Admin" as Admin
+boundary "Kelola Galeri" as AdminView
+control "MediaManager (Livewire)" as Media
+collections "Storage Publik" as Storage
+entity "GalleryItem" as Gallery
+database "Database" as DB
+actor "Pengguna" as User
+boundary "Halaman Galeri" as PublicView
+control "Gallery Index (Livewire)" as GalleryPage
+
+Admin -> AdminView : Pilih gambar dan isi metadata
+AdminView -> Media : upload()
+Media -> Media : Validasi gambar dan metadata
+Media -> Storage : storePublicly(gallery-images)
+Storage --> Media : Path gambar
+Media -> Gallery : create(metadata, media_url, published_at)
+Gallery -> DB : INSERT gallery_items
+DB --> Media : Item tersimpan
+Media --> AdminView : Toast sinkron dengan Galeri publik
+
+opt Mengubah status publikasi
+  Admin -> AdminView : Tampilkan/Sembunyikan
+  AdminView -> Media : toggleGalleryPublication(id)
+  Media -> Gallery : update(published_at)
+  Gallery -> DB : UPDATE gallery_items
+  DB --> AdminView : Status diperbarui
+end
+
+opt Menghapus Galeri
+  Admin -> AdminView : Konfirmasi hapus
+  AdminView -> Media : deleteGalleryItem(id) / delete(path)
+  Media -> Gallery : delete()
+  Gallery -> DB : DELETE gallery_items
+  Media -> Storage : delete(path) jika menghapus berkas
+  DB --> AdminView : Item dihapus
+end
+
+User -> PublicView : Buka menu Galeri
+PublicView -> GalleryPage : render()
+GalleryPage -> Gallery : whereNotNull(published_at).latest()
+Gallery -> DB : SELECT gallery_items terpublikasi
+DB --> GalleryPage : Daftar Galeri
+GalleryPage --> PublicView : Render Galeri
+PublicView --> User : Tampilkan media terpublikasi
+@enduml

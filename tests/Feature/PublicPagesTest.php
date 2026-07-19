@@ -3,6 +3,7 @@
 use App\Models\AlumniProfile;
 use App\Models\CareerOpportunity;
 use App\Models\NewsArticle;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -61,4 +62,21 @@ test('career opportunity pages resolve by slug', function () {
         ->assertOk()
         ->assertSee('Backend Engineer Alumni')
         ->assertSee('FTI Career Lab');
+});
+
+test('community button uses the internal forum', function () {
+    $this->get(route('career.index'))
+        ->assertOk()
+        ->assertSee(route('login'), false)
+        ->assertDontSee('https://discord.com', false);
+
+    /** @var User $alumni */
+    $alumni = User::factory()->create(['role' => 'alumni']);
+
+    $this->actingAs($alumni)
+        ->get(route('career.index'))
+        ->assertOk()
+        ->assertSee(route('alumni.forum'), false)
+        ->assertSee('Masuk Forum Alumni')
+        ->assertDontSee('https://discord.com', false);
 });

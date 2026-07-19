@@ -1,0 +1,44 @@
+@startuml
+title Sequence Diagram Pengisian Tracer Study
+autonumber
+skinparam shadowing false
+
+actor "Pengguna/Alumni" as User
+boundary "Halaman Tracer Study" as View
+control "TracerStudy Index (Livewire)" as Tracer
+control "Auth" as Auth
+entity "AlumniProfile" as Profile
+entity "TracerStudyResponse" as Response
+database "Database" as DB
+
+User -> View : Buka Tracer Study
+View -> Tracer : mount()
+Tracer -> Auth : check()
+alt Alumni sudah login
+  Auth --> Tracer : User aktif
+  Tracer -> Profile : Ambil alumniProfile
+  Profile -> DB : SELECT profil
+  DB --> Tracer : Data prefill
+  Tracer -> Response : exists(user_id)
+  Response -> DB : SELECT respons
+  DB --> Tracer : Status pengisian
+end
+Tracer --> View : Tampilkan formulir/status
+
+User -> View : Isi dan kirim formulir
+View -> Tracer : submit()
+Tracer -> Tracer : Validasi input
+Tracer -> Response : exists(email)
+Response -> DB : SELECT berdasarkan email
+alt Email atau user_id sudah tercatat
+  DB --> Tracer : Duplikat ditemukan
+  Tracer --> View : Tampilkan pesan sudah mengisi
+else Belum pernah mengisi
+  DB --> Tracer : Tidak ditemukan
+  Tracer -> Response : create(data + optional user_id)
+  Response -> DB : INSERT tracer_study_responses
+  DB --> Tracer : Respons tersimpan
+  Tracer --> View : Toast berhasil dan status submitted
+  View --> User : Tampilkan konfirmasi
+end
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+title Activity Diagram Akses Layanan Publik
+skinparam shadowing false
+
+|Pengguna|
+start
+:Buka Portal Alumni FTI;
+:Pilih menu publik;
+
+|Sistem|
+if (Menu yang dipilih?) then (Beranda)
+  :Ambil statistik, alumni bekerja,\nberita, agenda, testimoni, dan FAQ;
+elseif (Menu Profil?) then (Profil)
+  :Ambil profil, organisasi,\ndan program kerja;
+elseif (Menu Data Alumni?) then (Data Alumni)
+  |Pengguna|
+  :Masukkan pencarian atau filter;
+  |Sistem|
+  :Filter berdasarkan nama, kampus,\npekerjaan, kota, program, dan angkatan;
+  :Tampilkan daftar alumni;
+  |Pengguna|
+  if (Membuka detail?) then (Ya)
+    |Sistem|
+    :Cari profil berdasarkan slug;
+    :Tampilkan detail alumni;
+  endif
+elseif (Menu Berita & Agenda?) then (Berita & Agenda)
+  :Ambil berita terbit dan agenda mendatang;
+  |Pengguna|
+  if (Membuka berita?) then (Ya)
+    |Sistem|
+    :Cari berita berdasarkan slug;
+    :Tampilkan detail berita;
+  endif
+elseif (Menu Karier & Kolaborasi?) then (Karier & Kolaborasi)
+  :Ambil lowongan approved yang masih aktif\ndan program kategori Karier/Kolaborasi;
+  |Pengguna|
+  if (Membuka lowongan?) then (Ya)
+    |Sistem|
+    :Cari lowongan berdasarkan slug;
+    :Pastikan status approved;
+    :Tampilkan detail lowongan;
+  endif
+elseif (Menu Galeri?) then (Galeri)
+  :Ambil media dengan published_at terisi;
+  :Tampilkan Galeri publik;
+else (Kontak)
+  :Ambil kanal kontak, peta, dan FAQ;
+  :Tampilkan halaman Kontak;
+endif
+|Pengguna|
+:Membaca informasi yang ditampilkan;
+stop
+@enduml

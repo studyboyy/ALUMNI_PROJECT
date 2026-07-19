@@ -55,9 +55,16 @@
                     </p>
                 </div>
 
-                <a href="https://discord.com" target="_blank" rel="noreferrer" class="outline-btn mt-5 w-full sm:w-fit">
-                    Masuk Kanal Komunitas
-                </a>
+                @auth
+                    <a href="{{ auth()->user()->isAdmin() ? route('admin.forum') : route('alumni.forum') }}"
+                        wire:navigate class="outline-btn mt-5 w-full sm:w-fit">
+                        Masuk Forum Alumni
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" wire:navigate class="outline-btn mt-5 w-full sm:w-fit">
+                        Login untuk Masuk Forum
+                    </a>
+                @endauth
             </div>
         </div>
     </section>
