@@ -14,7 +14,9 @@ class TracerStudyManager extends Component
     use WithPagination;
 
     public string $search = '';
+
     public string $filterStatus = '';
+
     public string $filterProgram = '';
 
     protected string $paginationTheme = 'tailwind';
@@ -46,9 +48,9 @@ class TracerStudyManager extends Component
             ->when($this->search !== '', function ($q) {
                 $q->where(function ($q) {
                     $q->where('name', 'like', "%{$this->search}%")
-                      ->orWhere('nim', 'like', "%{$this->search}%")
-                      ->orWhere('email', 'like', "%{$this->search}%")
-                      ->orWhere('employer', 'like', "%{$this->search}%");
+                        ->orWhere('nim', 'like', "%{$this->search}%")
+                        ->orWhere('email', 'like', "%{$this->search}%")
+                        ->orWhere('employer', 'like', "%{$this->search}%");
                 });
             })
             ->when($this->filterStatus !== '', fn ($q) => $q->where('employment_status', $this->filterStatus))
@@ -56,10 +58,10 @@ class TracerStudyManager extends Component
             ->orderByDesc('created_at');
 
         return view('livewire.pages.admin.tracer-study-manager', [
-            'responses'   => $query->paginate(15),
-            'totalCount'  => TracerStudyResponse::count(),
-            'programs'    => TracerStudyResponse::query()->distinct()->orderBy('program')->pluck('program'),
-            'statuses'    => TracerStudyResponse::query()->distinct()->orderBy('employment_status')->pluck('employment_status'),
+            'responses' => $query->paginate(15),
+            'totalCount' => TracerStudyResponse::count(),
+            'programs' => TracerStudyResponse::query()->distinct()->orderBy('program')->pluck('program'),
+            'statuses' => TracerStudyResponse::query()->distinct()->orderBy('employment_status')->pluck('employment_status'),
         ]);
     }
 }

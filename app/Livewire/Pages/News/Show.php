@@ -17,6 +17,7 @@ class Show extends Component
         // Tolak akses ke artikel yang belum dipublish
         if ($newsArticle->published_at === null) {
             $this->redirect(route('news.index'), navigate: true);
+
             return;
         }
 

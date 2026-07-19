@@ -30,8 +30,8 @@ class CampusSearchController extends Controller
 
             return collect($response->json())
                 ->pluck('name')
-                ->filter(fn($name) => is_string($name) && trim($name) !== '')
-                ->map(fn($name) => trim($name))
+                ->filter(fn ($name) => is_string($name) && trim($name) !== '')
+                ->map(fn ($name) => trim($name))
                 ->unique()
                 ->sort()
                 ->values()
@@ -41,7 +41,7 @@ class CampusSearchController extends Controller
         $needle = mb_strtolower($query);
 
         $filtered = collect($campuses)
-            ->filter(fn($name) => str_contains(mb_strtolower($name), $needle))
+            ->filter(fn ($name) => str_contains(mb_strtolower($name), $needle))
             ->take(20)
             ->values()
             ->all();

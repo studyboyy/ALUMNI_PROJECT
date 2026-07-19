@@ -32,14 +32,12 @@ class AlumniProfile extends Model
         'linkedin_url',
         'photo_url',
         'testimonial_quote',
-        'is_featured',
     ];
 
     protected function casts(): array
     {
         return [
             'achievements' => 'array',
-            'is_featured' => 'boolean',
         ];
     }
 
@@ -60,7 +58,7 @@ class AlumniProfile extends Model
         $initials = collect($parts)
             ->filter()
             ->take(2)
-            ->map(fn(string $part) => mb_strtoupper(mb_substr($part, 0, 1)))
+            ->map(fn (string $part) => mb_strtoupper(mb_substr($part, 0, 1)))
             ->implode('');
 
         return $initials !== '' ? $initials : 'AL';
@@ -83,8 +81,8 @@ class AlumniProfile extends Model
                         ->orWhere('city', 'like', "%{$search}%");
                 });
             })
-            ->when($filters['program'] ?? null, fn(Builder $query, string $program) => $query->where('program', $program))
-            ->when($filters['batch_year'] ?? null, fn(Builder $query, string $batchYear) => $query->where('batch_year', $batchYear))
-            ->when($filters['employer'] ?? null, fn(Builder $query, string $employer) => $query->where('employer', 'like', "%{$employer}%"));
+            ->when($filters['program'] ?? null, fn (Builder $query, string $program) => $query->where('program', $program))
+            ->when($filters['batch_year'] ?? null, fn (Builder $query, string $batchYear) => $query->where('batch_year', $batchYear))
+            ->when($filters['employer'] ?? null, fn (Builder $query, string $employer) => $query->where('employer', 'like', "%{$employer}%"));
     }
 }

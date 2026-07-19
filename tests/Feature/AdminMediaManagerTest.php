@@ -33,7 +33,7 @@ test('admin media upload is synchronized with the public gallery', function () {
     expect($item->published_at)->not->toBeNull();
     expect(Storage::disk('public')->files('gallery-images'))->toHaveCount(1);
 
-    $this->get(route('news.index'))
+    $this->get(route('gallery.index'))
         ->assertOk()
         ->assertSee('Dokumentasi Reuni Alumni');
 });
@@ -46,7 +46,7 @@ test('unpublished media is hidden from the public gallery', function () {
         'published_at' => null,
     ]);
 
-    $this->get(route('news.index'))
+    $this->get(route('gallery.index'))
         ->assertOk()
         ->assertDontSee('Dokumentasi Internal');
 });

@@ -70,7 +70,7 @@ class SubmitJob extends Component
 
         while (CareerOpportunity::query()->where('slug', $slug)->exists()) {
             $suffix++;
-            $slug = $base . '-' . $suffix;
+            $slug = $base.'-'.$suffix;
         }
 
         return $slug;

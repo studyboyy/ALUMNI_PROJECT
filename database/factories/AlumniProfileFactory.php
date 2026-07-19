@@ -47,6 +47,7 @@ class AlumniProfileFactory extends Factory
     {
         $photo = self::$photoPool[self::$photoIndex % count(self::$photoPool)];
         self::$photoIndex++;
+
         return $photo;
     }
 
@@ -120,12 +121,12 @@ class AlumniProfileFactory extends Factory
             'Banten', 'Jawa Barat', 'Jawa Barat', 'Jawa Barat', 'Sumatera Selatan',
         ];
 
-        $cityIndex   = array_rand($cities);
-        $batchYear   = fake()->numberBetween(2015, 2022);
-        $employer    = fake()->randomElement($employers);
-        $jobTitle    = fake()->randomElement($jobTitles);
-        $city        = $cities[$cityIndex];
-        $province    = $provinces[$cityIndex];
+        $cityIndex = array_rand($cities);
+        $batchYear = fake()->numberBetween(2015, 2022);
+        $employer = fake()->randomElement($employers);
+        $jobTitle = fake()->randomElement($jobTitles);
+        $city = $cities[$cityIndex];
+        $province = $provinces[$cityIndex];
 
         $bios = [
             'Alumni FTI yang berfokus pada pengembangan aplikasi berbasis cloud dan microservices.',
@@ -148,27 +149,27 @@ class AlumniProfileFactory extends Factory
         ];
 
         return [
-            'user_id'           => null,
-            'nim'               => fake()->unique()->numerify('20####'),
-            'name'              => $name,
-            'slug'              => Str::slug($name) . '-' . fake()->unique()->numerify('####'),
-            'email'             => Str::slug($name) . '@' . fake()->randomElement(['gmail.com', 'yahoo.com', 'outlook.com']),
-            'phone'             => '08' . fake()->numerify('##########'),
-            'program'           => fake()->randomElement($programs),
-            'campus_name'       => fake()->randomElement($campuses),
-            'batch_year'        => $batchYear,
-            'graduation_year'   => $batchYear + fake()->numberBetween(3, 5),
-            'employer'          => $employer,
-            'job_title'         => $jobTitle,
-            'city'              => $city,
-            'province'          => $province,
-            'industry'          => fake()->randomElement($industries),
+            'user_id' => null,
+            'nim' => fake()->unique()->numerify('20####'),
+            'name' => $name,
+            'slug' => Str::slug($name).'-'.fake()->unique()->numerify('####'),
+            'email' => Str::slug($name).'@'.fake()->randomElement(['gmail.com', 'yahoo.com', 'outlook.com']),
+            'phone' => '08'.fake()->numerify('##########'),
+            'program' => fake()->randomElement($programs),
+            'campus_name' => fake()->randomElement($campuses),
+            'batch_year' => $batchYear,
+            'graduation_year' => $batchYear + fake()->numberBetween(3, 5),
+            'employer' => $employer,
+            'job_title' => $jobTitle,
+            'city' => $city,
+            'province' => $province,
+            'industry' => fake()->randomElement($industries),
             'employment_status' => fake()->randomElement(['Bekerja', 'Bekerja', 'Bekerja', 'Berwiraswasta', 'Melanjutkan Kuliah']),
-            'bio'               => fake()->randomElement($bios),
-            'achievements'      => [
+            'bio' => fake()->randomElement($bios),
+            'achievements' => [
                 fake()->randomElement([
-                    'Juara 1 Hackathon Nasional ' . fake()->numberBetween(2020, 2024),
-                    'Speaker di Indonesia Tech Summit ' . fake()->numberBetween(2022, 2024),
+                    'Juara 1 Hackathon Nasional '.fake()->numberBetween(2020, 2024),
+                    'Speaker di Indonesia Tech Summit '.fake()->numberBetween(2022, 2024),
                     'Kontributor open source dengan 500+ GitHub stars',
                     'Penerima beasiswa Google Developer Expert',
                     'Co-founder startup yang telah mendapat pendanaan seed',
@@ -183,10 +184,9 @@ class AlumniProfileFactory extends Factory
                     'Lead engineer untuk produk dengan 1 juta pengguna aktif',
                 ]),
             ],
-            'linkedin_url'      => 'https://linkedin.com/in/' . Str::slug($name),
-            'photo_url'         => self::nextPhoto(),
+            'linkedin_url' => 'https://linkedin.com/in/'.Str::slug($name),
+            'photo_url' => self::nextPhoto(),
             'testimonial_quote' => fake()->randomElement($quotes),
-            'is_featured'       => fake()->boolean(35),
         ];
     }
 }

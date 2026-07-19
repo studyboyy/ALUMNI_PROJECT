@@ -105,7 +105,7 @@
                             @if ($job->is_featured)
                                 <span class="inline-flex items-center rounded-full border px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide"
                                     style="background:rgba(var(--brand-rgb),.08);color:var(--brand-deep);border-color:rgba(var(--brand-rgb),.18)">
-                                    Featured
+                                    Lowongan Prioritas
                                 </span>
                             @endif
                             <span class="ml-auto inline-flex items-center rounded-full border px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wide"

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Pages\Alumni;
 
+use App\Models\AlumniProfile;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -15,23 +16,41 @@ class UpdateProfile extends Component
     use WithFileUploads;
 
     public string $name = '';
+
     public string $email = '';
+
     public string $phone = '';
+
     public string $program = '';
+
     public string $campus_name = '';
+
     public string $batch_year = '';
+
     public string $graduation_year = '';
+
     public string $employer = '';
+
     public string $job_title = '';
+
     public string $city = '';
+
     public string $province = '';
+
     public string $industry = '';
+
     public string $employment_status = 'Bekerja';
+
     public string $bio = '';
+
     public array $achievements = [];
+
     public string $linkedin_url = '';
+
     public string $testimonial_quote = '';
+
     public $photo_file = null;
+
     public string $photo_url = '';
 
     public function mount(): void
@@ -90,12 +109,12 @@ class UpdateProfile extends Component
     {
         $validated = $this->validate();
 
-        $profile = Auth::user()?->alumniProfile ?? new \App\Models\AlumniProfile();
+        $profile = Auth::user()?->alumniProfile ?? new AlumniProfile;
 
         if ($this->photo_file) {
             // Upload foto baru
             $path = $this->photo_file->storePublicly('alumni-photos', 'public');
-            $profile->photo_url = asset('storage/' . $path);
+            $profile->photo_url = asset('storage/'.$path);
         }
         // Jika tidak ada foto baru, biarkan photo_url yang sudah ada tidak berubah
         // (alumni tidak bisa "hapus" foto lewat form ini karena tidak ada tombol hapus yang eksplisit)
@@ -104,7 +123,7 @@ class UpdateProfile extends Component
         $profile->name = $validated['name'];
         // Hanya generate slug baru jika profil belum punya slug (pertama kali)
         if (! $profile->exists || empty($profile->slug)) {
-            $profile->slug = Str::slug($validated['name']) . '-' . Str::random(5);
+            $profile->slug = Str::slug($validated['name']).'-'.Str::random(5);
         }
         $profile->email = $validated['email'];
         $profile->phone = $validated['phone'] ?: null;

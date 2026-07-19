@@ -11,17 +11,20 @@ use Livewire\Component;
 class FaqManager extends Component
 {
     public bool $showForm = false;
+
     public ?int $editingId = null;
 
     public string $question = '';
+
     public string $answer = '';
+
     public string $sort_order = '0';
 
     protected function rules(): array
     {
         return [
-            'question'   => ['required', 'string', 'min:10'],
-            'answer'     => ['required', 'string', 'min:10'],
+            'question' => ['required', 'string', 'min:10'],
+            'answer' => ['required', 'string', 'min:10'],
             'sort_order' => ['required', 'integer', 'min:0'],
         ];
     }
@@ -36,11 +39,11 @@ class FaqManager extends Component
     {
         $faq = FaqItem::findOrFail($id);
 
-        $this->editingId  = $faq->id;
-        $this->question   = $faq->question;
-        $this->answer     = $faq->answer;
+        $this->editingId = $faq->id;
+        $this->question = $faq->question;
+        $this->answer = $faq->answer;
         $this->sort_order = (string) $faq->sort_order;
-        $this->showForm   = true;
+        $this->showForm = true;
     }
 
     public function save(): void
@@ -48,8 +51,8 @@ class FaqManager extends Component
         $validated = $this->validate();
 
         $data = [
-            'question'   => $validated['question'],
-            'answer'     => $validated['answer'],
+            'question' => $validated['question'],
+            'answer' => $validated['answer'],
             'sort_order' => (int) $validated['sort_order'],
         ];
 
@@ -77,7 +80,7 @@ class FaqManager extends Component
 
     public function resetForm(): void
     {
-        $this->showForm  = false;
+        $this->showForm = false;
         $this->editingId = null;
         $this->reset(['question', 'answer']);
         $this->sort_order = '0';

@@ -1,17 +1,9 @@
 <?php
 
-use App\Http\Controllers\ImageUploadController;
-use App\Http\Controllers\CampusSearchController;
-use App\Http\Controllers\TracerStudyExportController;
 use App\Http\Controllers\AlumniExportController;
-use App\Livewire\Pages\Alumni\Dashboard as AlumniDashboard;
-use App\Livewire\Pages\Alumni\Index as AlumniIndex;
-use App\Livewire\Pages\Alumni\ForumChat as AlumniForumChat;
-use App\Livewire\Pages\Alumni\Show as AlumniShow;
-use App\Livewire\Pages\Alumni\SubmitJob as AlumniSubmitJob;
-use App\Livewire\Pages\Alumni\UpdateProfile as AlumniUpdateProfile;
-use App\Livewire\Pages\Auth\Login;
-use App\Livewire\Pages\Auth\Register;
+use App\Http\Controllers\CampusSearchController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\TracerStudyExportController;
 use App\Livewire\Pages\Admin\AlumniManager;
 use App\Livewire\Pages\Admin\Dashboard;
 use App\Livewire\Pages\Admin\FaqManager;
@@ -26,9 +18,18 @@ use App\Livewire\Pages\Admin\TestimoniManager;
 use App\Livewire\Pages\Admin\ThemeManager;
 use App\Livewire\Pages\Admin\TracerStudyManager;
 use App\Livewire\Pages\Admin\WorkProgramManager;
+use App\Livewire\Pages\Alumni\Dashboard as AlumniDashboard;
+use App\Livewire\Pages\Alumni\ForumChat as AlumniForumChat;
+use App\Livewire\Pages\Alumni\Index as AlumniIndex;
+use App\Livewire\Pages\Alumni\Show as AlumniShow;
+use App\Livewire\Pages\Alumni\SubmitJob as AlumniSubmitJob;
+use App\Livewire\Pages\Alumni\UpdateProfile as AlumniUpdateProfile;
+use App\Livewire\Pages\Auth\Login;
+use App\Livewire\Pages\Auth\Register;
 use App\Livewire\Pages\Career\Index as CareerIndex;
 use App\Livewire\Pages\Career\Show as CareerShow;
 use App\Livewire\Pages\Contact\Index as ContactIndex;
+use App\Livewire\Pages\Gallery\Index as GalleryIndex;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\News\Index as NewsIndex;
 use App\Livewire\Pages\News\Show as NewsShow;
@@ -45,6 +46,7 @@ Route::get('/data-alumni/{alumniProfile:slug}', AlumniShow::class)->name('alumni
 Route::get('/tracer-study', TracerStudyIndex::class)->name('tracer-study.index');
 Route::get('/berita-agenda', NewsIndex::class)->name('news.index');
 Route::get('/berita-agenda/{newsArticle:slug}', NewsShow::class)->name('news.show');
+Route::get('/galeri', GalleryIndex::class)->name('gallery.index');
 Route::get('/karier-kolaborasi', CareerIndex::class)->name('career.index');
 Route::get('/karier-kolaborasi/{careerOpportunity:slug}', CareerShow::class)->name('career.show');
 Route::get('/kontak-bantuan', ContactIndex::class)->name('contact.index');
@@ -74,6 +76,7 @@ Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(
     Route::get('/', Dashboard::class)->name('dashboard');
     Route::get('/homepage', HomepageManager::class)->name('homepage');
     Route::get('/profil-kontak', ProfileManager::class)->name('profile');
+    Route::get('/kontak', ProfileManager::class)->name('contact');
     Route::get('/alumni', AlumniManager::class)->name('alumni');
     Route::get('/alumni/export', [AlumniExportController::class, 'export'])->name('alumni.export');
     Route::get('/forum', AdminForumChat::class)->name('forum');

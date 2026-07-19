@@ -11,24 +11,30 @@ use Livewire\Component;
 class WorkProgramManager extends Component
 {
     public bool $showForm = false;
+
     public ?int $editingId = null;
 
     public string $title = '';
+
     public string $category = 'Karier';
+
     public string $summary = '';
+
     public string $impact_target = '';
+
     public string $status = 'Berjalan';
+
     public string $sort_order = '0';
 
     protected function rules(): array
     {
         return [
-            'title'         => ['required', 'string', 'min:5'],
-            'category'      => ['required', 'string'],
-            'summary'       => ['required', 'string', 'min:10'],
+            'title' => ['required', 'string', 'min:5'],
+            'category' => ['required', 'string'],
+            'summary' => ['required', 'string', 'min:10'],
             'impact_target' => ['nullable', 'string'],
-            'status'        => ['required', 'string'],
-            'sort_order'    => ['required', 'integer', 'min:0'],
+            'status' => ['required', 'string'],
+            'sort_order' => ['required', 'integer', 'min:0'],
         ];
     }
 
@@ -42,14 +48,14 @@ class WorkProgramManager extends Component
     {
         $program = WorkProgram::findOrFail($id);
 
-        $this->editingId     = $program->id;
-        $this->title         = $program->title;
-        $this->category      = $program->category;
-        $this->summary       = $program->summary;
+        $this->editingId = $program->id;
+        $this->title = $program->title;
+        $this->category = $program->category;
+        $this->summary = $program->summary;
         $this->impact_target = $program->impact_target ?? '';
-        $this->status        = $program->status;
-        $this->sort_order    = (string) $program->sort_order;
-        $this->showForm      = true;
+        $this->status = $program->status;
+        $this->sort_order = (string) $program->sort_order;
+        $this->showForm = true;
     }
 
     public function save(): void
@@ -57,12 +63,12 @@ class WorkProgramManager extends Component
         $validated = $this->validate();
 
         $data = [
-            'title'         => $validated['title'],
-            'category'      => $validated['category'],
-            'summary'       => $validated['summary'],
+            'title' => $validated['title'],
+            'category' => $validated['category'],
+            'summary' => $validated['summary'],
             'impact_target' => $validated['impact_target'] ?: null,
-            'status'        => $validated['status'],
-            'sort_order'    => (int) $validated['sort_order'],
+            'status' => $validated['status'],
+            'sort_order' => (int) $validated['sort_order'],
         ];
 
         if ($this->editingId) {
@@ -89,11 +95,11 @@ class WorkProgramManager extends Component
 
     public function resetForm(): void
     {
-        $this->showForm  = false;
+        $this->showForm = false;
         $this->editingId = null;
         $this->reset(['title', 'summary', 'impact_target']);
-        $this->category   = 'Karier';
-        $this->status     = 'Berjalan';
+        $this->category = 'Karier';
+        $this->status = 'Berjalan';
         $this->sort_order = '0';
     }
 

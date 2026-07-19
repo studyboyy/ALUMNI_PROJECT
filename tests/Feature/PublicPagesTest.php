@@ -21,6 +21,7 @@ test('public sitemap pages render successfully', function () {
     $this->get(route('news.index'))->assertOk();
     $this->get(route('news.show', $article))->assertOk();
     $this->get(route('career.index'))->assertOk();
+    $this->get(route('gallery.index'))->assertOk();
     $this->get(route('contact.index'))->assertOk();
 });
 
@@ -43,8 +44,8 @@ test('alumni and article pages resolve by slug', function () {
         'published_at' => now(),
     ]);
 
-    $this->get('/data-alumni/' . $alumnus->slug)->assertOk()->assertSee('Salsa Permata');
-    $this->get('/berita-agenda/' . $article->slug)->assertOk()->assertSee('Artikel Demo');
+    $this->get('/data-alumni/'.$alumnus->slug)->assertOk()->assertSee('Salsa Permata');
+    $this->get('/berita-agenda/'.$article->slug)->assertOk()->assertSee('Artikel Demo');
 });
 
 test('career opportunity pages resolve by slug', function () {
@@ -56,7 +57,7 @@ test('career opportunity pages resolve by slug', function () {
         'closes_at' => now()->addMonth(),
     ]);
 
-    $this->get('/karier-kolaborasi/' . $job->slug)
+    $this->get('/karier-kolaborasi/'.$job->slug)
         ->assertOk()
         ->assertSee('Backend Engineer Alumni')
         ->assertSee('FTI Career Lab');

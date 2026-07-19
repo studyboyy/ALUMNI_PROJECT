@@ -47,24 +47,24 @@ class DatabaseSeeder extends Seeder
     {
         // ── ADMIN ──────────────────────────────────
         User::factory()->create([
-            'name'     => 'Admin Alumni FTI',
-            'email'    => 'admin@alumni-fti.ac.id',
-            'role'     => 'admin',
+            'name' => 'Admin Alumni FTI',
+            'email' => 'admin@alumni-fti.ac.id',
+            'role' => 'admin',
             'password' => Hash::make('Admin123!'),
         ]);
 
         // ── ALUMNI DENGAN AKUN ──────────────────────
         $registeredUsers = User::factory()->count(8)->create([
-            'role'     => 'alumni',
+            'role' => 'alumni',
             'password' => Hash::make('Alumni123!'),
         ]);
 
         $registeredUsers->each(function (User $user) {
             AlumniProfile::factory()->create([
                 'user_id' => $user->id,
-                'name'    => $user->name,
-                'email'   => $user->email,
-                'slug'    => Str::slug($user->name) . '-' . Str::random(4),
+                'name' => $user->name,
+                'email' => $user->email,
+                'slug' => Str::slug($user->name).'-'.Str::random(4),
             ]);
         });
 
@@ -85,13 +85,13 @@ class DatabaseSeeder extends Seeder
 
         foreach ($orgMembers as $member) {
             OrganizationMember::create([
-                'name'       => $member['name'],
-                'role'       => $member['role'],
-                'division'   => $member['division'],
-                'period'     => $member['period'],
+                'name' => $member['name'],
+                'role' => $member['role'],
+                'division' => $member['division'],
+                'period' => $member['period'],
                 'focus_area' => $member['focus_area'],
                 'sort_order' => $member['sort_order'],
-                'photo_url'  => $member['photo'],
+                'photo_url' => $member['photo'],
             ]);
         }
 
@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Mentoring Karier Alumni Muda',   'category' => 'Karier',      'summary' => 'Program pendampingan alumni baru untuk persiapan karier, CV, portofolio, dan simulasi wawancara.', 'impact_target' => '100 peserta per semester',          'status' => 'Berjalan',   'sort_order' => 1],
             ['title' => 'FTI Industry Connect',           'category' => 'Kolaborasi',  'summary' => 'Mempertemukan alumni dengan mitra industri untuk proyek riset, magang, dan pengembangan talenta.', 'impact_target' => '10 kolaborasi strategis per tahun', 'status' => 'Prioritas',  'sort_order' => 2],
             ['title' => 'Tracer Study Berkelanjutan',     'category' => 'Data Alumni', 'summary' => 'Pengumpulan dan analisis data karier alumni untuk evaluasi kurikulum dan perencanaan program.',     'impact_target' => 'Tingkat respons 70%',               'status' => 'Berjalan',   'sort_order' => 3],
-            ['title' => 'Beasiswa Alumni untuk Adik Tingkat', 'category' => 'Sosial',  'summary' => 'Program beasiswa kecil dari dana alumni untuk mahasiswa aktif FTI yang berprestasi dan kurang mampu.', 'impact_target' => '20 penerima per tahun',          'status' => 'Perencanaan','sort_order' => 4],
+            ['title' => 'Beasiswa Alumni untuk Adik Tingkat', 'category' => 'Sosial',  'summary' => 'Program beasiswa kecil dari dana alumni untuk mahasiswa aktif FTI yang berprestasi dan kurang mampu.', 'impact_target' => '20 penerima per tahun',          'status' => 'Perencanaan', 'sort_order' => 4],
         ];
 
         foreach ($workPrograms as $p) {
@@ -119,21 +119,21 @@ class DatabaseSeeder extends Seeder
         $articles = [
             ['title' => 'Alumni FTI Luncurkan Program Mentoring Nasional',      'category' => 'Berita',   'is_featured' => true,  'days' => 6,  'excerpt' => 'Ikatan alumni memperluas program mentoring lintas angkatan untuk memperkuat kesiapan karier.', 'content' => 'Program mentoring nasional mempertemukan alumni berpengalaman dengan mahasiswa tingkat akhir dan lulusan baru. Fokus mencakup kesiapan karier, penguatan portofolio, dan simulasi proses rekrutmen.'],
             ['title' => 'Reuni Akbar FTI 2026 Siap Digelar di Kampus Utama',   'category' => 'Agenda',   'is_featured' => false, 'days' => 3,  'excerpt' => 'Agenda tahunan alumni menghadirkan sesi networking, penghargaan, dan showcase kolaborasi.',     'content' => 'Reuni akbar tahun ini dirancang lebih kolaboratif dengan sesi business matching, talkshow karier, dan galeri prestasi alumni.'],
-            ['title' => 'Prestasi Alumni di Bidang AI Terapan Raih Penghargaan','category' => 'Prestasi', 'is_featured' => true,  'days' => 1,  'excerpt' => 'Tim alumni FTI mendapat pengakuan nasional atas implementasi AI untuk otomasi layanan publik.',  'content' => 'Penghargaan ini menegaskan kontribusi alumni FTI dalam mendorong inovasi teknologi yang berdampak langsung pada masyarakat.'],
-            ['title' => 'FTI Industry Connect: 15 Perusahaan Bergabung',        'category' => 'Kolaborasi','is_featured'=> false,  'days' => 10, 'excerpt' => 'Program kolaborasi industri FTI berhasil menarik 15 perusahaan teknologi terkemuka sebagai mitra.', 'content' => 'Mitra industri akan membuka akses magang eksklusif, proyek riset bersama, dan jalur rekrutmen langsung bagi alumni dan mahasiswa FTI.'],
-            ['title' => 'Workshop Data Science Alumni FTI Dihadiri 200 Peserta','category' => 'Workshop',  'is_featured' => false, 'days' => 15, 'excerpt' => 'Workshop dua hari mengupas tren terbaru machine learning dan praktik data engineering di industri.', 'content' => 'Para pembicara adalah alumni senior yang kini bekerja di perusahaan teknologi besar seperti Gojek, Tokopedia, dan Shopee.'],
+            ['title' => 'Prestasi Alumni di Bidang AI Terapan Raih Penghargaan', 'category' => 'Prestasi', 'is_featured' => true,  'days' => 1,  'excerpt' => 'Tim alumni FTI mendapat pengakuan nasional atas implementasi AI untuk otomasi layanan publik.',  'content' => 'Penghargaan ini menegaskan kontribusi alumni FTI dalam mendorong inovasi teknologi yang berdampak langsung pada masyarakat.'],
+            ['title' => 'FTI Industry Connect: 15 Perusahaan Bergabung',        'category' => 'Kolaborasi', 'is_featured' => false,  'days' => 10, 'excerpt' => 'Program kolaborasi industri FTI berhasil menarik 15 perusahaan teknologi terkemuka sebagai mitra.', 'content' => 'Mitra industri akan membuka akses magang eksklusif, proyek riset bersama, dan jalur rekrutmen langsung bagi alumni dan mahasiswa FTI.'],
+            ['title' => 'Workshop Data Science Alumni FTI Dihadiri 200 Peserta', 'category' => 'Workshop',  'is_featured' => false, 'days' => 15, 'excerpt' => 'Workshop dua hari mengupas tren terbaru machine learning dan praktik data engineering di industri.', 'content' => 'Para pembicara adalah alumni senior yang kini bekerja di perusahaan teknologi besar seperti Gojek, Tokopedia, dan Shopee.'],
         ];
 
         foreach ($articles as $i => $article) {
             NewsArticle::create([
-                'title'           => $article['title'],
-                'slug'            => Str::slug($article['title']),
-                'category'        => $article['category'],
-                'excerpt'         => $article['excerpt'],
-                'content'         => $article['content'],
+                'title' => $article['title'],
+                'slug' => Str::slug($article['title']),
+                'category' => $article['category'],
+                'excerpt' => $article['excerpt'],
+                'content' => $article['content'],
                 'cover_image_url' => $newsImages[$i % count($newsImages)],
-                'is_featured'     => $article['is_featured'],
-                'published_at'    => now()->subDays($article['days']),
+                'is_featured' => $article['is_featured'],
+                'published_at' => now()->subDays($article['days']),
             ]);
         }
 
@@ -144,7 +144,7 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Seminar Karier Data & AI',      'slug' => 'seminar-karier-data-ai',      'category' => 'Seminar',   'summary' => 'Sesi bersama alumni praktisi data untuk membahas skill map dan peluang karier terbaru.', 'location' => 'Auditorium FTI, Gedung A',         'starts_at' => now()->addDays(10), 'is_featured' => true,  'registration_url' => 'https://forms.alumni-fti.ac.id/seminar-data-ai'],
             ['title' => 'Reuni Lintas Angkatan FTI',     'slug' => 'reuni-lintas-angkatan-fti',   'category' => 'Reuni',     'summary' => 'Ajang temu alumni sekaligus penggalangan ide program kerja dan kemitraan baru.',       'location' => 'Convention Hall Kampus Utama',     'starts_at' => now()->addDays(25), 'is_featured' => true,  'registration_url' => 'https://forms.alumni-fti.ac.id/reuni-2026'],
             ['title' => 'Workshop Portofolio Digital',   'slug' => 'workshop-portofolio-digital', 'category' => 'Workshop',  'summary' => 'Pelatihan singkat untuk alumni muda yang ingin meningkatkan kualitas CV dan portofolio.',  'location' => 'Ruang Kolaborasi FTI Lt. 3',       'starts_at' => now()->addDays(18), 'is_featured' => false, 'registration_url' => 'https://forms.alumni-fti.ac.id/workshop-portfolio'],
-            ['title' => 'Talkshow Startup Alumni FTI',   'slug' => 'talkshow-startup-alumni-fti', 'category' => 'Talkshow',  'summary' => 'Berbagi pengalaman membangun startup dari alumni yang telah berhasil di ekosistem digital.','location' => 'Aula FTI, Gedung Rektorat',        'starts_at' => now()->addDays(32), 'is_featured' => false, 'registration_url' => 'https://forms.alumni-fti.ac.id/talkshow-startup'],
+            ['title' => 'Talkshow Startup Alumni FTI',   'slug' => 'talkshow-startup-alumni-fti', 'category' => 'Talkshow',  'summary' => 'Berbagi pengalaman membangun startup dari alumni yang telah berhasil di ekosistem digital.', 'location' => 'Aula FTI, Gedung Rektorat',        'starts_at' => now()->addDays(32), 'is_featured' => false, 'registration_url' => 'https://forms.alumni-fti.ac.id/talkshow-startup'],
         ];
 
         foreach ($events as $event) {
@@ -161,16 +161,16 @@ class DatabaseSeeder extends Seeder
             ['title' => 'Galeri Reuni Akbar 2025',      'media_url' => 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?fit=crop&w=1200&q=80', 'caption' => 'Momen networking lintas angkatan dalam reuni akbar tahun lalu.',      'event_name' => 'Reuni Akbar 2025'],
             ['title' => 'Seminar Industri Digital',      'media_url' => 'https://images.unsplash.com/photo-1511578314322-379afb476865?fit=crop&w=1200&q=80', 'caption' => 'Diskusi kolaborasi industri bersama alumni dan mitra perusahaan.',     'event_name' => 'Seminar Industri 2025'],
             ['title' => 'Workshop Data Science 2025',   'media_url' => 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?fit=crop&w=1200&q=80', 'caption' => 'Peserta antusias mengikuti sesi hands-on data engineering.',           'event_name' => 'Workshop Data Science'],
-            ['title' => 'Pelantikan Pengurus Baru 2025','media_url' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?fit=crop&w=1200&q=80', 'caption' => 'Serah terima jabatan pengurus Ikatan Alumni FTI periode 2025–2029.',  'event_name' => 'Pelantikan Pengurus 2025'],
+            ['title' => 'Pelantikan Pengurus Baru 2025', 'media_url' => 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?fit=crop&w=1200&q=80', 'caption' => 'Serah terima jabatan pengurus Ikatan Alumni FTI periode 2025–2029.',  'event_name' => 'Pelantikan Pengurus 2025'],
         ];
 
         foreach ($galleryItems as $item) {
             GalleryItem::create([
-                'title'        => $item['title'],
-                'media_type'   => 'image',
-                'media_url'    => $item['media_url'],
-                'caption'      => $item['caption'],
-                'event_name'   => $item['event_name'],
+                'title' => $item['title'],
+                'media_type' => 'image',
+                'media_url' => $item['media_url'],
+                'caption' => $item['caption'],
+                'event_name' => $item['event_name'],
                 'published_at' => now()->subMonths(fake()->numberBetween(1, 6)),
             ]);
         }
@@ -180,7 +180,7 @@ class DatabaseSeeder extends Seeder
             ['question' => 'Bagaimana cara memperbarui data alumni?',             'answer' => 'Login ke akun alumni Anda, lalu buka menu "Update Profil" di dashboard. Perubahan langsung tersimpan ke direktori publik.',                'sort_order' => 1],
             ['question' => 'Apakah lowongan hanya untuk alumni FTI?',             'answer' => 'Mayoritas lowongan diprioritaskan untuk alumni FTI, namun beberapa program kolaborasi terbuka bagi mahasiswa tingkat akhir.',             'sort_order' => 2],
             ['question' => 'Bagaimana mengikuti tracer study?',                   'answer' => 'Buka halaman Tracer Study di navigasi utama dan isi form yang tersedia. Data langsung tersimpan tanpa perlu mengirim email.',             'sort_order' => 3],
-            ['question' => 'Siapa yang bisa mengajukan lowongan?',                'answer' => 'Alumni yang sudah memiliki akun aktif dapat mengajukan lowongan melalui menu Submit Lowongan di dashboard. Lowongan akan diverifikasi admin.','sort_order' => 4],
+            ['question' => 'Siapa yang bisa mengajukan lowongan?',                'answer' => 'Alumni yang sudah memiliki akun aktif dapat mengajukan lowongan melalui menu Submit Lowongan di dashboard. Lowongan akan diverifikasi admin.', 'sort_order' => 4],
             ['question' => 'Bagaimana cara mendapatkan akun alumni?',             'answer' => 'Klik Daftar di navbar, cari NIM Anda, lalu buat akun dengan email dan password. NIM harus sudah terdaftar oleh admin terlebih dahulu.',   'sort_order' => 5],
             ['question' => 'Apakah data alumni bersifat publik?',                 'answer' => 'Nama, program studi, dan informasi karier alumni bersifat publik. Email dan nomor telepon hanya terlihat di halaman profil detail.',       'sort_order' => 6],
         ];
@@ -201,38 +201,38 @@ class DatabaseSeeder extends Seeder
 
         foreach ($testimonials as $t) {
             Testimonial::create([
-                'name'       => $t['name'],
+                'name' => $t['name'],
                 'batch_year' => $t['batch_year'],
-                'role'       => $t['role'],
-                'company'    => $t['company'],
-                'quote'      => $t['quote'],
+                'role' => $t['role'],
+                'company' => $t['company'],
+                'quote' => $t['quote'],
                 'sort_order' => $t['sort_order'],
-                'photo_url'  => $t['photo'],
+                'photo_url' => $t['photo'],
             ]);
         }
 
         // ── SITE SETTINGS ─────────────────────────
         SiteSetting::setValue('home_hero_slides', [
             [
-                'title'     => 'Bersama Membangun Teknologi dan Karier',
-                'subtitle'  => 'Jejaring alumni FTI untuk kolaborasi, pembelajaran, dan peluang profesional.',
-                'image'     => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?fit=crop&w=1600&q=80',
+                'title' => 'Bersama Membangun Teknologi dan Karier',
+                'subtitle' => 'Jejaring alumni FTI untuk kolaborasi, pembelajaran, dan peluang profesional.',
+                'image' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?fit=crop&w=1600&q=80',
                 'cta_label' => 'Lihat Direktori Alumni',
-                'cta_url'   => '/data-alumni',
+                'cta_url' => '/data-alumni',
             ],
             [
-                'title'     => 'Kolaborasi Nyata Lintas Angkatan',
-                'subtitle'  => 'Hubungkan alumni, mahasiswa, dan industri dalam satu ekosistem modern.',
-                'image'     => 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?fit=crop&w=1600&q=80',
+                'title' => 'Kolaborasi Nyata Lintas Angkatan',
+                'subtitle' => 'Hubungkan alumni, mahasiswa, dan industri dalam satu ekosistem modern.',
+                'image' => 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?fit=crop&w=1600&q=80',
                 'cta_label' => 'Lihat Kolaborasi',
-                'cta_url'   => '/karier-kolaborasi',
+                'cta_url' => '/karier-kolaborasi',
             ],
             [
-                'title'     => 'Peluang Karier dari Jaringan Alumni',
-                'subtitle'  => 'Lowongan eksklusif dari alumni dan mitra industri terpercaya FTI.',
-                'image'     => 'https://images.unsplash.com/photo-1552664730-d307ca884978?fit=crop&w=1600&q=80',
+                'title' => 'Peluang Karier dari Jaringan Alumni',
+                'subtitle' => 'Lowongan eksklusif dari alumni dan mitra industri terpercaya FTI.',
+                'image' => 'https://images.unsplash.com/photo-1552664730-d307ca884978?fit=crop&w=1600&q=80',
                 'cta_label' => 'Jelajahi Karier',
-                'cta_url'   => '/karier-kolaborasi',
+                'cta_url' => '/karier-kolaborasi',
             ],
         ]);
 

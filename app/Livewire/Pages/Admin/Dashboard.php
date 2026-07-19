@@ -7,7 +7,6 @@ use App\Models\CareerOpportunity;
 use App\Models\EventAgenda;
 use App\Models\NewsArticle;
 use App\Models\TracerStudyResponse;
-use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -133,7 +132,7 @@ class Dashboard extends Component
             ->orderByDesc('total')
             ->limit(5)
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'label' => $item->program ?: 'Lainnya',
                 'value' => (int) $item->total,
             ])
@@ -146,7 +145,7 @@ class Dashboard extends Component
             ->orderByDesc('total')
             ->limit(5)
             ->get()
-            ->map(fn($item) => [
+            ->map(fn ($item) => [
                 'label' => $item->city ?: 'Lainnya',
                 'value' => (int) $item->total,
             ])

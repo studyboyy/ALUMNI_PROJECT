@@ -15,20 +15,20 @@ class CareerOpportunityFactory extends Factory
         $companies = ['GoTo Group', 'Tokopedia', 'Shopee', 'Traveloka', 'Mekari', 'Dicoding', 'Gojek'];
         $positions = ['Backend Engineer', 'Frontend Engineer', 'Data Analyst', 'Product Manager', 'UI/UX Designer'];
         $jobBoardUrls = [
-            'https://linkedin.com/jobs/view/' . fake()->numerify('##########'),
-            'https://www.kalibrr.id/jobs/' . fake()->slug(),
-            'https://www.jobstreet.co.id/en/job/' . fake()->slug(),
-            'https://glints.com/en/opportunities/' . fake()->slug(),
-            'https://careers.tokopedia.com/jobs/' . fake()->slug(),
+            'https://linkedin.com/jobs/view/'.fake()->numerify('##########'),
+            'https://www.kalibrr.id/jobs/'.fake()->slug(),
+            'https://www.jobstreet.co.id/en/job/'.fake()->slug(),
+            'https://glints.com/en/opportunities/'.fake()->slug(),
+            'https://careers.tokopedia.com/jobs/'.fake()->slug(),
         ];
 
-        $title   = fake()->randomElement($positions);
+        $title = fake()->randomElement($positions);
         $company = fake()->randomElement($companies);
 
         return [
-            'title'           => $title,
-            'slug'            => Str::slug($title . '-' . $company . '-' . fake()->numerify('###')),
-            'company'         => $company,
+            'title' => $title,
+            'slug' => Str::slug($title.'-'.$company.'-'.fake()->numerify('###')),
+            'company' => $company,
             'location' => fake()->randomElement(['Jakarta', 'Bandung', 'Yogyakarta', 'Surabaya', 'Remote']),
             'employment_type' => fake()->randomElement(['Full-time', 'Contract', 'Internship']),
             'summary' => fake()->paragraph(),

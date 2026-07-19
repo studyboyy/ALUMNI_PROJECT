@@ -69,7 +69,7 @@ class LiveNotifications extends Component
         $unreadCount = (clone $baseQuery)
             ->when(
                 $user->job_notifications_seen_at,
-                fn($query) => $query->where('approved_at', '>', $user->job_notifications_seen_at)
+                fn ($query) => $query->where('approved_at', '>', $user->job_notifications_seen_at)
             )
             ->count();
 

@@ -60,7 +60,7 @@
                                 <span class="badge-pill">{{ $job->employment_type }}</span>
                                 <span class="badge-pill">{{ $job->location }}</span>
                                 @if ($job->is_featured)
-                                    <span class="badge-pill">Featured</span>
+                                    <span class="badge-pill">Lowongan Prioritas</span>
                                 @endif
                             </div>
 

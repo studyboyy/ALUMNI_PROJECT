@@ -10,14 +10,12 @@ test('homepage uses employment status instead of subjective featured status', fu
         'name' => 'Alumni Sudah Bekerja',
         'slug' => 'alumni-sudah-bekerja',
         'employment_status' => 'Bekerja',
-        'is_featured' => false,
     ]);
 
     AlumniProfile::factory()->create([
         'name' => 'Alumni Pilihan Lama',
         'slug' => 'alumni-pilihan-lama',
         'employment_status' => 'Belum Bekerja',
-        'is_featured' => true,
     ]);
 
     $this->get(route('home'))
@@ -31,7 +29,6 @@ test('alumni directory labels working alumni objectively', function () {
         'name' => 'Profesional Alumni',
         'slug' => 'profesional-alumni',
         'employment_status' => 'Bekerja',
-        'is_featured' => false,
     ]);
 
     $this->get(route('alumni.index'))

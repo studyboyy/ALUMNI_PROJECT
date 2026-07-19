@@ -1,13 +1,13 @@
-@section('title', 'Kelola Galeri & Media')
+@section('title', 'Kelola Galeri')
 
 <div class="w-full space-y-8">
     <section class="w-full">
         <div class="grid gap-5 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
             <div class="glass-panel p-6 sm:p-7">
-                <p class="section-eyebrow">Galeri & Media</p>
+                <p class="section-eyebrow">Galeri</p>
                 <h1 class="section-title mt-2">Kelola Galeri publik dan aset website.</h1>
                 <p class="section-copy mt-3 max-w-2xl">
-                    Media yang dipublikasikan di sini langsung tampil pada Galeri di halaman Berita & Agenda.
+                    Media yang dipublikasikan di sini langsung tampil pada menu Galeri di halaman pengguna.
                 </p>
             </div>
 
@@ -157,7 +157,7 @@
             @empty
                 <div class="glass-panel col-span-full px-8 py-12 text-center">
                     <p class="font-semibold" style="color:var(--ink)">Belum ada item Galeri</p>
-                    <p class="mt-1 text-sm" style="color:var(--ink-muted)">Upload media untuk menampilkannya di halaman Berita & Agenda.</p>
+                    <p class="mt-1 text-sm" style="color:var(--ink-muted)">Upload media untuk menampilkannya di menu Galeri pengguna.</p>
                 </div>
             @endforelse
         </div>

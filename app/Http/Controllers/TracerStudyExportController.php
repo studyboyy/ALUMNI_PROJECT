@@ -52,14 +52,14 @@ class TracerStudyExportController extends Controller
             7, 24, 18, 28, 18, 24, 12, 14, 20, 26, 24, 22, 18, 20, 24, 20, 20, 42, 18,
         ]);
 
-        $filename = 'tracer-study-' . now()->format('Y-m-d') . '.xlsx';
+        $filename = 'tracer-study-'.now()->format('Y-m-d').'.xlsx';
 
         return response($xlsx, 200, [
-            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length'      => strlen($xlsx),
-            'Pragma'              => 'no-cache',
-            'Cache-Control'       => 'no-store, no-cache, must-revalidate',
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+            'Content-Length' => strlen($xlsx),
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
         ]);
     }
 }

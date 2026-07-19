@@ -37,7 +37,7 @@ class ForumChat extends Component
             ->values();
 
         $this->messages = $items
-            ->map(fn(ChatMessage $message) => [
+            ->map(fn (ChatMessage $message) => [
                 'id' => $message->id,
                 'body' => $message->body,
                 'created_at' => $message->created_at?->diffForHumans(),

@@ -37,7 +37,7 @@ class ThemeManager extends Component
 
     public function setTheme(string $theme): void
     {
-        if (!isset($this->availableThemes[$theme])) {
+        if (! isset($this->availableThemes[$theme])) {
             return;
         }
 
@@ -45,7 +45,7 @@ class ThemeManager extends Component
         $this->theme = $theme;
 
         $this->dispatch('theme-changed', theme: $theme);
-        $this->dispatch('toast', type: 'success', message: 'Tema berhasil diubah menjadi ' . $this->availableThemes[$theme]['name']);
+        $this->dispatch('toast', type: 'success', message: 'Tema berhasil diubah menjadi '.$this->availableThemes[$theme]['name']);
     }
 
     public function render(): View

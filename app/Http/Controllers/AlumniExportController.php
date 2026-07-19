@@ -47,14 +47,14 @@ class AlumniExportController extends Controller
             7, 24, 18, 28, 18, 24, 26, 12, 14, 20, 26, 24, 22, 18, 20, 34,
         ]);
 
-        $filename = 'data-alumni-' . now()->format('Y-m-d') . '.xlsx';
+        $filename = 'data-alumni-'.now()->format('Y-m-d').'.xlsx';
 
         return response($xlsx, 200, [
-            'Content-Type'        => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            'Content-Length'      => strlen($xlsx),
-            'Pragma'              => 'no-cache',
-            'Cache-Control'       => 'no-store, no-cache, must-revalidate',
+            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+            'Content-Length' => strlen($xlsx),
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
         ]);
     }
 }

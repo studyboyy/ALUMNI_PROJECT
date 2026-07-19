@@ -29,7 +29,7 @@ class Dashboard extends Component
         ];
 
         $completedCount = collect($completionFields)
-            ->filter(fn($value) => filled($value))
+            ->filter(fn ($value) => filled($value))
             ->count();
 
         $completionRate = (int) round(($completedCount / max(count($completionFields), 1)) * 100);

@@ -14,26 +14,34 @@ class OrganizationManager extends Component
     use WithFileUploads;
 
     public bool $showForm = false;
+
     public ?int $editingId = null;
 
     public string $name = '';
+
     public string $role = '';
+
     public string $division = '';
+
     public string $period = '';
+
     public string $focus_area = '';
+
     public string $photo_url = '';
+
     public $photo_file = null;
+
     public string $sort_order = '0';
 
     protected function rules(): array
     {
         return [
-            'name'       => ['required', 'string', 'min:3'],
-            'role'       => ['required', 'string'],
-            'division'   => ['required', 'string'],
-            'period'     => ['required', 'string'],
+            'name' => ['required', 'string', 'min:3'],
+            'role' => ['required', 'string'],
+            'division' => ['required', 'string'],
+            'period' => ['required', 'string'],
             'focus_area' => ['nullable', 'string', 'max:255'],
-            'photo_url'  => ['nullable', 'string'],
+            'photo_url' => ['nullable', 'string'],
             'photo_file' => ['nullable', 'image', 'max:3072'],
             'sort_order' => ['required', 'integer', 'min:0'],
         ];
@@ -49,15 +57,15 @@ class OrganizationManager extends Component
     {
         $member = OrganizationMember::findOrFail($id);
 
-        $this->editingId   = $member->id;
-        $this->name        = $member->name;
-        $this->role        = $member->role;
-        $this->division    = $member->division;
-        $this->period      = $member->period;
-        $this->focus_area  = $member->focus_area ?? '';
-        $this->photo_url   = $member->photo_url ?? '';
-        $this->sort_order  = (string) $member->sort_order;
-        $this->showForm    = true;
+        $this->editingId = $member->id;
+        $this->name = $member->name;
+        $this->role = $member->role;
+        $this->division = $member->division;
+        $this->period = $member->period;
+        $this->focus_area = $member->focus_area ?? '';
+        $this->photo_url = $member->photo_url ?? '';
+        $this->sort_order = (string) $member->sort_order;
+        $this->showForm = true;
     }
 
     public function save(): void
@@ -66,16 +74,16 @@ class OrganizationManager extends Component
 
         if ($this->photo_file) {
             $path = $this->photo_file->storePublicly('org-photos', 'public');
-            $this->photo_url = asset('storage/' . $path);
+            $this->photo_url = asset('storage/'.$path);
         }
 
         $data = [
-            'name'       => $validated['name'],
-            'role'       => $validated['role'],
-            'division'   => $validated['division'],
-            'period'     => $validated['period'],
+            'name' => $validated['name'],
+            'role' => $validated['role'],
+            'division' => $validated['division'],
+            'period' => $validated['period'],
             'focus_area' => $validated['focus_area'] ?: null,
-            'photo_url'  => $this->photo_url ?: null,
+            'photo_url' => $this->photo_url ?: null,
             'sort_order' => (int) $validated['sort_order'],
         ];
 
@@ -103,8 +111,8 @@ class OrganizationManager extends Component
 
     public function resetForm(): void
     {
-        $this->showForm   = false;
-        $this->editingId  = null;
+        $this->showForm = false;
+        $this->editingId = null;
         $this->photo_file = null;
         $this->reset(['name', 'role', 'division', 'period', 'focus_area', 'photo_url']);
         $this->sort_order = '0';

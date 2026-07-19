@@ -14,25 +14,33 @@ class TestimoniManager extends Component
     use WithFileUploads;
 
     public bool $showForm = false;
+
     public ?int $editingId = null;
 
     public string $name = '';
+
     public string $role = '';
+
     public string $company = '';
+
     public string $quote = '';
+
     public string $photo_url = '';
+
     public $photo_file = null;
+
     public string $batch_year = '';
+
     public string $sort_order = '0';
 
     protected function rules(): array
     {
         return [
-            'name'       => ['required', 'string', 'min:3'],
-            'role'       => ['required', 'string'],
-            'company'    => ['nullable', 'string'],
-            'quote'      => ['required', 'string', 'min:10'],
-            'photo_url'  => ['nullable', 'string'],
+            'name' => ['required', 'string', 'min:3'],
+            'role' => ['required', 'string'],
+            'company' => ['nullable', 'string'],
+            'quote' => ['required', 'string', 'min:10'],
+            'photo_url' => ['nullable', 'string'],
             'photo_file' => ['nullable', 'image', 'max:3072'],
             'batch_year' => ['nullable', 'integer', 'min:1990', 'max:2100'],
             'sort_order' => ['required', 'integer', 'min:0'],
@@ -49,15 +57,15 @@ class TestimoniManager extends Component
     {
         $t = Testimonial::findOrFail($id);
 
-        $this->editingId  = $t->id;
-        $this->name       = $t->name;
-        $this->role       = $t->role;
-        $this->company    = $t->company ?? '';
-        $this->quote      = $t->quote;
-        $this->photo_url  = $t->photo_url ?? '';
+        $this->editingId = $t->id;
+        $this->name = $t->name;
+        $this->role = $t->role;
+        $this->company = $t->company ?? '';
+        $this->quote = $t->quote;
+        $this->photo_url = $t->photo_url ?? '';
         $this->batch_year = (string) ($t->batch_year ?? '');
         $this->sort_order = (string) $t->sort_order;
-        $this->showForm   = true;
+        $this->showForm = true;
     }
 
     public function save(): void
@@ -66,15 +74,15 @@ class TestimoniManager extends Component
 
         if ($this->photo_file) {
             $path = $this->photo_file->storePublicly('testimoni-photos', 'public');
-            $this->photo_url = asset('storage/' . $path);
+            $this->photo_url = asset('storage/'.$path);
         }
 
         $data = [
-            'name'       => $validated['name'],
-            'role'       => $validated['role'],
-            'company'    => $validated['company'] ?: null,
-            'quote'      => $validated['quote'],
-            'photo_url'  => $this->photo_url ?: null,
+            'name' => $validated['name'],
+            'role' => $validated['role'],
+            'company' => $validated['company'] ?: null,
+            'quote' => $validated['quote'],
+            'photo_url' => $this->photo_url ?: null,
             'batch_year' => $validated['batch_year'] ?: null,
             'sort_order' => (int) $validated['sort_order'],
         ];
@@ -103,8 +111,8 @@ class TestimoniManager extends Component
 
     public function resetForm(): void
     {
-        $this->showForm   = false;
-        $this->editingId  = null;
+        $this->showForm = false;
+        $this->editingId = null;
         $this->photo_file = null;
         $this->reset(['name', 'role', 'company', 'quote', 'photo_url', 'batch_year']);
         $this->sort_order = '0';

@@ -83,7 +83,7 @@
                 <label class="flex cursor-pointer items-center gap-2.5 text-sm font-medium" style="color:var(--ink-2)">
                     <input wire:model="isFeatured" type="checkbox"
                         class="h-4 w-4 rounded" style="accent-color:var(--brand)">
-                    Featured
+                    Jadikan Berita Utama
                 </label>
                 <label class="flex cursor-pointer items-center gap-2.5 text-sm font-medium" style="color:var(--ink-2)">
                     <input wire:model="publishNow" type="checkbox"
@@ -132,7 +132,7 @@
                                 </span>
                                 @if ($article->is_featured)
                                     <span class="rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                                        style="background:var(--brand-soft);color:var(--brand-deep)">Featured</span>
+                                        style="background:var(--brand-soft);color:var(--brand-deep)">Berita Utama</span>
                                 @endif
                             </div>
                             <p class="font-sans text-xl" style="color:var(--ink)">{{ $article->title }}</p>

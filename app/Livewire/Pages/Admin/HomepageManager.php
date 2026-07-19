@@ -74,7 +74,7 @@ class HomepageManager extends Component
             ->map(function (array $slide, int $index) {
                 if (isset($this->slideUploads[$index]) && $this->slideUploads[$index]) {
                     $path = $this->slideUploads[$index]->storePublicly('homepage-images', 'public');
-                    $slide['image'] = asset('storage/' . $path);
+                    $slide['image'] = asset('storage/'.$path);
                 }
 
                 return [
@@ -85,7 +85,7 @@ class HomepageManager extends Component
                     'cta_url' => trim($slide['cta_url'] ?? ''),
                 ];
             })
-            ->filter(fn(array $slide) => $slide['title'] !== '')
+            ->filter(fn (array $slide) => $slide['title'] !== '')
             ->values()
             ->all();
 

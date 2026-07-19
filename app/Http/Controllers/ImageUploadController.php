@@ -22,20 +22,20 @@ class ImageUploadController extends Controller
 
             // Generate unique filename with timestamp
             $timestamp = now()->format('YmdHis');
-            $filename = $timestamp . '_' . Str::random(8) . '.' . $file->getClientOriginalExtension();
+            $filename = $timestamp.'_'.Str::random(8).'.'.$file->getClientOriginalExtension();
 
             // Store in public disk
             $path = $file->storeAs('news-images', $filename, 'public');
 
             // Return URL that TinyMCE expects
             return response()->json([
-                'location' => asset('storage/' . $path),
+                'location' => asset('storage/'.$path),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
                 'error' => [
-                    'message' => 'Upload gagal: ' . $e->getMessage()
-                ]
+                    'message' => 'Upload gagal: '.$e->getMessage(),
+                ],
             ], 422);
         }
     }

@@ -7,14 +7,14 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 #[Layout('layouts.admin')]
 class NewsManager extends Component
 {
-    use WithPagination;
     use WithFileUploads;
+    use WithPagination;
 
     public ?int $editingId = null;
 
@@ -57,12 +57,12 @@ class NewsManager extends Component
         // Handle file upload if provided
         if ($this->coverImageFile) {
             $path = $this->coverImageFile->storePublicly('news-images', 'public');
-            $coverImageUrl = asset('storage/' . $path);
+            $coverImageUrl = asset('storage/'.$path);
         }
 
         NewsArticle::query()->create([
             'title' => $validated['title'],
-            'slug' => Str::slug($validated['title']) . '-' . Str::lower(Str::random(5)),
+            'slug' => Str::slug($validated['title']).'-'.Str::lower(Str::random(5)),
             'category' => $validated['category'],
             'excerpt' => Str::limit(trim(strip_tags($normalizedContent)), 180),
             'content' => $normalizedContent,
@@ -106,7 +106,7 @@ class NewsManager extends Component
         // Handle file upload if provided
         if ($this->coverImageFile) {
             $path = $this->coverImageFile->storePublicly('news-images', 'public');
-            $coverImageUrl = asset('storage/' . $path);
+            $coverImageUrl = asset('storage/'.$path);
         }
 
         $article->update([

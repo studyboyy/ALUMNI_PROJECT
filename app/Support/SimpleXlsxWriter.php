@@ -13,7 +13,7 @@ class SimpleXlsxWriter
      */
     public static function make(string $title, array $headers, array $rows, array $widths = []): string
     {
-        $writer = new XLSXWriter();
+        $writer = new XLSXWriter;
         $writer->setAuthor('Alumni FTI');
         $writer->setTempDir(storage_path('framework/cache'));
 

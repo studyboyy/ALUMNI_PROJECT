@@ -39,6 +39,7 @@ class Register extends Component
 
             if (is_string($selectedNim) && $selectedNim === $query) {
                 $this->nimResults = [];
+
                 return;
             }
         }
@@ -47,6 +48,7 @@ class Register extends Component
 
         if ($query === '') {
             $this->nimResults = [];
+
             return;
         }
 
@@ -60,7 +62,7 @@ class Register extends Component
             ->get();
 
         $this->nimResults = $results
-            ->map(fn(AlumniProfile $profile) => [
+            ->map(fn (AlumniProfile $profile) => [
                 'id' => $profile->id,
                 'nim' => $profile->nim,
                 'name' => $profile->name,

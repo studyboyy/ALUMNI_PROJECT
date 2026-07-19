@@ -64,7 +64,7 @@ class ProfileManager extends Component
 
         if ($this->logoUpload) {
             $path = $this->logoUpload->storePublicly('site-assets', 'public');
-            $this->logoUrl = asset('storage/' . $path);
+            $this->logoUrl = asset('storage/'.$path);
         }
 
         $cleanLogo = trim($this->logoUrl);
@@ -138,34 +138,34 @@ class ProfileManager extends Component
 
         if ($this->logoUpload) {
             $path = $this->logoUpload->storePublicly('site-assets', 'public');
-            $this->logoUrl = asset('storage/' . $path);
+            $this->logoUrl = asset('storage/'.$path);
         }
 
         $cleanLogo = trim($this->logoUrl);
         $cleanVision = trim($this->vision);
 
         $cleanMissions = collect($this->missions)
-            ->map(fn(string $mission) => trim($mission))
+            ->map(fn (string $mission) => trim($mission))
             ->filter()
             ->values()
             ->all();
 
         $cleanTimeline = collect($this->timeline)
-            ->map(fn(array $item) => [
+            ->map(fn (array $item) => [
                 'year' => trim((string) ($item['year'] ?? '')),
                 'title' => trim((string) ($item['title'] ?? '')),
                 'description' => trim((string) ($item['description'] ?? '')),
             ])
-            ->filter(fn(array $item) => $item['year'] !== '' && $item['title'] !== '' && $item['description'] !== '')
+            ->filter(fn (array $item) => $item['year'] !== '' && $item['title'] !== '' && $item['description'] !== '')
             ->values()
             ->all();
 
         $cleanContacts = collect($this->contactChannels)
-            ->map(fn(array $channel) => [
+            ->map(fn (array $channel) => [
                 'label' => trim((string) ($channel['label'] ?? '')),
                 'value' => trim((string) ($channel['value'] ?? '')),
             ])
-            ->filter(fn(array $channel) => $channel['label'] !== '' && $channel['value'] !== '')
+            ->filter(fn (array $channel) => $channel['label'] !== '' && $channel['value'] !== '')
             ->values()
             ->all();
 
@@ -267,7 +267,8 @@ class ProfileManager extends Component
 
         if (str_contains($rawUrl, 'google.com/maps') || str_contains($rawUrl, 'maps.google.com')) {
             $separator = str_contains($rawUrl, '?') ? '&' : '?';
-            return $rawUrl . $separator . 'output=embed';
+
+            return $rawUrl.$separator.'output=embed';
         }
 
         return $rawUrl;
